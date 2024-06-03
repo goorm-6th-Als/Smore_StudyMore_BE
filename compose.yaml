@@ -1,5 +1,5 @@
-services:
-  redis:
-    image: 'redis:latest'
-    ports:
-      - '6379'
+#services:
+#  redis:
+#    image: 'redis:latest'
+#    ports:
+#      - '6379'
