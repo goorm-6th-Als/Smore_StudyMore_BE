@@ -1,13 +1,13 @@
-package com.als.SMore.demo;
+package com.als.SMore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DemoApplication {
+public class SmoreApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(SmoreApplication.class, args);
 	}
 
 }
