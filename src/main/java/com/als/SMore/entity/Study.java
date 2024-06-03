@@ -1,4 +1,4 @@
-package com.als.SMore.demo.entity;
+package com.als.SMore.entity;
 
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;

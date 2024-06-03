@@ -1,15 +1,16 @@
-package com.als.SMore.demo.entity;
+package com.als.SMore.entity;
+
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "share_schedule")
-public class ShareSchedule {
+@Table(name = "personal_schedule")
+public class PersonalSchedule {
     @Id @Tsid
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "share_schedule_pk", nullable = false)
-    private Long shareSchedulePk;
+    @Column(name = "personal_schedule_pk", nullable = false)
+    private Long personalSchedulePk;
 
     @ManyToOne
     @JoinColumn(name = "study_pk", nullable = false)
@@ -19,15 +20,19 @@ public class ShareSchedule {
     @JoinColumn(name = "member_pk", nullable = false)
     private Member member;
 
-    @Column(name = "schedule_status")
+    @Column(name = "schedule_status", nullable = false)
     private String scheduleStatus;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "target_date")
-    private Date targetDate;
+    @Lob
+    @Column(name = "schedule_content")
+    private String scheduleContent;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_date")
+    @Column(name = "schedule_date", nullable = false)
+    private Date scheduleDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date", nullable = false)
     private Date createDate;
 
     // Getters and Setters
