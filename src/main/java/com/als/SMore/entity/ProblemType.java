@@ -1,14 +1,14 @@
 package com.als.SMore.entity;
 
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "problem_type")
 public class ProblemType {
-    @Id @Tsid
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "problem_type_pk", nullable = false)
+    @Column(name = "problem_type_pk")
     private Long problemTypePk;
 
     @ManyToOne

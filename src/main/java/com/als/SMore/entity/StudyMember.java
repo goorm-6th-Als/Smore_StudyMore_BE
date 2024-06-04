@@ -1,15 +1,18 @@
 package com.als.SMore.entity;
 
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "study_member")
 public class StudyMember {
-    @Id @Tsid
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "study_member_pk", nullable = false)
+    @Column(name = "study_member_pk")
     private Long studyMemberPk;
+
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @ManyToOne
     @JoinColumn(name = "study_pk", nullable = false)
@@ -18,9 +21,6 @@ public class StudyMember {
     @ManyToOne
     @JoinColumn(name = "member_pk", nullable = false)
     private Member member;
-
-    @Column(name = "role", nullable = false)
-    private String role;
 
     // Getters and Setters
 }

@@ -1,14 +1,15 @@
 package com.als.SMore.entity;
 
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "member")
 public class Member {
-    @Id @Tsid
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_pk", nullable = false)
+    @Column(name = "member_pk")
     private Long memberPk;
 
     @Column(name = "user_id", nullable = false)
@@ -25,6 +26,12 @@ public class Member {
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
+
+    @OneToMany(mappedBy = "member")
+    private Set<Study> studies;
+
+    @OneToMany(mappedBy = "member")
+    private Set<StudyBoard> studyBoards;
 
     // Getters and Setters
 }

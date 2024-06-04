@@ -1,16 +1,16 @@
 package com.als.SMore.entity;
 
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "personal_schedule")
-public class PersonalSchedule {
-    @Id @Tsid
+@Table(name = "personal_todo")
+public class PersonalTodo {
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "personal_schedule_pk", nullable = false)
-    private Long personalSchedulePk;
+    @Column(name = "personal_todo_pk")
+    private Long personalTodoPk;
 
     @ManyToOne
     @JoinColumn(name = "study_pk", nullable = false)
@@ -23,7 +23,6 @@ public class PersonalSchedule {
     @Column(name = "schedule_status", nullable = false)
     private String scheduleStatus;
 
-    @Lob
     @Column(name = "schedule_content")
     private String scheduleContent;
 

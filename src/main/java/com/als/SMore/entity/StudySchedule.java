@@ -1,15 +1,16 @@
 package com.als.SMore.entity;
-import io.hypersistence.utils.hibernate.id.Tsid;
+
 import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "share_schedule")
-public class ShareSchedule {
-    @Id @Tsid
+@Table(name = "study_schedule")
+public class StudySchedule {
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "share_schedule_pk", nullable = false)
-    private Long shareSchedulePk;
+    @Column(name = "study_schedule_pk")
+    private Long studySchedulePk;
 
     @ManyToOne
     @JoinColumn(name = "study_pk", nullable = false)

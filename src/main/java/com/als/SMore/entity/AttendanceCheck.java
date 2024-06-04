@@ -1,15 +1,15 @@
 package com.als.SMore.entity;
 
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "attendance_check")
 public class AttendanceCheck {
-    @Id @Tsid
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "attendance_check_pk", nullable = false)
+    @Column(name = "attendance_check_pk")
     private Long attendanceCheckPk;
 
     @ManyToOne
@@ -30,3 +30,4 @@ public class AttendanceCheck {
 
     // Getters and Setters
 }
+
