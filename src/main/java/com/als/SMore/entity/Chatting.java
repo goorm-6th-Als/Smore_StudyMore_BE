@@ -1,16 +1,15 @@
 package com.als.SMore.entity;
 
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
-
 import java.util.Date;
 
 @Entity
 @Table(name = "chatting")
 public class Chatting {
-    @Id @Tsid
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chatting_pk", nullable = false)
+    @Column(name = "chatting_pk")
     private Long chattingPk;
 
     @ManyToOne
@@ -21,7 +20,6 @@ public class Chatting {
     @JoinColumn(name = "chatting_room_pk", nullable = false)
     private ChattingRoom chattingRoom;
 
-    @Lob
     @Column(name = "chat_content", nullable = false)
     private String chatContent;
 
@@ -31,3 +29,4 @@ public class Chatting {
 
     // Getters and Setters
 }
+

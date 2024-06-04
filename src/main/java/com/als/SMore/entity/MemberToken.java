@@ -1,13 +1,13 @@
 package com.als.SMore.entity;
 
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "member_token")
 public class MemberToken {
-    @Id @Tsid
-    @Column(name = "member_pk", nullable = false)
+
+    @Id
+    @Column(name = "member_pk")
     private Long memberPk;
 
     @Column(name = "access_token", nullable = false)

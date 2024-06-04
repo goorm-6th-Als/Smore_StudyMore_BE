@@ -1,26 +1,30 @@
 package com.als.SMore.entity;
 
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "advertising_table")
-public class AdvertisingTable {
-    @Id @Tsid
+@Table(name = "study_board")
+public class StudyBoard {
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "advertising_table_pk", nullable = false)
-    private Long advertisingTablePk;
+    @Column(name = "study_board_pk")
+    private Long studyBoardPk;
 
     @ManyToOne
     @JoinColumn(name = "study_pk", nullable = false)
     private Study study;
 
+    @ManyToOne
+    @JoinColumn(name = "member_pk", nullable = false)
+    private Member member;
+
     @Column(name = "ad_title", nullable = false)
     private String adTitle;
 
     @Column(name = "ad_content")
-    private String ad_content;
+    private String adContent;
 
     @Column(name = "ad_summary")
     private String adSummary;
@@ -37,10 +41,5 @@ public class AdvertisingTable {
     @Column(name = "close_date")
     private Date closeDate;
 
-    @ManyToOne
-    @JoinColumn(name = "member_pk", nullable = false)
-    private Member member;
-
     // Getters and Setters
 }
-
