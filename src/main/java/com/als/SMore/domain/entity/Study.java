@@ -1,5 +1,6 @@
 package com.als.SMore.domain.entity;
 
+import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import java.util.List;
 import lombok.Getter;
@@ -12,17 +13,14 @@ import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "study")
-@Getter
-@Setter
+@Getter @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @ToString
 @EqualsAndHashCode(of = "studyPk")
 public class Study {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @Tsid
     @Column(name = "study_pk")
     private Long studyPk;
 

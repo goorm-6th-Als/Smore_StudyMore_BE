@@ -1,19 +1,18 @@
 package com.als.SMore.domain.entity;
 
+import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "problem_type")
-@Data
+@Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProblemType {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @Tsid
     @Column(name = "problem_type_pk")
     private Long problemTypePk;
 

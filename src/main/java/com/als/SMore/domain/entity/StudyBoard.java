@@ -1,21 +1,20 @@
 package com.als.SMore.domain.entity;
 
+import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "study_board")
-@Data
+@Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyBoard {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @Tsid
     @Column(name = "study_board_pk")
     private Long studyBoardPk;
 
