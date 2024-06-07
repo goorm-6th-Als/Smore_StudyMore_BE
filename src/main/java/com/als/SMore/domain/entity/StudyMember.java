@@ -12,7 +12,9 @@ import lombok.*;
 @AllArgsConstructor
 public class StudyMember {
 
-    @Id @Tsid
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Tsid
     @Column(name = "study_member_pk")
     private Long studyMemberPk;
 

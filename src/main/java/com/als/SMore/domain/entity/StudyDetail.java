@@ -1,20 +1,27 @@
 package com.als.SMore.domain.entity;
 
-import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "study_detail")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyDetail {
 
-    @Id @Tsid
+    @Id
     @Column(name = "study_pk")
     private Long studyPk;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "study_pk")
+    private Study study;
 
     @Column(name = "image_uri")
     private String imageUri;
@@ -25,9 +32,9 @@ public class StudyDetail {
     @Column(name = "overview")
     private String overview;
 
-    @Column(name = "open_time", nullable = false)
-    private String openTime = "00:00:00";
+    @Column(name = "open_date", nullable = false)
+    private LocalDate openDate;
 
-    @Column(name = "close_time", nullable = false)
-    private String closeTime = "23:59:59";
+    @Column(name = "close_date", nullable = false)
+    private LocalDate closeDate;
 }
