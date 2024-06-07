@@ -4,8 +4,6 @@ import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
-
 @Entity
 @Table(name = "member")
 @Getter @Builder(toBuilder = true)
@@ -31,4 +29,5 @@ public class Member {
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
+
 }

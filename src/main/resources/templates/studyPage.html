@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>스터디 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<header>
+    <h1 th:text="'스터디: ' + ${studyName}"></h1>
+</header>
+<main>
+    <div class="buttons">
+        <button onclick="location.href='/'">홈</button>
+        <button onclick="location.href='/study'">스터디 공지사항</button>
+        <button onclick="location.href='/study/edit/' + [[${studyPk}]]">스터디 수정</button>
+        <button onclick="deleteStudy()">스터디 삭제</button>
+    </div>
+</main>
+
+<script th:inline="javascript">
+    function deleteStudy() {
+        if (confirm('스터디를 삭제하겠습니까?')) {
+            var studyPk = /*[[${studyPk}]]*/ 'default';
+            fetch('/study/' + studyPk, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    alert('스터디 삭제에 성공했습니다.');
+                    location.href = '/study';
+                } else {
+                    alert('오류: 스터디 삭제 실패');
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>
