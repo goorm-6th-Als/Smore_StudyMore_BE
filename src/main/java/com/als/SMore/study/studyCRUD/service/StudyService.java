@@ -32,8 +32,9 @@ public class StudyService {
      */
     @Transactional
     public StudyCreateDTO createStudy(StudyCreateDTO studyCreateDTO) {
+        // 멤버를 memberRepository에서 조회
         Member member = memberRepository.findById(studyCreateDTO.getMemberPk())
-                .orElseThrow(() -> new IllegalArgumentException("불가능한 memberPk: " + studyCreateDTO.getMemberPk()));
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 memberPk: " + studyCreateDTO.getMemberPk()));
 
         // Study 엔티티 생성
         Study study = Study.builder()
@@ -53,7 +54,6 @@ public class StudyService {
                 .closeDate(studyCreateDTO.getCloseDate())
                 .build();
 
-        logger.info("StudyDetail 연결 체크: {}", studyDetail);
         studyDetailRepository.save(studyDetail);
         logger.info("StudyDetail 생성: {}", studyDetail);
 
@@ -63,14 +63,10 @@ public class StudyService {
                 .member(member)
                 .role("admin")
                 .build();
-
         studyMemberRepository.save(studyMember);
-
         logger.info("StudyMember 생성: {}", studyMember);
 
-//      // 스터디 페이지 URL 설정 - 이름으로.
-//      String studyUrl = "http://localhost:8080/study/" + UrlUtils.toUrlFriendly(study.getStudyName());
-        //스터디 페이지 URL 설정 - Pk로
+        // 스터디 페이지 URL 설정 - Pk로
         String studyUrl = "http://localhost:8080/study/" + study.getStudyPk();
         // 생성된 StudyCreateDTO 객체 반환
         studyCreateDTO.setStudyPk(study.getStudyPk());
@@ -81,26 +77,31 @@ public class StudyService {
 
     /**
      * 스터디를 삭제하는 메서드.
-     * @return delete 동작
+     * @param id 삭제할 스터디의 ID
      */
     @Transactional
     public void deleteStudy(Long id) {
         Study study = studyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지않는 study ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + id));
         studyRepository.delete(study);
-        logger.info("스터디 관련 삭제: {}", id);
+        logger.info("스터디 삭제: {}", id);
     }
 
-    // 업데이트
+    /**
+     * 스터디를 업데이트하는 메서드.
+     * @param id 업데이트할 스터디의 ID
+     * @param studyCreateDTO 업데이트할 스터디 정보를 담은 DTO 객체
+     * @return 업데이트된 스터디 정보를 담은 StudyCreateDTO 객체
+     */
     @Transactional
     public StudyCreateDTO updateStudy(Long id, StudyCreateDTO studyCreateDTO) {
         Study study = studyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid study ID: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + id));
 
         study.setStudyName(studyCreateDTO.getStudyName());
-        Study updatedStudy = studyRepository.save(study);
+        studyRepository.save(study);
 
-        StudyDetail studyDetail = studyDetailRepository.findByStudy(updatedStudy);
+        StudyDetail studyDetail = studyDetailRepository.findByStudy(study);
         studyDetail.setImageUri(studyCreateDTO.getImageUri());
         studyDetailRepository.save(studyDetail);
 
