@@ -1,10 +1,18 @@
 package com.als.SMore.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "study_board")
@@ -12,6 +20,8 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+// 순환 참조 방지.
+@JsonIgnoreProperties({"study", "member"})
 public class StudyBoard {
 
     @Id @Tsid
@@ -35,15 +45,12 @@ public class StudyBoard {
     @Column(name = "ad_summary")
     private String adSummary;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "create_date")
-    private Date createDate;
+    private LocalDate createDate;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "modify_date")
-    private Date modifyDate;
+    private LocalDate modifyDate;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "close_date")
-    private Date closeDate;
+    private LocalDate closeDate;
 }
