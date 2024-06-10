@@ -28,7 +28,4 @@ public class Member {
 
     @Column(name = "full_name", nullable = false)
     private String fullName;
-
-    @Column(name = "kakao_user_id")
-    private String KakaoUserId;
 }
