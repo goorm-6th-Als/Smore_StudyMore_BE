@@ -26,15 +26,15 @@ public class StudyDetail {
     @Column(name = "image_uri")
     private String imageUri;
 
-    @Column(name = "max_people", nullable = false)
-    private Integer maxPeople;
+    @Column(name = "max_people")
+    private int maxPeople;
 
-    @Column(name = "overview")
-    private String overview;
+    @Column(name = "content")
+    private String content;
 
-    @Column(name = "open_date", nullable = false)
-    private LocalDate openDate;
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    @Column(name = "close_date", nullable = false)
+    @Column(name = "close_date")
     private LocalDate closeDate;
 }

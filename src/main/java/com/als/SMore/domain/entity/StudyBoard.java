@@ -6,7 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -28,29 +28,22 @@ public class StudyBoard {
     @Column(name = "study_board_pk")
     private Long studyBoardPk;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "study_pk", nullable = false)
     private Study study;
-
-    @ManyToOne
-    @JoinColumn(name = "member_pk", nullable = false)
-    private Member member;
 
     @Column(name = "ad_title", nullable = false)
     private String adTitle;
 
-    @Column(name = "ad_content")
+    @Column(name = "ad_content", nullable = false)
     private String adContent;
 
-    @Column(name = "ad_summary")
+    @Column(name = "ad_summary", nullable = false)
     private String adSummary;
 
-    @Column(name = "create_date")
-    private LocalDate createDate;
-
-    @Column(name = "modify_date")
+    @Column(name = "modify_date", nullable = false)
     private LocalDate modifyDate;
 
-    @Column(name = "close_date")
-    private LocalDate closeDate;
+    @Column(name = "image_uri")
+    private String imageUri;
 }
