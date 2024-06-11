@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 public class ChattingController {
 
     private final SimpMessagingTemplate simpMessagingTemplate;  // @EnableWebSocketMessageBroker를 통해 등록되는 Bean으로, Broker로 메시지 전달
-    private final C
+//    private final
     @MessageMapping("/{RoomId}/chat")  // 클라이언트가 SEND할 수 있는 경로.
     // WebSocketConfig에서 등록한 applicationDestinationPrfixes와 @MessageMapping의 경로가 합쳐진다.
     public void chat(@DestinationVariable Long RoomId, ChattingRequest chattingRequest) { //@DestinationVariable : 구독 및 발행 URL의 경로변수를 지정

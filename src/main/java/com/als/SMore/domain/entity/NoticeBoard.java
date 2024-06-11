@@ -1,5 +1,6 @@
 package com.als.SMore.domain.entity;
 
+import com.als.SMore.study.notice.DTO.NoticeRequestDTO;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,4 +26,11 @@ public class NoticeBoard {
 
     @Column(name = "notice_content", nullable = false)
     private String noticeContent;
+
+    public NoticeBoard(NoticeRequestDTO requestDTO, Study study){
+        this.study = study;
+        this.noticeTitle = requestDTO.getNoticeTitle();
+        this.noticeContent = requestDTO.getNoticeContent();
+    }
+
 }
