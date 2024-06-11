@@ -18,9 +18,6 @@ public class Member {
     @Column(name = "user_id", nullable = false)
     private String userId;
 
-    @Column(name = "user_password", nullable = false)
-    private String userPassword;
-
     @Column(name = "profile_img")
     private String profileImg;
 
