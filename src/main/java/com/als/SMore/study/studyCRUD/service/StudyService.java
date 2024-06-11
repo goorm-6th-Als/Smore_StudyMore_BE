@@ -2,13 +2,16 @@ package com.als.SMore.study.studyCRUD.service;
 
 import com.als.SMore.domain.entity.Member;
 import com.als.SMore.domain.entity.Study;
+import com.als.SMore.domain.entity.StudyBoard;
 import com.als.SMore.domain.entity.StudyDetail;
 import com.als.SMore.domain.entity.StudyMember;
 import com.als.SMore.domain.repository.MemberRepository;
+import com.als.SMore.domain.repository.StudyBoardRepository;
 import com.als.SMore.domain.repository.StudyDetailRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,7 @@ public class StudyService {
     private final StudyDetailRepository studyDetailRepository;
     private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
+    private final StudyBoardRepository studyBoardRepository;
 
     /**
      * 스터디를 생성하는 메서드.
@@ -32,7 +36,6 @@ public class StudyService {
      */
     @Transactional
     public StudyCreateDTO createStudy(StudyCreateDTO studyCreateDTO) {
-        // 멤버를 memberRepository에서 조회
         Member member = memberRepository.findById(studyCreateDTO.getMemberPk())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 memberPk: " + studyCreateDTO.getMemberPk()));
 
@@ -62,9 +65,27 @@ public class StudyService {
                 .study(study)
                 .member(member)
                 .role("admin")
+                .enterDate(LocalDate.now())
                 .build();
         studyMemberRepository.save(studyMember);
         logger.info("StudyMember 생성: {}", studyMember);
+
+        // StudyBoard 엔티티 생성 및 저장
+        String adSummary = studyCreateDTO.getContent();
+        if (adSummary.length() > 30) {
+            adSummary = adSummary.substring(0, 30) + "...";
+        }
+
+        StudyBoard studyBoard = StudyBoard.builder()
+                .study(study)
+                .adTitle(studyCreateDTO.getStudyName())
+                .adContent(studyCreateDTO.getContent())
+                .adSummary(adSummary)
+                .modifyDate(LocalDate.now())
+                .imageUri(studyCreateDTO.getImageUri())
+                .build();
+        studyBoardRepository.save(studyBoard);
+        logger.info("StudyBoard 생성: {}", studyBoard);
 
         // 스터디 페이지 URL 설정 - Pk로
         String studyUrl = "http://localhost:8080/study/" + study.getStudyPk();
