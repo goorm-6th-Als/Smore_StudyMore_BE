@@ -49,8 +49,8 @@ public class StudyService {
                 .study(study) // Study 참조 설정
                 .imageUri(studyCreateDTO.getImageUri())
                 .maxPeople(studyCreateDTO.getMaxPeople())
-                .overview(studyCreateDTO.getOverview())
-                .openDate(studyCreateDTO.getOpenDate())
+                .content(studyCreateDTO.getContent())
+                .startDate(studyCreateDTO.getStartDate())
                 .closeDate(studyCreateDTO.getCloseDate())
                 .build();
 

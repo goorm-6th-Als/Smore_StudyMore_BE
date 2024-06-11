@@ -13,9 +13,7 @@ public class StudyBoardDTO {
     private String adTitle;
     private String adContent;
     private String adSummary;
-    private LocalDate createDate;
     private LocalDate modifyDate;
-    private LocalDate closeDate;
 
     // 기본 생성자
     public StudyBoardDTO() {}
@@ -25,9 +23,7 @@ public class StudyBoardDTO {
         this.studyBoardPk = studyBoard.getStudyBoardPk();
         this.studyPk = studyBoard.getStudy().getStudyPk();
         this.adTitle = studyBoard.getAdTitle();
-        this.createDate = studyBoard.getCreateDate();
         this.modifyDate = studyBoard.getModifyDate();
-        this.closeDate = studyBoard.getCloseDate();
         if (includeContent) {
             this.adContent = studyBoard.getAdContent();
         } else {

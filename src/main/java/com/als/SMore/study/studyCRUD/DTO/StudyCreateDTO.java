@@ -14,8 +14,8 @@ public class StudyCreateDTO {
     private Long memberPk;
     private String imageUri;
     private int maxPeople;
-    private String overview;
-    private LocalDate openDate;
+    private String content;
+    private LocalDate startDate;
     private LocalDate closeDate;
     private String studyUrl;
 }
