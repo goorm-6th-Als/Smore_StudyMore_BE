@@ -47,13 +47,4 @@ public class PersonalTodo {
 
     @Column(name = "create_date", updatable = false)
     private LocalDate createDate;
-
-    // setter나 생성자 대신 빌더 패턴사용
-    public PersonalTodo updateFields(TodoStatus scheduleStatus, String scheduleContent, LocalDate scheduleDate) {
-        return this.toBuilder()
-                .scheduleStatus(scheduleStatus)
-                .scheduleContent(scheduleContent)
-                .scheduleDate(scheduleDate)
-                .build();
-    }
 }

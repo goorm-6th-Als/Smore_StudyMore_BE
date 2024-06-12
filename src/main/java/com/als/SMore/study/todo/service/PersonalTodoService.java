@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,19 +74,28 @@ public class PersonalTodoService {
     }
 
     /**
-     * PersonalTodo 항목의 상태를 업데이트
-     * @param todoPk 바꿀 PersonalTodo의 PK
-     * @param status 새로운 상태
+     * PersonalTodo 항목을 업데이트
+     * @param todoPk 업데이트할 PersonalTodo의 PK
+     * @param personalTodoDTO 업데이트할 PersonalTodoDTO 객체
      * @return 업데이트된 PersonalTodoDTO 객체
      */
-    public PersonalTodoDTO updatePersonalTodoStatus(Long todoPk, String status) {
+    @Transactional
+    public PersonalTodoDTO updatePersonalTodo(Long todoPk, PersonalTodoDTO personalTodoDTO) {
         PersonalTodo personalTodo = personalTodoRepository.findById(todoPk)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 TODO PK: " + todoPk));
 
-        TodoStatus newStatus = TodoStatus.fromDisplayName(status);
-        personalTodo = personalTodo.updateFields(newStatus, personalTodo.getScheduleContent(), personalTodo.getScheduleDate());
+        personalTodo = personalTodoDTO.updateEntity(personalTodo);
         personalTodo = personalTodoRepository.save(personalTodo);
         return PersonalTodoDTO.fromEntity(personalTodo);
+    }
+
+    /*
+     * 스터디 전체 todo 조회
+     */
+    public List<PersonalTodoDTO> getAllTodos(Long studyPk) {
+        return personalTodoRepository.findByStudyStudyPk(studyPk).stream()
+                .map(PersonalTodoDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     /**
