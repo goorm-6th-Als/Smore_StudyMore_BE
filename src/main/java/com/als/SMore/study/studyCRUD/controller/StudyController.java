@@ -3,7 +3,6 @@ package com.als.SMore.study.studyCRUD.controller;
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
 import com.als.SMore.study.studyCRUD.service.StudyService;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,7 +31,7 @@ public class StudyController {
     @PostMapping
     public ResponseEntity<StudyCreateDTO> createStudy(@RequestBody StudyCreateDTO studyCreateDTO) {
         StudyCreateDTO createdStudy = studyService.createStudy(studyCreateDTO);
-        return ResponseEntity.created(URI.create(createdStudy.getStudyUrl())).body(createdStudy);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdStudy);
     }
 
     /**
@@ -45,18 +43,6 @@ public class StudyController {
     public ResponseEntity<Void> deleteStudy(@PathVariable Long id) {
         studyService.deleteStudy(id);
         return ResponseEntity.noContent().build();
-    }
-
-    /**
-     * 스터디 정보 업데이트
-     * @param id 업데이트할 스터디의 ID
-     * @param studyCreateDTO 업데이트할 스터디의 정 보를 담은 DTO
-     * @return 업데이트된 스터디 정보를 담은 DTO와 함께 응답
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<StudyCreateDTO> updateStudy(@PathVariable Long id, @RequestBody StudyCreateDTO studyCreateDTO) {
-        StudyCreateDTO updatedStudy = studyService.updateStudy(id, studyCreateDTO);
-        return ResponseEntity.ok(updatedStudy);
     }
 
     /**

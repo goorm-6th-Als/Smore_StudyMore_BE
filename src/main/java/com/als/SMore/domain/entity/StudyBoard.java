@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "study_board")
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 // 순환 참조 방지.
@@ -46,4 +46,5 @@ public class StudyBoard {
 
     @Column(name = "image_uri")
     private String imageUri;
+
 }

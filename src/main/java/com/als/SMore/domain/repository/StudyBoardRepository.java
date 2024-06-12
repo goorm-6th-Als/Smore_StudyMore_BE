@@ -1,5 +1,6 @@
 package com.als.SMore.domain.repository;
 
+import com.als.SMore.domain.entity.Study;
 import com.als.SMore.domain.entity.StudyBoard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,4 +15,5 @@ public interface StudyBoardRepository extends JpaRepository<StudyBoard, Long> {
     //대소문자 구분없이 수정날짜로 정렬
     @Query("SELECT sb FROM StudyBoard sb WHERE LOWER(sb.adTitle) LIKE LOWER(CONCAT('%', :keyword, '%')) ORDER BY sb.modifyDate DESC")
     Page<StudyBoard> searchByAdTitle(@Param("keyword") String keyword, Pageable pageable);
+    StudyBoard findByStudy(Study study);
 }
