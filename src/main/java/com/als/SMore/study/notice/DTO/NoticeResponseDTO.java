@@ -17,5 +17,11 @@ public class NoticeResponseDTO {
         this.noticeContent = noticeBoard.getNoticeContent();
     }
 
+    public NoticeResponseDTO(Long noticeBoardPK, NoticeRequestDTO requestDTO){
+        this.noticeBoardPk = noticeBoardPK;
+        this.noticeTitle = requestDTO.getNoticeTitle();
+        this.noticeContent = requestDTO.getNoticeContent();
+    }
+
 
 }
