@@ -3,10 +3,8 @@ package com.als.SMore.study.studyCRUD.DTO;
 import com.als.SMore.domain.entity.StudyBoard;
 import java.time.LocalDate;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class StudyBoardDTO {
     private Long studyBoardPk;
     private Long studyPk;
@@ -14,9 +12,6 @@ public class StudyBoardDTO {
     private String adContent;
     private String adSummary;
     private LocalDate modifyDate;
-
-    // 기본 생성자
-    public StudyBoardDTO() {}
 
     // 스터디 모집 게시물 생성자
     public StudyBoardDTO(StudyBoard studyBoard, boolean includeContent) {

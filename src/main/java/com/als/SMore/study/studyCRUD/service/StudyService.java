@@ -11,7 +11,6 @@ import com.als.SMore.domain.repository.StudyDetailRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
-import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,60 +38,21 @@ public class StudyService {
         Member member = memberRepository.findById(studyCreateDTO.getMemberPk())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 memberPk: " + studyCreateDTO.getMemberPk()));
 
-        // Study 엔티티 생성
-        Study study = Study.builder()
-                .studyName(studyCreateDTO.getStudyName())
-                .member(member)
-                .build();
+        Study study = StudyCreateDTO.toEntity(studyCreateDTO, member);
         studyRepository.save(study);
         logger.info("Study 생성: {}", study);
 
-        // StudyDetail 엔티티 생성
-        StudyDetail studyDetail = StudyDetail.builder()
-                .study(study) // Study 참조 설정
-                .imageUri(studyCreateDTO.getImageUri())
-                .maxPeople(studyCreateDTO.getMaxPeople())
-                .content(studyCreateDTO.getContent())
-                .startDate(studyCreateDTO.getStartDate())
-                .closeDate(studyCreateDTO.getCloseDate())
-                .build();
-
+        StudyDetail studyDetail = StudyCreateDTO.toDetailEntity(studyCreateDTO, study);
         studyDetailRepository.save(studyDetail);
         logger.info("StudyDetail 생성: {}", studyDetail);
 
-        // StudyMember 엔티티 생성 및 저장
-        StudyMember studyMember = StudyMember.builder()
-                .study(study)
-                .member(member)
-                .role("admin")
-                .enterDate(LocalDate.now())
-                .build();
+        StudyMember studyMember = StudyCreateDTO.toMemberEntity(studyCreateDTO, study, member);
         studyMemberRepository.save(studyMember);
         logger.info("StudyMember 생성: {}", studyMember);
 
-        // StudyBoard 엔티티 생성 및 저장
-        String adSummary = studyCreateDTO.getContent();
-        if (adSummary.length() > 30) {
-            adSummary = adSummary.substring(0, 30) + "...";
-        }
-
-        StudyBoard studyBoard = StudyBoard.builder()
-                .study(study)
-                .adTitle(studyCreateDTO.getStudyName())
-                .adContent(studyCreateDTO.getContent())
-                .adSummary(adSummary)
-                .modifyDate(LocalDate.now())
-                .imageUri(studyCreateDTO.getImageUri())
-                .build();
+        StudyBoard studyBoard = StudyCreateDTO.toBoardEntity(studyCreateDTO, study);
         studyBoardRepository.save(studyBoard);
         logger.info("StudyBoard 생성: {}", studyBoard);
-
-        // 스터디 페이지 URL 설정 - Pk로
-        String studyUrl = "http://localhost:8080/study/" + study.getStudyPk();
-        // 생성된 StudyCreateDTO 객체 반환
-        studyCreateDTO.setStudyPk(study.getStudyPk());
-        studyCreateDTO.setStudyUrl(studyUrl);
-
         return studyCreateDTO;
     }
 
@@ -106,27 +66,6 @@ public class StudyService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + id));
         studyRepository.delete(study);
         logger.info("스터디 삭제: {}", id);
-    }
-
-    /**
-     * 스터디를 업데이트하는 메서드.
-     * @param id 업데이트할 스터디의 ID
-     * @param studyCreateDTO 업데이트할 스터디 정보를 담은 DTO 객체
-     * @return 업데이트된 스터디 정보를 담은 StudyCreateDTO 객체
-     */
-    @Transactional
-    public StudyCreateDTO updateStudy(Long id, StudyCreateDTO studyCreateDTO) {
-        Study study = studyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + id));
-
-        study.setStudyName(studyCreateDTO.getStudyName());
-        studyRepository.save(study);
-
-        StudyDetail studyDetail = studyDetailRepository.findByStudy(study);
-        studyDetail.setImageUri(studyCreateDTO.getImageUri());
-        studyDetailRepository.save(studyDetail);
-
-        return studyCreateDTO;
     }
 
     /**
