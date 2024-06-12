@@ -4,13 +4,15 @@ import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name = "attendance_check")
-@Getter @Builder
+@Getter @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class AttendanceCheck {
 
     @Id @Tsid
@@ -27,9 +29,9 @@ public class AttendanceCheck {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "attendance_date")
-    private Date attendanceDate;
+    private LocalDateTime attendanceDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "attendance_date_end")
-    private Date attendanceDateEnd;
+    private LocalDateTime attendanceDateEnd;
 }
