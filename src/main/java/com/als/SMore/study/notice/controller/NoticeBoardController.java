@@ -35,21 +35,27 @@ public class NoticeBoardController {
     }
 
     @PostMapping
-    public NoticeResponseDTO createNotice(@PathVariable Long studyPK, @RequestBody NoticeRequestDTO requestDTO){
+    public NoticeResponseDTO createNotice(@PathVariable Long studyPK, @RequestBody NoticeRequestDTO requestDTO, @RequestParam String requestorPk){
         //방장 본인 인지 검증하는 로직 추가 되어야함.
-        return noticeBoardService.createNotice(studyPK, requestDTO);
+        System.out.println("!!!" + requestorPk);
+        Long requestorPkLong = Long.parseLong(requestorPk);
+        return noticeBoardService.createNotice(studyPK, requestDTO, requestorPkLong);
     }
 
     @PutMapping("/{noticeBoardPK}")
-    public NoticeResponseDTO updateNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestBody NoticeRequestDTO requestDTO){
+    public NoticeResponseDTO updateNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestBody NoticeRequestDTO requestDTO, @RequestParam String requestorPk){
         //방장 본인 인지 검증하는 로직 추가 되어야함.
-        return noticeBoardService.updateNotice(studyPK, noticeBoardPK, requestDTO);
+        Long requestorPkLong = Long.parseLong(requestorPk);
+
+        return noticeBoardService.updateNotice(studyPK, noticeBoardPK, requestDTO , requestorPkLong);
     }
 
     @DeleteMapping("/{noticeBoardPK}")
-    public MessageResponseDTO deleteNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK){
+    public MessageResponseDTO deleteNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestParam String requestorPk){
         //방장 본인 인지 검증하는 로직 추가 되어야함.
-       return noticeBoardService.deleteNotice(studyPK, noticeBoardPK);
+        Long requestorPkLong = Long.parseLong(requestorPk);
+
+        return noticeBoardService.deleteNotice(studyPK, noticeBoardPK, requestorPkLong);
     }
 
 }
