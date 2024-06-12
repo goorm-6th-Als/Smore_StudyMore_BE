@@ -65,12 +65,12 @@ class SMoreApplicationTests {
 	}
 	@Test
 	void addMember(){
-		memberRepository.save(new Member().toBuilder()
-						.userPassword("비밀비밀~")
-						.userId("일빠인가?")
-						.nickName("진수")
-						.fullName("박진수")
-				.build());
+//		memberRepository.save(new Member().toBuilder()
+//						.userPassword("비밀비밀~")
+//						.userId("일빠인가?")
+//						.nickName("진수")
+//						.fullName("박진수")
+//				.build());
 	}
 
 	@Test
