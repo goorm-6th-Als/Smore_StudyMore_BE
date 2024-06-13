@@ -23,7 +23,7 @@ public class StudyBoardService {
      */
     public List<StudyBoardDTO> getAllStudyBoards() {
         return studyBoardRepository.findAll().stream()
-                .map(studyBoard -> new StudyBoardDTO(studyBoard, false))
+                .map(studyBoard -> StudyBoardDTO.fromEntity(studyBoard, false))
                 .collect(Collectors.toList());
     }
 
@@ -35,7 +35,7 @@ public class StudyBoardService {
     public StudyBoardDTO getStudyBoardById(Long id) {
         StudyBoard studyBoard = studyBoardRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 studyBoard ID: " + id));
-        return new StudyBoardDTO(studyBoard, true);
+        return StudyBoardDTO.fromEntity(studyBoard, true);
     }
 
     /**
@@ -45,17 +45,17 @@ public class StudyBoardService {
      */
     public Page<StudyBoardDTO> getStudyBoardsPage(Pageable pageable) {
         return studyBoardRepository.findAll(pageable)
-                .map(studyBoard -> new StudyBoardDTO(studyBoard, false));
+                .map(studyBoard -> StudyBoardDTO.fromEntity(studyBoard, false));
     }
-
-    /**
-     * 스터디 보드 검색 기능 수정날짜로 정렬
-     * @param keyword 검색할 문자열
-     * @param pageable 페이지 정보
-     * @return 검색된 StudyBoardDTO의 페이지 객체
-     */
+//
+//    /**
+//     * 스터디 보드 검색 기능 수정날짜로 정렬
+//     * @param keyword 검색할 문자열
+//     * @param pageable 페이지 정보
+//     * @return 검색된 StudyBoardDTO의 페이지 객체
+//     */
     public Page<StudyBoardDTO> searchStudyBoards(String keyword, Pageable pageable) {
-        return studyBoardRepository.searchByAdTitle(keyword, pageable)
-                .map(studyBoard -> new StudyBoardDTO(studyBoard, false));
+        return studyBoardRepository.findByAdTitleContainingIgnoreCaseOrderByModifyDateDesc(keyword, pageable)
+                .map(studyBoard -> StudyBoardDTO.fromEntity(studyBoard, false));
     }
 }
