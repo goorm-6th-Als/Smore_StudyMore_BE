@@ -7,7 +7,7 @@ import lombok.*;
 @Entity
 @Table(name = "study_member")
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyMember {
