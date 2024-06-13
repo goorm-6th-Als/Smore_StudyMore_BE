@@ -69,8 +69,8 @@ public class PersonalTodoController {
     @PutMapping("/{todoPk}")
     public ResponseEntity<PersonalTodoDTO> updateTodo(
             @PathVariable Long studyPk, @PathVariable Long todoPk, @RequestBody PersonalTodoDTO personalTodoDTO) {
-        PersonalTodoDTO updatedTodo = personalTodoService.updatePersonalTodo(todoPk,
-                PersonalTodoDTO.builder().studyPk(studyPk).build());
+        PersonalTodoDTO updatedDTO = personalTodoDTO.toBuilder().studyPk(studyPk).build();
+        PersonalTodoDTO updatedTodo = personalTodoService.updatePersonalTodo(todoPk, updatedDTO);
         return ResponseEntity.ok(updatedTodo);
     }
 
