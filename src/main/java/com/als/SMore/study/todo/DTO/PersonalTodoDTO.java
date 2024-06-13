@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 public class PersonalTodoDTO {
     private Long personalTodoPk;
     private Long studyPk;
@@ -19,7 +19,7 @@ public class PersonalTodoDTO {
     private LocalDate scheduleDate;
     private LocalDate createDate;
 
-    //PersonalTodo 랑 PersonalTodoDTO 개체 변환용
+    // PersonalTodo 랑 PersonalTodoDTO 개체 변환용
     public static PersonalTodoDTO fromEntity(PersonalTodo personalTodo) {
         return PersonalTodoDTO.builder()
                 .personalTodoPk(personalTodo.getPersonalTodoPk())
@@ -44,16 +44,11 @@ public class PersonalTodoDTO {
                 .build();
     }
 
-
     public PersonalTodo updateEntity(PersonalTodo personalTodo) {
-        return PersonalTodo.builder()
-                .personalTodoPk(personalTodo.getPersonalTodoPk())
-                .member(personalTodo.getMember())
-                .study(personalTodo.getStudy())
+        return personalTodo.toBuilder()
                 .scheduleStatus(this.scheduleStatus != null ? this.scheduleStatus : personalTodo.getScheduleStatus())
                 .scheduleContent(this.scheduleContent != null ? this.scheduleContent : personalTodo.getScheduleContent())
                 .scheduleDate(this.scheduleDate != null ? this.scheduleDate : personalTodo.getScheduleDate())
-                .createDate(personalTodo.getCreateDate())
                 .build();
     }
 }
