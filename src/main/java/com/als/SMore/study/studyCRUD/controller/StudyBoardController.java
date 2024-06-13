@@ -22,8 +22,7 @@ public class StudyBoardController {
     private final StudyBoardService studyBoardService;
 
     /**
-     * 모든 StudyBoard 엔티티를 조회하는 엔드포인트
-     *
+     * 모든 StudyBoard를 확인하는 엔드포인트
      * @return 모든 StudyBoard 엔티티의 DTO 리스트와 함께 OK 응답 반환
      */
     @GetMapping
@@ -32,8 +31,7 @@ public class StudyBoardController {
     }
 
     /**
-     * 특정 ID의 StudyBoard 엔티티를 조회하는 엔드포인트
-     *
+     * 특정 StudyBoard 엔티티를 조회하는 엔드포인트
      * @param id 조회할 StudyBoard 엔티티의 ID
      * @return 조회된 StudyBoard 엔티티의 DTO와 함께 OK 응답 반환
      */
@@ -43,8 +41,7 @@ public class StudyBoardController {
     }
 
     /**
-     * StudyBoard 엔티티를 페이지 단위로 조회하는 엔드포인트
-     *
+     * StudyBoard 페이징 엔드포인트
      * @param page 페이지 번호 (1부터 시작)
      * @param size 페이지 크기 (한 페이지당 항목 수)
      * @return 요청된 페이지에 해당하는 StudyBoard 엔티티의 DTO 리스트와 함께 OK 응답 반환
@@ -55,6 +52,23 @@ public class StudyBoardController {
             @RequestParam(defaultValue = "9") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<StudyBoardDTO> studyBoardPage = studyBoardService.getStudyBoardsPage(pageable);
+        return ResponseEntity.ok(studyBoardPage);
+    }
+
+    /**
+     * 제목 검색 메서드
+     * @param keyword 검색할 문자열
+     * @param page 페이지 번호 (1부터 시작)
+     * @param size 페이지 크기 (한 페이지당 항목 수)
+     * @return 검색된 StudyBoard 엔티티의 DTO 리스트와 함께 OK 응답 반환
+     */
+    @GetMapping("/search")
+    public ResponseEntity<Page<StudyBoardDTO>> searchStudyBoards(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "9") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<StudyBoardDTO> studyBoardPage = studyBoardService.searchStudyBoards(keyword, pageable);
         return ResponseEntity.ok(studyBoardPage);
     }
 }
