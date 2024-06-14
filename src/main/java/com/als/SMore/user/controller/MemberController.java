@@ -1,5 +1,9 @@
 package com.als.SMore.user.controller;
 
+import com.als.SMore.user.dto.member.response.MemberProfileResponse;
+import com.als.SMore.user.service.UserInfoService;
+import com.als.SMore.user.util.MemberUtil;
+import org.aspectj.weaver.MemberUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,8 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     @GetMapping("/mypage")
-    public ResponseEntity<String> getMyProfile(){
-        return ResponseEntity.ok("굿");
+    public ResponseEntity<MemberProfileResponse> getMyProfile(){
+        return ResponseEntity.ok(MemberProfileResponse.builder()
+                .nickname(MemberUtil.getNickname())
+                .profileImage(MemberUtil.getProfileUrl()).build());
     }
 
     @PatchMapping("/nickname")
