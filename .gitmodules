@@ -1,0 +1,3 @@
+[submodule "SMore_SubModule"]
+	path = SMore_SubModule
+	url = https://github.com/goorm-6th-Als/Smore_StudyMore_BE.git
