@@ -1,15 +1,20 @@
 package com.als.SMore.user.controller;
 
+import com.als.SMore.user.dto.member.request.NicknameRequest;
 import com.als.SMore.user.dto.member.response.MemberProfileResponse;
-import com.als.SMore.user.service.UserInfoService;
+import com.als.SMore.user.dto.member.response.NicknameResponse;
+import com.als.SMore.user.service.MemberService;
 import com.als.SMore.user.util.MemberUtil;
-import org.aspectj.weaver.MemberUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 public class MemberController {
+
+    private final MemberService memberService;
 
     @GetMapping("/mypage")
     public ResponseEntity<MemberProfileResponse> getMyProfile(){
@@ -19,8 +24,9 @@ public class MemberController {
     }
 
     @PatchMapping("/nickname")
-    public ResponseEntity<String> modifyNickname(){
-        return ResponseEntity.ok("굿");
+    public ResponseEntity<NicknameResponse> modifyNickname(@RequestBody NicknameRequest nickname){
+        NicknameResponse nicknameResponse = memberService.modifyNickname(nickname);
+        return ResponseEntity.ok(nicknameResponse);
     }
 
     @PatchMapping("/profileImage")
