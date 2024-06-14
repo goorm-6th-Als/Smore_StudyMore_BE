@@ -44,12 +44,20 @@ dependencies {
 	implementation 'org.springframework.data:spring-data-commons'
 
 	// jwt 관련 설정
-    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
-	// AWS S3 의존성 추가
-	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+    // AWS S3 의존성 추가
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+}
+
+task copyYML(type: Copy){
+	copy {
+		from './resources'
+		include "*.yml"
+		into './common/src/main/resources'
+	}
 }
 
 tasks.named('test') {
