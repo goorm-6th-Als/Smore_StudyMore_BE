@@ -42,9 +42,10 @@ public class PersonalTodo {
     @Column(name = "schedule_content")
     private String scheduleContent;
 
-    @Column(name = "schedule_date")
-    private LocalDate scheduleDate;
+    @Column(name = "modify_date")
+    private LocalDate modifyDate;
 
     @Column(name = "create_date", updatable = false)
     private LocalDate createDate;
+
 }
