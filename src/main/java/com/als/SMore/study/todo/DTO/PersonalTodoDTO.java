@@ -16,7 +16,7 @@ public class PersonalTodoDTO {
     private Long memberPk;
     private TodoStatus scheduleStatus;
     private String scheduleContent;
-    private LocalDate scheduleDate;
+    private LocalDate modifyDate;
     private LocalDate createDate;
 
     // PersonalTodo 랑 PersonalTodoDTO 개체 변환용
@@ -27,7 +27,7 @@ public class PersonalTodoDTO {
                 .memberPk(personalTodo.getMember().getMemberPk())
                 .scheduleStatus(personalTodo.getScheduleStatus())
                 .scheduleContent(personalTodo.getScheduleContent())
-                .scheduleDate(personalTodo.getScheduleDate())
+                .modifyDate(personalTodo.getModifyDate())
                 .createDate(personalTodo.getCreateDate())
                 .build();
     }
@@ -39,8 +39,8 @@ public class PersonalTodoDTO {
                 .study(study)
                 .scheduleStatus(personalTodoDTO.getScheduleStatus())
                 .scheduleContent(personalTodoDTO.getScheduleContent())
-                .scheduleDate(personalTodoDTO.getScheduleDate())
-                .createDate(LocalDate.now())
+                .modifyDate(LocalDate.now())
+                .createDate(personalTodoDTO.getCreateDate())
                 .build();
     }
 
@@ -48,7 +48,7 @@ public class PersonalTodoDTO {
         return personalTodo.toBuilder()
                 .scheduleStatus(this.scheduleStatus != null ? this.scheduleStatus : personalTodo.getScheduleStatus())
                 .scheduleContent(this.scheduleContent != null ? this.scheduleContent : personalTodo.getScheduleContent())
-                .scheduleDate(this.scheduleDate != null ? this.scheduleDate : personalTodo.getScheduleDate())
+                .modifyDate(LocalDate.now())
                 .build();
     }
 }
