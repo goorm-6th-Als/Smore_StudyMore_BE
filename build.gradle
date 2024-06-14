@@ -52,11 +52,12 @@ dependencies {
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
 }
 
-task copyYML(type: Copy){
+// YML 파일
+task copyYML(type: Copy) {
 	copy {
-		from './resources'
+		from './sub_Module'
 		include "*.yml"
-		into './common/src/main/resources'
+		into 'src/main/resources'
 	}
 }
 
