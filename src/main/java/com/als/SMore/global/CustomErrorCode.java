@@ -18,12 +18,15 @@ public enum CustomErrorCode {
 
     //notice
     NOT_EXIST_PAGE(HttpStatus.NOT_FOUND, "존재하지 않는 게시물 입니다."),
-    INVALID_TITLE_NAME(HttpStatus.BAD_REQUEST, "제목은 공백 포함 1자 이상 30자 이하로 해주세요.");
+    INVALID_TITLE_NAME(HttpStatus.BAD_REQUEST, "제목은 공백 포함 1자 이상 30자 이하로 해주세요."),
 
 
 
-
-
+    //attendance
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND,"없는 유저 입니다."),
+    NOT_FOUND_STUDY(HttpStatus.NOT_FOUND, "없는 스터디 입니다"),
+    NOT_FOUND_USER_OR_STUDY(HttpStatus.NOT_FOUND, "없는 유저 또는 스터디 입니다"),
+    INVALID_VALUE(HttpStatus.BAD_REQUEST, "유효하지 않은 값입니다");
     private final HttpStatus httpStatus;
     private final String message;
 }
