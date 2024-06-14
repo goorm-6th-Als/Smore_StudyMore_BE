@@ -8,8 +8,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "study_detail")
 @Getter
-@Setter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyDetail {
@@ -26,7 +25,7 @@ public class StudyDetail {
     @Column(name = "image_uri")
     private String imageUri;
 
-    @Column(name = "max_people")
+    @Column(name = "max_people", nullable = false)
     private int maxPeople;
 
     @Column(name = "content")
@@ -37,4 +36,5 @@ public class StudyDetail {
 
     @Column(name = "close_date")
     private LocalDate closeDate;
+
 }

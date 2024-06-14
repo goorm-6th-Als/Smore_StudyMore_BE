@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudyDetailRepository extends JpaRepository<StudyDetail, Long> {
-    void deleteByStudy(Study study);
     StudyDetail findByStudy(Study updatedStudy);
 }

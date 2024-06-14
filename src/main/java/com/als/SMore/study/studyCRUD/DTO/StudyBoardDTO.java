@@ -2,11 +2,11 @@ package com.als.SMore.study.studyCRUD.DTO;
 
 import com.als.SMore.domain.entity.StudyBoard;
 import java.time.LocalDate;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@Builder
 public class StudyBoardDTO {
     private Long studyBoardPk;
     private Long studyPk;
@@ -15,19 +15,14 @@ public class StudyBoardDTO {
     private String adSummary;
     private LocalDate modifyDate;
 
-    // 기본 생성자
-    public StudyBoardDTO() {}
-
-    // 스터디 모집 게시물 생성자
-    public StudyBoardDTO(StudyBoard studyBoard, boolean includeContent) {
-        this.studyBoardPk = studyBoard.getStudyBoardPk();
-        this.studyPk = studyBoard.getStudy().getStudyPk();
-        this.adTitle = studyBoard.getAdTitle();
-        this.modifyDate = studyBoard.getModifyDate();
-        if (includeContent) {
-            this.adContent = studyBoard.getAdContent();
-        } else {
-            this.adSummary = studyBoard.getAdSummary();
-        }
+    public static StudyBoardDTO fromEntity(StudyBoard studyBoard, boolean includeContent) {
+        return StudyBoardDTO.builder()
+                .studyBoardPk(studyBoard.getStudyBoardPk())
+                .studyPk(studyBoard.getStudy().getStudyPk())
+                .adTitle(studyBoard.getAdTitle())
+                .modifyDate(studyBoard.getModifyDate())
+                .adContent(includeContent ? studyBoard.getAdContent() : null)
+                .adSummary(includeContent ? null : studyBoard.getAdSummary())
+                .build();
     }
 }

@@ -19,29 +19,32 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "study")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class Study {
     @Id @Tsid
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_pk")
     private Long studyPk;
 
-    // 스터디 디테일, 스터디 멤버 종속
+    // 스터디 디테일, 스터디 멤버, 스터디 보드 종속
     @OneToOne(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private StudyDetail studyDetail;
-    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<StudyMember> studyMembers;
+
+    @OneToOne(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private StudyBoard studyBoards;
 
     @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NoticeBoard> noticeBoards;
+
 
     @ManyToOne
     @JoinColumn(name = "member_pk", nullable = false)
