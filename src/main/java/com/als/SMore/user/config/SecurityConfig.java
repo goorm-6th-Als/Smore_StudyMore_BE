@@ -41,16 +41,21 @@ public class SecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable());
 
-        http.authorizeHttpRequests(request -> request
-                        .anyRequest().authenticated()
-        )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        http.oauth2Login(oauth2 -> oauth2
-                .authorizationEndpoint(endpoint -> endpoint.baseUri("/oauth2/authorization/kakao"))
-                .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
-                .userInfoEndpoint(endpoint -> endpoint.userService(kakaoMemberDetailsService))
-                .successHandler(oAuth2SuccessHandler)
-        );
+//        http.authorizeHttpRequests(request -> request
+//                        .anyRequest().authenticated()
+//                )
+//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+                .authorizeRequests()
+                    .anyRequest().permitAll() // 모든 요청을 허용(개발 끝나면 없어져야 합니당)
+                    .and()
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(endpoint -> endpoint.baseUri("/oauth2/authorization/kakao"))
+                        .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+                        .userInfoEndpoint(endpoint -> endpoint.userService(kakaoMemberDetailsService))
+                        .successHandler(oAuth2SuccessHandler)
+                )
+                .csrf(csrf -> csrf.disable()); // CSRF 보호 비활성화 (개발 끝나면 없어져야 합니당)
         return http.build();
     }
 
@@ -77,7 +82,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Collections.singletonList("*"));
         config.setMaxAge(3600L);
-        config.setExposedHeaders(Arrays.asList("Authorization","X-Refresh-Token"));
+        config.setExposedHeaders(Arrays.asList("Authorization", "X-Refresh-Token"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
