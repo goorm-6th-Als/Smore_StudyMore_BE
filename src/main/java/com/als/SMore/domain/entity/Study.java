@@ -40,6 +40,9 @@ public class Study {
     @OneToOne(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private StudyBoard studyBoards;
 
+    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<NoticeBoard> noticeBoards;
+
     @ManyToOne
     @JoinColumn(name = "member_pk", nullable = false)
     private Member member;
