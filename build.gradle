@@ -52,7 +52,7 @@ dependencies {
 // YML 파일
 task copyYML(type: Copy) {
 	copy {
-		from './sub_Module'
+		from './Sub_Module'
 		include "*.yml"
 		into 'src/main/resources'
 	}
