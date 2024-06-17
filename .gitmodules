@@ -1,6 +1,6 @@
 [submodule "SMore_SubModule"]
-	path = SMore_SubModule
-	url = https://github.com/goorm-6th-Als/Smore_StudyMore_BE.git
+    path = SMore_SubModule
+    url = git@github.com:goorm-6th-Als/Smore_StudyMore_BE.git
 [submodule "Sub_Module"]
-	path = Sub_Module
-	url = https://github.com/goorm-6th-Als/SMore_SubModule.git
+    path = Sub_Module
+    url = git@github.com:goorm-6th-Als/SMore_SubModule.git
