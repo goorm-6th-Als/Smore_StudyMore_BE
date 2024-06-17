@@ -2,9 +2,14 @@ package com.als.SMore.study.attendance.service.impl;
 
 import com.als.SMore.domain.entity.*;
 import com.als.SMore.domain.repository.*;
+import com.als.SMore.global.CustomErrorCode;
+import com.als.SMore.global.CustomException;
+import com.als.SMore.study.attendance.DTO.request.LearningMonthRequestDTO;
+import com.als.SMore.study.attendance.DTO.response.LearningMonthResponseDTO;
 import com.als.SMore.study.attendance.exception.AttendanceErrorCode;
 import com.als.SMore.study.attendance.exception.AttendanceException;
 import com.als.SMore.study.attendance.service.AttendanceService;
+import com.als.SMore.study.attendance.validator.AttendanceValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +18,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
-@Transactional
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -25,22 +31,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     final private AttendanceCheckRepository attendanceCheckRepository;
     final private StudyMemberRepository studyMemberRepository;
     final private StudyLearningTimeRepository studyLearningTimeRepository;
-
-    private Member getMember(Long pk) {
-        log.info("[getMember] Start");
-        Optional<Member> member = memberRepository.findById(pk);
-        if (member.isPresent()) return member.get();
-        else throw new AttendanceException(AttendanceErrorCode.NOT_FOUND_USER);
-    }
-
-
-    private Study getStudy(Long pk) {
-        log.info("[getStudy] Start");
-
-        Optional<Study> study = studyRepository.findById(pk);
-        if (study.isPresent()) return study.get();
-        else throw new AttendanceException(AttendanceErrorCode.NOT_FOUND_STUDY);
-    }
+    final private AttendanceValidator attendanceValidator;
+    
 
     /**
      * @param member
@@ -138,8 +130,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                         .studyMember(studyMember)
                         .build());
     }
-
-   
     /**
      *
      * @param member
@@ -149,22 +139,12 @@ public class AttendanceServiceImpl implements AttendanceService {
      *
      */
     private Long setLearningTime(Member member, Study study, AttendanceCheck attendanceCheck) {
-        Optional<StudyMember> optionalStudyMember = studyMemberRepository.findByMemberAndStudy(member, study);
-        StudyMember studyMember;
-        if(optionalStudyMember.isPresent()) studyMember = optionalStudyMember.get();
-        else throw new RuntimeException();// 이 자리에 예외처리좀 해줘~ 스터디나 멤버가 없어서 조회가 안되면 이거 터진다~
-        int startTime = (attendanceCheck.getAttendanceDate().getHour() * 60 * 60)
-                + (attendanceCheck.getAttendanceDate().getMinute() * 60)
-                + (attendanceCheck.getAttendanceDate().getSecond());
-        int endTime = (attendanceCheck.getAttendanceDateEnd().getHour() * 60 * 60)
-                + (attendanceCheck.getAttendanceDateEnd().getMinute() * 60)
-                + (attendanceCheck.getAttendanceDateEnd().getSecond());
-        Long learningTime = (long) (endTime - startTime);
 
-        Optional<StudyLearningTime> optionalStudyLearningTime =
-                studyLearningTimeRepository.findByStudyMemberAndLearningDate(studyMember, LocalDate.now());
-        StudyLearningTime studyLearningTime;
-        studyLearningTime = optionalStudyLearningTime.orElseGet(() -> createStudyLearningTime(studyMember));
+        StudyMember studyMember = attendanceValidator.getStudyMember(member, study);
+        Long learningTime = attendanceValidator.studyTimeCalculator(attendanceCheck);
+
+
+        StudyLearningTime studyLearningTime = getLearningTime(studyMember);
 
         studyLearningTime = studyLearningTime.toBuilder()
                 .learningTime(studyLearningTime.getLearningTime() + learningTime)
@@ -172,19 +152,44 @@ public class AttendanceServiceImpl implements AttendanceService {
         return studyLearningTimeRepository.save(studyLearningTime).getLearningTime();
     }
 
+    public StudyLearningTime getLearningTime(StudyMember studyMember){
+        Optional<StudyLearningTime> optionalStudyLearningTime = studyLearningTimeRepository.findByStudyMemberAndLearningDate(studyMember, LocalDate.now());
+        return optionalStudyLearningTime.orElseGet(() -> createStudyLearningTime(studyMember));
+    }
+
+    @Transactional
     @Override
     public LocalDateTime attendanceStart(Long memberPk, Long StudyPk) {
         log.info("[attendanceStart] Start");
-        Member member = getMember(memberPk);
-        Study study = getStudy(StudyPk);
+        Member member = attendanceValidator.getMember(memberPk);
+        Study study = attendanceValidator.getStudy(StudyPk);
         return attendanceStart(member, study).getAttendanceDate();
     }
-
+    @Transactional
     @Override
     public Long attendanceEnd(Long memberPk, Long StudyPk) {
         log.info("[attendanceEnd] Start");
-        Member member = getMember(memberPk);
-        Study study = getStudy(StudyPk);
+        Member member = attendanceValidator.getMember(memberPk);
+        Study study = attendanceValidator.getStudy(StudyPk);
         return attendanceCheckEnd(member, study);
     }
+
+    @Override
+    @Transactional
+    public Long getLearningSeconds(Long memberPk, Long StudyPk) {
+        Member member = attendanceValidator.getMember(memberPk);
+        Study study = attendanceValidator.getStudy(StudyPk);
+        return getLearningTime(attendanceValidator.getStudyMember(member, study)).getLearningTime();
+    }
+
+    @Override
+    public List<LearningMonthResponseDTO> getLearningMonth(Long memberPk, Long studyPk, LearningMonthRequestDTO learningMonthRequestDTO) {
+        Member member = attendanceValidator.getMember(memberPk);
+        Study study = attendanceValidator.getStudy(studyPk);
+        StudyMember studyMember = attendanceValidator.getStudyMember(member, study);
+        return attendanceValidator.getLearningMonth(studyMember, learningMonthRequestDTO);
+    }
+
+
+
 }
