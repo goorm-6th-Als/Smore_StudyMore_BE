@@ -24,7 +24,11 @@ public enum CustomErrorCode {
 
 
 
-
+    //attendance
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND,"없는 유저 입니다."),
+    NOT_FOUND_STUDY(HttpStatus.NOT_FOUND, "없는 스터디 입니다"),
+    NOT_FOUND_USER_OR_STUDY(HttpStatus.NOT_FOUND, "없는 유저 또는 스터디 입니다"),
+    INVALID_VALUE(HttpStatus.BAD_REQUEST, "유효하지 않은 값입니다");
     private final HttpStatus httpStatus;
     private final String message;
 }
