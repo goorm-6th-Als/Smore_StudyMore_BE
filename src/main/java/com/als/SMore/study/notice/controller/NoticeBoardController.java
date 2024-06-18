@@ -36,23 +36,23 @@ public class NoticeBoardController {
 
     @PostMapping
     public NoticeResponseDTO createNotice(@PathVariable Long studyPK, @RequestBody NoticeRequestDTO requestDTO, @RequestParam String requestorPk){
-        //방장 본인 인지 검증하는 로직 추가 되어야함.
-        System.out.println("!!!" + requestorPk);
+        //방장 본인 인지 검증하는것 헤더에서 PK가져오는것으로 변경 해야함.
         Long requestorPkLong = Long.parseLong(requestorPk);
         return noticeBoardService.createNotice(studyPK, requestDTO, requestorPkLong);
     }
 
     @PutMapping("/{noticeBoardPK}")
     public NoticeResponseDTO updateNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestBody NoticeRequestDTO requestDTO, @RequestParam String requestorPk){
-        //방장 본인 인지 검증하는 로직 추가 되어야함.
-        Long requestorPkLong = Long.parseLong(requestorPk);
+        //방장 본인 인지 검증하는것 헤더에서 PK가져오는것으로 변경 해야함.
 
+
+        Long requestorPkLong = Long.parseLong(requestorPk);
         return noticeBoardService.updateNotice(studyPK, noticeBoardPK, requestDTO , requestorPkLong);
     }
 
     @DeleteMapping("/{noticeBoardPK}")
     public MessageResponseDTO deleteNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestParam String requestorPk){
-        //방장 본인 인지 검증하는 로직 추가 되어야함.
+        //방장 본인 인지 검증하는것 헤더에서 PK가져오는것으로 변경 해야함.
         Long requestorPkLong = Long.parseLong(requestorPk);
 
         return noticeBoardService.deleteNotice(studyPK, noticeBoardPK, requestorPkLong);
