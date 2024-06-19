@@ -20,7 +20,6 @@ public class StudyCreateDTO {
     private String content;
     private LocalDate startDate;
     private LocalDate closeDate;
-    private String studyUrl;
 
     public static StudyCreateDTO fromEntity(Study study, StudyDetail studyDetail, StudyBoard studyBoard) {
         return StudyCreateDTO.builder()
