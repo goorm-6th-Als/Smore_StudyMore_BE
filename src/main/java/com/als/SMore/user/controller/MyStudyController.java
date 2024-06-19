@@ -4,6 +4,7 @@ import com.als.SMore.user.dto.member.response.MessageResponse;
 import com.als.SMore.user.dto.mystudy.request.IsCheckedStatusRequest;
 import com.als.SMore.user.dto.mystudy.response.EnterStudyResponse;
 import com.als.SMore.user.dto.mystudy.response.StudyListResponse;
+import com.als.SMore.user.service.MyStudyService;
 import com.als.SMore.user.util.MemberUtil;
 import com.amazonaws.Response;
 import jakarta.websocket.server.PathParam;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/study")
 @RestController
 public class MyStudyController {
+    private final MyStudyService myStudyService;
 
     // 내가 참여하는 스터디 get
     @GetMapping()
@@ -37,6 +39,7 @@ public class MyStudyController {
     // 신청한 사람들을 승낙하는 기능 post
     @PostMapping("/apply")
     public ResponseEntity<MessageResponse> acceptMember(@RequestBody IsCheckedStatusRequest statusRequest){
+        myStudyService.acceptMember(statusRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.builder().build());
     }
     // 신청한 사람들을 거절하는 기능 post
