@@ -38,7 +38,7 @@ public class StudyEnterMemberDTO {
                 .member(member)
                 .content(studyEnterMemberDTO.getContent())
                 .enterStatus(StudyEnterMemberStatus.PENDING) // 신청 시 초기 값은 '대기 중'
-                .createDate(LocalDateTime.now())
+                .createDate(LocalDateTime.now().withSecond(0).withNano(0))
                 .build();
     }
 }

@@ -38,8 +38,8 @@ public class StudyEnterMemberController {
      */
     @GetMapping
     public ResponseEntity<List<StudyEnterMemberDTO>> getAllStudyEnterMembers() {
-        List<StudyEnterMemberDTO> members = studyEnterMemberService.getAllStudyEnterMembers();
-        return ResponseEntity.ok(members);
+        List<StudyEnterMemberDTO> studyEnterMembers  = studyEnterMemberService.getAllStudyEnterMembers();
+        return ResponseEntity.ok(studyEnterMembers);
     }
 
     /**
