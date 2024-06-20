@@ -19,7 +19,7 @@ public enum CustomErrorCode {
     //notice
     NOT_EXIST_PAGE(HttpStatus.NOT_FOUND, "존재하지 않는 게시물 입니다."),
     INVALID_TITLE_NAME(HttpStatus.BAD_REQUEST, "제목은 공백 포함 1자 이상 30자 이하로 해주세요."),
-    NOT_AUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "공지사항은 스터디장만 생성, 수정, 삭제 할 수 있습니다.");
+    NOT_AUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "공지사항은 스터디장만 생성, 수정, 삭제 할 수 있습니다."),
 
 
 

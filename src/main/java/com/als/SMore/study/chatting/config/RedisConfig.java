@@ -1,4 +1,4 @@
-package com.als.SMore.study.Chatting.config;
+package com.als.SMore.study.chatting.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

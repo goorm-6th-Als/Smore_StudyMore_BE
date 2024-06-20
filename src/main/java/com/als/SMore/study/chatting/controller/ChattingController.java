@@ -1,8 +1,7 @@
-package com.als.SMore.study.Chatting.controller;
+package com.als.SMore.study.chatting.controller;
 
-import com.als.SMore.study.Chatting.DTO.ChatMessage;
-import com.als.SMore.study.Chatting.DTO.ChatMessageRequestDTO;
-import com.als.SMore.study.Chatting.service.ChattingService;
+import com.als.SMore.study.chatting.DTO.ChatMessageRequestDTO;
+import com.als.SMore.study.chatting.service.ChattingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -11,7 +10,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

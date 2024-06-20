@@ -1,6 +1,6 @@
 package com.als.SMore.domain.repository;
 
-import com.als.SMore.study.Chatting.DTO.ChatMessage;
+import com.als.SMore.study.chatting.DTO.ChatMessage;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;

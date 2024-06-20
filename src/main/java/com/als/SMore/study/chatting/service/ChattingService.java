@@ -1,4 +1,4 @@
-package com.als.SMore.study.Chatting.service;
+package com.als.SMore.study.chatting.service;
 
 import com.als.SMore.domain.entity.Member;
 import com.als.SMore.domain.entity.Study;
@@ -7,8 +7,8 @@ import com.als.SMore.domain.repository.ChattingRepository;
 import com.als.SMore.domain.repository.MemberRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
-import com.als.SMore.study.Chatting.DTO.ChatMessage;
-import com.als.SMore.study.Chatting.DTO.ChatMessageRequestDTO;
+import com.als.SMore.study.chatting.DTO.ChatMessage;
+import com.als.SMore.study.chatting.DTO.ChatMessageRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;

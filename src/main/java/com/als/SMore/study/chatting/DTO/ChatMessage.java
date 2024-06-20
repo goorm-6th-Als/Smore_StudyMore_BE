@@ -1,4 +1,4 @@
-package com.als.SMore.study.Chatting.DTO;
+package com.als.SMore.study.chatting.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

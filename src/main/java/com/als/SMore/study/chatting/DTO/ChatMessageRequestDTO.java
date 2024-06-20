@@ -1,4 +1,4 @@
-package com.als.SMore.study.Chatting.DTO;
+package com.als.SMore.study.chatting.DTO;
 
 
 import lombok.Getter;
