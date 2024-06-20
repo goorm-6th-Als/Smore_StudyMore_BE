@@ -7,14 +7,14 @@ import lombok.*;
 @Entity
 @Table(name = "study_problem_bank")
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyProblemBank {
 
     @Id @Tsid
-    @Column(name = "problem_code_bank_pk")
-    private Long problemCodeBankPk;
+    @Column(name = "study_problem_bank_pk")
+    private Long studyProblemBankPk;
 
     @ManyToOne  //그룹 만든 사람 스터디장과 함께 삭제 권한이 있는 사람
     @JoinColumn(name = "member_pk", nullable = false)
