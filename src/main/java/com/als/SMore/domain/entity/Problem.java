@@ -23,8 +23,11 @@ public class Problem {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "problem_code_bank_pk", nullable = false)
+    @JoinColumn(name = "study_problem_bank_pk", nullable = false)
     private StudyProblemBank studyProblemBank;
+
+    @Column(name = "problem_title")
+    private String problemTitle;
 
     @Column(name = "problem_content")
     private String problemContent;
