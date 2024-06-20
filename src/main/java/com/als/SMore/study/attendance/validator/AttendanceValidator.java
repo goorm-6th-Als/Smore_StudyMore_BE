@@ -8,6 +8,7 @@ import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.global.CustomErrorCode;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.attendance.DTO.request.LearningMonthRequestDTO;
+import com.als.SMore.study.attendance.DTO.response.LearningMonthListResponseDTO;
 import com.als.SMore.study.attendance.DTO.response.LearningMonthResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +64,7 @@ public class AttendanceValidator {
         return result;
     }
 
-    public List<LearningMonthResponseDTO> getLearningMonth(StudyMember studyMember, LearningMonthRequestDTO learningMonthRequestDTO) {
+    public LearningMonthListResponseDTO getLearningMonth(StudyMember studyMember, LearningMonthRequestDTO learningMonthRequestDTO) {
         int year = learningMonthRequestDTO.getYear();
 
         int month = learningMonthRequestDTO.getMonth();
@@ -75,14 +76,15 @@ public class AttendanceValidator {
         List<StudyLearningTime> studyLearningTimeList = studyLearningTimeRepository.findByStudyMemberAndLearningDateBetween(studyMember, start, end);
 
         List<LearningMonthResponseDTO> learningMonthResponseDTOList = new ArrayList<>();
-
+        Long totalTime = 0L;
         for (StudyLearningTime studyLearningTime : studyLearningTimeList) {
             LocalDate date = studyLearningTime.getLearningDate();
             Long LearningTime = studyLearningTime.getLearningTime();
+            totalTime += LearningTime;
             LocalTime time = LocalTime.MIDNIGHT.plusSeconds(LearningTime);
             learningMonthResponseDTOList.add(new LearningMonthResponseDTO(date, time));
         }
         
-        return learningMonthResponseDTOList;
+        return new LearningMonthListResponseDTO(learningMonthResponseDTOList, totalTime);
     }
 }

@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyEnterMember {
-
     @Id
     @Tsid
     @Column(name = "study_enter_member_pk", nullable = false)
@@ -26,17 +25,18 @@ public class StudyEnterMember {
     private Study study;
 
     @ManyToOne
-    @JoinColumn(name = "member_pk2", nullable = false)
+    @JoinColumn(name = "member_pk", nullable = false)
     private Member member;
 
-    @Column(name = "content", columnDefinition = "TEXT")
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "entrer_status")
-    private String entrerStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "enter_status", nullable = false)
+    private StudyEnterMemberStatus enterStatus;
 
-    @Column(name = "creat_date")
-    private LocalDateTime creatDate;
+    @Column(name = "create_date", nullable = false)
+    private LocalDateTime createDate;
 
 }
 

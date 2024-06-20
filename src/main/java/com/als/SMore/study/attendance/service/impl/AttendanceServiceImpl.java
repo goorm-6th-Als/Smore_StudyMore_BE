@@ -5,6 +5,7 @@ import com.als.SMore.domain.repository.*;
 import com.als.SMore.global.CustomErrorCode;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.attendance.DTO.request.LearningMonthRequestDTO;
+import com.als.SMore.study.attendance.DTO.response.LearningMonthListResponseDTO;
 import com.als.SMore.study.attendance.DTO.response.LearningMonthResponseDTO;
 import com.als.SMore.study.attendance.exception.AttendanceErrorCode;
 import com.als.SMore.study.attendance.exception.AttendanceException;
@@ -183,7 +184,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public List<LearningMonthResponseDTO> getLearningMonth(Long memberPk, Long studyPk, LearningMonthRequestDTO learningMonthRequestDTO) {
+    public LearningMonthListResponseDTO getLearningMonth(Long memberPk, Long studyPk, LearningMonthRequestDTO learningMonthRequestDTO) {
         Member member = attendanceValidator.getMember(memberPk);
         Study study = attendanceValidator.getStudy(studyPk);
         StudyMember studyMember = attendanceValidator.getStudyMember(member, study);
