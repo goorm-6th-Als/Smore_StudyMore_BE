@@ -195,5 +195,5 @@ gradle-app.setting
 .vscode/
 
 ### yaml~ ###
-*.yml
+application.yaml
 application.properties
