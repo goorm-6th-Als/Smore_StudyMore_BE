@@ -119,7 +119,7 @@ public class MyStudyService {
         StudyEnterMember studyEnterMember = studyEnterMemberRepository.findStudyEnterMemberByMember_UserIdAndStudy_StudyPk(statusRequest.getUserId(), statusRequest.getStudyPk())
                 .orElseThrow(IllegalAccessError::new);
 
-        StudyEnterMember renewStudyEnterMember = studyEnterMember.toBuilder().entrerStatus("거절").build();
+        StudyEnterMember renewStudyEnterMember = studyEnterMember.toBuilder().enterStatus("거절").build();
         studyEnterMemberRepository.save(renewStudyEnterMember);
     }
 

@@ -33,7 +33,7 @@ public class StudyEnterMember {
     private String content;
 
     @Column(name = "entrer_status")
-    private String entrerStatus;
+    private String enterStatus;
 
     @Column(name = "creat_date")
     private LocalDateTime creatDate;
