@@ -54,7 +54,7 @@ public class StudyService {
         studyBoardRepository.save(studyBoard);
         logger.info("StudyBoard 생성: {}", studyBoard);
 
-        return StudyCreateDTO.fromEntity(study, studyDetail, studyBoard);
+        return StudyCreateDTO.fromEntity(study, studyDetail);
     }
 
 

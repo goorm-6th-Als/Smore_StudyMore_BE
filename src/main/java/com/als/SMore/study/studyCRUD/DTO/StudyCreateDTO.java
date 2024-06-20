@@ -21,7 +21,7 @@ public class StudyCreateDTO {
     private LocalDate startDate;
     private LocalDate closeDate;
 
-    public static StudyCreateDTO fromEntity(Study study, StudyDetail studyDetail, StudyBoard studyBoard) {
+    public static StudyCreateDTO fromEntity(Study study, StudyDetail studyDetail ) {
         return StudyCreateDTO.builder()
                 .studyPk(study.getStudyPk())
                 .memberPk(study.getMember().getMemberPk())
