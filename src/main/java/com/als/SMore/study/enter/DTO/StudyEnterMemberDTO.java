@@ -41,4 +41,12 @@ public class StudyEnterMemberDTO {
                 .createDate(LocalDateTime.now().withSecond(0).withNano(0))
                 .build();
     }
+
+    // DTO로 업데이트
+    public StudyEnterMember updateEntity(StudyEnterMember studyEnterMember) {
+        return studyEnterMember.toBuilder()
+                .content(this.content != null ? this.content : studyEnterMember.getContent())
+                .createDate(LocalDateTime.now().withSecond(0).withNano(0))
+                .build();
+    }
 }
