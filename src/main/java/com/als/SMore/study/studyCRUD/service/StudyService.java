@@ -53,20 +53,10 @@ public class StudyService {
         StudyBoard studyBoard = StudyCreateDTO.toBoardEntity(studyCreateDTO, study);
         studyBoardRepository.save(studyBoard);
         logger.info("StudyBoard 생성: {}", studyBoard);
-        return studyCreateDTO;
+
+        return StudyCreateDTO.fromEntity(study, studyDetail);
     }
 
-    /**
-     * 스터디를 삭제하는 메서드.
-     * @param id 삭제할 스터디의 ID
-     */
-    @Transactional
-    public void deleteStudy(Long id) {
-        Study study = studyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + id));
-        studyRepository.delete(study);
-        logger.info("스터디 삭제: {}", id);
-    }
 
     /**
      * 스터디 이름을 ID로 조회하는 메서드.
