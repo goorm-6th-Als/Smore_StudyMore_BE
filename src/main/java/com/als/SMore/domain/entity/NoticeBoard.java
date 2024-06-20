@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notice_board")
@@ -30,13 +31,17 @@ public class NoticeBoard {
     @Column(name = "notice_content", nullable = false)
     private String noticeContent;
 
-    public NoticeBoard(NoticeRequestDTO requestDTO, Study study){
+    @Column(name= "time", nullable = false)
+    private LocalDateTime time;
+
+    public NoticeBoard(NoticeRequestDTO requestDTO, Study study){  //create
         this.study = study;
         this.noticeTitle = requestDTO.getNoticeTitle();
         this.noticeContent = requestDTO.getNoticeContent();
+        this.time = LocalDateTime.now().withNano(0);
     }
 
-    public void updateNotice(NoticeRequestDTO requestDTO){
+    public void updateNotice(NoticeRequestDTO requestDTO){ //update
         this.noticeTitle = requestDTO.getNoticeTitle();
         this.noticeContent = requestDTO.getNoticeContent();
     }
