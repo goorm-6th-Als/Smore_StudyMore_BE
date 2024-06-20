@@ -49,14 +49,12 @@ public class NoticeBoardService {
     public NoticeResponseDTO updateNotice(Long studyPK, Long noticeBoardPK, NoticeRequestDTO requestDTO, Long requestorPk) {
         //유저 정보 받아오면, 유저 정보 + 스터디 PK로 방장이 맞는지 확인하도록.
         noticeValidator.CheckIsItManagerOfStudy(studyPK,requestorPk);
-
         noticeValidator.validateTitleLength(requestDTO.getNoticeTitle());
-
         Study study = noticeValidator.findStudyByStudyPk(studyPK);
         NoticeBoard noticeBoard = noticeValidator.findNoticeByBoardPkAndStudy(noticeBoardPK, study);
         noticeBoard.updateNotice(requestDTO);
 
-        return new NoticeResponseDTO(noticeBoardPK, requestDTO);
+        return new NoticeResponseDTO(noticeBoard, requestDTO);
     }
 
     public MessageResponseDTO deleteNotice(Long studyPK, Long noticeBoardPK, Long requestorPk) {
