@@ -1,6 +1,7 @@
 package com.als.SMore.study.Chatting.controller;
 
 import com.als.SMore.study.Chatting.DTO.ChatMessage;
+import com.als.SMore.study.Chatting.DTO.ChatMessageRequestDTO;
 import com.als.SMore.study.Chatting.service.ChattingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,20 +9,25 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Controller
+@RestController
+
 public class ChattingController {
 
     private final ChattingService chattingService;
 
-    @GetMapping("/sub/chat/{studyPk}/enter")
-    public void getChattings(@PathVariable("studyPk") String StudyPk){
-        chattingService.getChattinghistory(StudyPk);
+    @GetMapping("/chat/{studyPk}/enter")
+    public List<Object> getChattings(@PathVariable("studyPk") String StudyPk){
+        log.info("get Chattings 컨트롤러, StudyPk = {}",StudyPk);
+        return chattingService.getChattingHistory(StudyPk);
     }
 
 
@@ -32,11 +38,15 @@ public class ChattingController {
      * @param message 사용자가 보내는 메시지 내용
      */
     @MessageMapping("/chat/{studyPk}") //클라이언트에서 /pub/chat/{studyPk}로 메시지를 보내면 해당 채팅방을 구독 중인 사용자들에게 메시지를 전달
-    public void sendMessage(@DestinationVariable("studyPk") String StudyPk,  //@DestinationVariable : 구독 및 발행 URL의 경로변수를 지정
-                     @Payload ChatMessage chatMessage,
+    public void sendMessage(@DestinationVariable("studyPk") String StudyPk,
+                     @Payload ChatMessageRequestDTO requestDTO,
                      Message<?> message) {
-        //유저 디테일에서 Pk, name, profileImage 받아서 인자에 추가.
+        //유저 디테일에서 Pk, name, profileImage등 받아서 DTO 변경
+        log.info("ChattingController.sendMessage, getContent = {}",requestDTO.getContent());
+        log.info("ChattingController.sendMessage, getMemberName = {}",requestDTO.getMemberName());
+        log.info("ChattingController.sendMessage, getProfileImageUrl = {}",requestDTO.getProfileImageUrl());
+        log.info("ChattingController.sendMessage, message = {}",message);
 
-        chattingService.saveAndSendMessage(StudyPk, chatMessage, message);
+        chattingService.saveAndSendMessage(StudyPk, requestDTO, message);
     }
 }

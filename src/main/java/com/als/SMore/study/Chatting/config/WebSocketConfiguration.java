@@ -12,9 +12,8 @@ import org.springframework.web.socket.config.annotation.*;
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) { //핸드쉐이크 통신을 담당할 스톰프 엔드 포인트
-        log.info("소켓 연결");
-        registry.addEndpoint( "/ws") //WebSocket 연결 시 요청을 보낼 EndPoint
-                .setAllowedOrigins("*")
+        registry.addEndpoint( "/con") //WebSocket 연결 시 요청을 보낼 EndPoint
+                .setAllowedOriginPatterns("*")
                 .withSockJS() // websocket 관련 자바스크립트 라이브러리 SockJS 설정
                 .setHeartbeatTime(10000); // 클라이언트 - 서버 연결 상태 확인 주기 : 10초;
     }
@@ -22,7 +21,6 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override //메시지 브로커 설정
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/sub");  // 메시지 브로커가 Subscriber들에게(프론트로) 메시지를 전달할 URL 지정
-        //sub 로 보내면 이곳을 한번 거쳐서 프론트에 데이터를 전달
         registry.setApplicationDestinationPrefixes("/pub"); // 송신 메시지를 전송하는 데 사용되는 URL
     }
 
