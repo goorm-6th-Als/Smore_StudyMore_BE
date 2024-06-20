@@ -34,9 +34,11 @@ public class NoticeBoardService {
         return noticeBoardRepository.findAllByStudy(study);
     }
 
-    public NoticeResponseDTO createNotice(Long studyPK, NoticeRequestDTO requestDTO) {
+    public NoticeResponseDTO createNotice(Long studyPK, NoticeRequestDTO requestDTO, Long requestorPk) {
         //연관관계 주인 = noticeBoard (O) Study(X)
         //유저 정보 받아오면, 유저 정보 + 스터디 PK로 방장이 맞는지 확인하도록.
+
+        noticeValidator.CheckIsItManagerOfStudy(studyPK,requestorPk);
         noticeValidator.validateTitleLength(requestDTO.getNoticeTitle());
 
         Study study = noticeValidator.findStudyByStudyPk(studyPK);
@@ -44,18 +46,20 @@ public class NoticeBoardService {
         return new NoticeResponseDTO(noticeBoard);
     }
 
-    public NoticeResponseDTO updateNotice(Long studyPK, Long noticeBoardPK, NoticeRequestDTO requestDTO) {
+    public NoticeResponseDTO updateNotice(Long studyPK, Long noticeBoardPK, NoticeRequestDTO requestDTO, Long requestorPk) {
         //유저 정보 받아오면, 유저 정보 + 스터디 PK로 방장이 맞는지 확인하도록.
+        noticeValidator.CheckIsItManagerOfStudy(studyPK,requestorPk);
         noticeValidator.validateTitleLength(requestDTO.getNoticeTitle());
-
         Study study = noticeValidator.findStudyByStudyPk(studyPK);
         NoticeBoard noticeBoard = noticeValidator.findNoticeByBoardPkAndStudy(noticeBoardPK, study);
         noticeBoard.updateNotice(requestDTO);
 
-        return new NoticeResponseDTO(noticeBoardPK, requestDTO);
+        return new NoticeResponseDTO(noticeBoard, requestDTO);
     }
 
-    public MessageResponseDTO deleteNotice(Long studyPK, Long noticeBoardPK) {
+    public MessageResponseDTO deleteNotice(Long studyPK, Long noticeBoardPK, Long requestorPk) {
+        noticeValidator.CheckIsItManagerOfStudy(studyPK,requestorPk);
+
         Study study = noticeValidator.findStudyByStudyPk(studyPK);
         NoticeBoard noticeBoard = noticeValidator.findNoticeByBoardPkAndStudy(noticeBoardPK, study);
 

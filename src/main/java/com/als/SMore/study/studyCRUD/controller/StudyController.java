@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,17 +31,6 @@ public class StudyController {
     public ResponseEntity<StudyCreateDTO> createStudy(@RequestBody StudyCreateDTO studyCreateDTO) {
         StudyCreateDTO createdStudy = studyService.createStudy(studyCreateDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdStudy);
-    }
-
-    /**
-     * 스터디 삭제
-     * @param id 삭제할 스터디의 ID
-     * @return No Content 상태의 응답
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudy(@PathVariable Long id) {
-        studyService.deleteStudy(id);
-        return ResponseEntity.noContent().build();
     }
 
     /**
