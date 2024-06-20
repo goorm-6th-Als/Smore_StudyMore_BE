@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class StudyUpdateDTO {
     private String content;
     private String imageUri;
-    private Integer maxPeople; // Use Integer to differentiate between no change and a zero value
+    private Integer maxPeople;
     private LocalDate closeDate;
 
     public static StudyUpdateDTO fromEntity(StudyDetail studyDetail) {
