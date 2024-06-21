@@ -8,6 +8,8 @@ import com.als.SMore.domain.repository.MemberRepository;
 import com.als.SMore.domain.repository.PersonalTodoRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
+import com.als.SMore.global.CustomErrorCode;
+import com.als.SMore.global.CustomException;
 import com.als.SMore.study.todo.DTO.PersonalTodoDTO;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,9 +82,13 @@ public class PersonalTodoService {
      * @return 업데이트된 PersonalTodoDTO 객체
      */
     @Transactional
-    public PersonalTodoDTO updatePersonalTodo(Long todoPk, PersonalTodoDTO personalTodoDTO) {
+    public PersonalTodoDTO updatePersonalTodo(Long todoPk, PersonalTodoDTO personalTodoDTO, Long memberPk) {
         PersonalTodo personalTodo = personalTodoRepository.findById(todoPk)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 TODO PK: " + todoPk));
+
+        if (!personalTodo.getMember().getMemberPk().equals(memberPk)) {
+            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_TODO);
+        }
 
         personalTodo = personalTodoDTO.updateEntity(personalTodo);
         personalTodo = personalTodoRepository.save(personalTodo);
@@ -99,10 +105,31 @@ public class PersonalTodoService {
     }
 
     /**
-     * PersonalTodo 항목을 삭제합니다.
+     * PersonalTodo 항목을 삭제
      * @param todoPk 삭제할 PersonalTodo의 PK
      */
-    public void deletePersonalTodoById(Long todoPk) {
+    @Transactional
+    public void deletePersonalTodoById(Long todoPk, Long memberPk) {
+        PersonalTodo personalTodo = personalTodoRepository.findById(todoPk)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 TODO PK: " + todoPk));
+
+        if (!personalTodo.getMember().getMemberPk().equals(memberPk) &&
+                !isAdmin(personalTodo.getStudy().getStudyPk(), memberPk)) {
+            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_TODO);
+        }
+
         personalTodoRepository.deleteById(todoPk);
     }
+
+    /**
+     * 멤버가 스터디의 장인지 확인
+     * @param studyPk 스터디 PK
+     * @param memberPk 멤버 PK
+     * @return 멤버가 스터디의 관리자일때 true
+     */
+    @Transactional(readOnly = true)
+    public boolean isAdmin(Long studyPk, Long memberPk) {
+        return studyMemberRepository.existsByStudyStudyPkAndMemberMemberPkAndRole(studyPk, memberPk, "admin");
+    }
+
 }
