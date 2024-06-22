@@ -1,55 +1,68 @@
 package com.als.SMore.study.problem.controller;
 
-import com.als.SMore.domain.entity.Problem;
-import com.als.SMore.domain.entity.StudyProblemBank;
-import com.als.SMore.study.problem.DTO.request.ProblemBankUpdateRequestDTO;
-import com.als.SMore.study.problem.DTO.response.ProblemBankResponseDTO;
+import com.als.SMore.study.problem.DTO.request.problem.ProblemCreateRequestDTO;
+import com.als.SMore.study.problem.DTO.request.problem.ProblemGetAllRequestDTO;
+import com.als.SMore.study.problem.DTO.request.problem.ProblemUpdateRequestDTO;
+import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
+import com.als.SMore.study.problem.DTO.response.problem.ProblemSummaryResponseDTO;
+import com.als.SMore.study.problem.DTO.response.problem.ProblemUpdateResponseDTO;
 import com.als.SMore.study.problem.service.ProblemService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("study/{studyPk}/problem")
+@RequestMapping("/study/{studyPk}/problem")
 @RequiredArgsConstructor
+@Slf4j
 public class ProblemController {
-    private static final Logger log = LoggerFactory.getLogger(ProblemController.class);
+
     private final ProblemService problemService;
+
     private Long getMemberPk(){
 
         return 588964788038193070L;
     }
-    //=======================================ProblemBank=============================
-    @GetMapping("/bank")
-    public List<ProblemBankResponseDTO> getAllStudyProblemBank(@PathVariable Long studyPk){
 
-        return problemService.getAllProblemBank(getMemberPk(), studyPk);
-    }
-    @GetMapping("/bank/{problemBankPk}")
-    public ProblemBankResponseDTO getStudyProblemBank(@PathVariable Long studyPk, @PathVariable Long problemBankPk){
-
-        return problemService.getProblemBank(problemBankPk, getMemberPk());
+    // 문제 불러오기 (수정하기용)
+    @GetMapping("/{problemPk}")
+    public ProblemUpdateResponseDTO getProblem(@PathVariable("studyPk") Long studyPk, @PathVariable("problemPk") Long problemPk) {
+        return problemService.getProblem(problemPk);
     }
 
-    @PostMapping("/bank")
-    public void createProblemBank(@PathVariable Long studyPk, @RequestBody Map<String, String> problemBankMap){
-        problemService.createProblemBank(getMemberPk(), studyPk, problemBankMap.get("problemName"));
+    //
+    @GetMapping
+    public List<ProblemResponseDTO> getAllProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemGetAllRequestDTO problemGetAllRequestDTO) {
+        return problemService.getAllProblem(problemGetAllRequestDTO);
+
+    }
+    //문제 요약List (방장이나 작성자가 수정할 때 사용할 용도)
+    @GetMapping("/summary/{ProblemBankPk}")
+    public List<ProblemSummaryResponseDTO> getAllSummaryProblem(@PathVariable String studyPk, @PathVariable("ProblemBankPk") Long problemBankPk) {
+        return problemService.getAllProblemSummary(problemBankPk);
     }
 
-    @DeleteMapping("/bank/{problemBankPk}")
-    public void deleteProblemBank(@PathVariable Long studyPk, @PathVariable Long problemBankPk){
-        problemService.deleteProblemBank(getMemberPk(), problemBankPk);
+    //지우는거
+    @DeleteMapping("/{problemPk}")
+    public void deleteProblem(@PathVariable("studyPk") Long studyPk, @PathVariable("problemPk") Long problemPk) {
+        problemService.deleteProblem(problemPk, getMemberPk());
+    }
+    //수정하는거
+    @PutMapping
+    public void updateProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemUpdateRequestDTO problemUpdateRequestDTO) {
+        problemService.updateProblem(problemUpdateRequestDTO, getMemberPk());
     }
 
-    @PutMapping("/bank")
-    public ProblemBankResponseDTO updateProblemBank(@PathVariable Long studyPk, @RequestBody ProblemBankUpdateRequestDTO problemBankUpdateRequestDTO){
-        log.info("problemBankUpdateRequestDTO.getProblemBankName() = {}", problemBankUpdateRequestDTO.getProblemBankName());
-        log.info("problemBankUpdateRequestDTO.getProblemBankPk() = {}", problemBankUpdateRequestDTO.getProblemBankPk());
-        return problemService.updateProblemBank(getMemberPk(),problemBankUpdateRequestDTO);
+    //만드는거
+    @PostMapping
+    public void createProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemCreateRequestDTO problemCreateRequestDTO) {
+        log.info("problemCreateRequestDTO.toString = {}", problemCreateRequestDTO.toString());
+        problemService.createProblem(getMemberPk(), problemCreateRequestDTO);
+
     }
+
+
 
 }
