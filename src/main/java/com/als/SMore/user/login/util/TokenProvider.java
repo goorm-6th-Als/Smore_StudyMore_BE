@@ -29,7 +29,7 @@ public class TokenProvider {
 
     public String create(String userId, Long time){
         Date startedDate = Date.from(Instant.now());
-        Date expiredDate = Date.from(Instant.now().plusMillis(accessTokenValidTime));
+        Date expiredDate = Date.from(Instant.now().plusMillis(time));
 
         String jwt = Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
