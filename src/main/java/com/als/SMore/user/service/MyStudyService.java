@@ -40,7 +40,7 @@ public class MyStudyService {
             Study study = studyRepository.findById(studyMember.getStudy().getStudyPk()).orElseThrow(IllegalAccessError::new);
             StudyResponse studyResponse = StudyResponse.builder().studyPk(study.getStudyPk()).studyName(study.getStudyName())
                     .studyImg(studyDetail.getImageUri()).studyStartDate(studyDetail.getStartDate()).studyEndDate(studyDetail.getCloseDate())
-                    .studyPersomNum(studyMemberCount).build();
+                    .studyPersonNum(studyMemberCount).build();
             studyList.add(studyResponse);
         }
 
@@ -65,7 +65,7 @@ public class MyStudyService {
             Study study = studyRepository.findById(studyMember.getStudy().getStudyPk()).orElseThrow(IllegalAccessError::new);
             StudyResponse studyResponse = StudyResponse.builder().studyPk(study.getStudyPk()).studyName(study.getStudyName())
                     .studyImg(studyDetail.getImageUri()).studyStartDate(studyDetail.getStartDate()).studyEndDate(studyDetail.getCloseDate())
-                    .studyPersomNum(studyMemberCount).build();
+                    .studyPersonNum(studyMemberCount).build();
             studyList.add(studyResponse);
         }
 
@@ -119,7 +119,7 @@ public class MyStudyService {
         StudyEnterMember studyEnterMember = studyEnterMemberRepository.findStudyEnterMemberByMember_UserIdAndStudy_StudyPk(statusRequest.getUserId(), statusRequest.getStudyPk())
                 .orElseThrow(IllegalAccessError::new);
 
-        StudyEnterMember renewStudyEnterMember = studyEnterMember.toBuilder().entrerStatus("거절").build();
+        StudyEnterMember renewStudyEnterMember = studyEnterMember.toBuilder().enterStatus(StudyEnterMemberStatus.REJECTED).build();
         studyEnterMemberRepository.save(renewStudyEnterMember);
     }
 
