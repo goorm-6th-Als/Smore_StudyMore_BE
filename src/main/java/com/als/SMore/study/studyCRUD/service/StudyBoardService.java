@@ -55,7 +55,7 @@ public class StudyBoardService {
 //     * @return 검색된 StudyBoardDTO의 페이지 객체
 //     */
     public Page<StudyBoardDTO> searchStudyBoards(String keyword, Pageable pageable) {
-        return studyBoardRepository.findByAdTitleContainingIgnoreCaseOrderByModifyDateDesc(keyword, pageable)
+        return studyBoardRepository.searchByAdTitle(keyword, pageable)
                 .map(studyBoard -> StudyBoardDTO.fromEntity(studyBoard, false));
     }
 }
