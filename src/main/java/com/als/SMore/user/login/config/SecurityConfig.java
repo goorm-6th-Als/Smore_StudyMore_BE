@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -37,21 +38,17 @@ public class SecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable());
 
-//        http.authorizeHttpRequests(request -> request
-//                        .anyRequest().authenticated()
-//                )
-//                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        http
-                .authorizeRequests()
-                    .anyRequest().permitAll() // 모든 요청을 허용(개발 끝나면 없어져야 합니당)
-                    .and()
+        http.authorizeHttpRequests(request -> request
+                        .requestMatchers("board/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtFilter, OAuth2LoginAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint.baseUri("/oauth2/authorization/kakao"))
                         .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
                         .userInfoEndpoint(endpoint -> endpoint.userService(kakaoMemberDetailsService))
                         .successHandler(oAuth2SuccessHandler)
-                )
-                .csrf(csrf -> csrf.disable()); // CSRF 보호 비활성화 (개발 끝나면 없어져야 합니당)
+                );
         return http.build();
     }
 
@@ -73,7 +70,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        config.setAllowedOrigins(Collections.singletonList("https://smore-stydy-more-fe.vercel.app"));
         config.setAllowedMethods(Collections.singletonList("*"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Collections.singletonList("*"));
