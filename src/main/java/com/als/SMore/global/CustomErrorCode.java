@@ -36,10 +36,16 @@ public enum CustomErrorCode {
     INVALID_TITLE_BANK_NAME(HttpStatus.BAD_REQUEST, "문제은행 이름은 공백 포함 1자 이상 30자 이하로 해주세요."),
     PROBLEM_BANK_COUNT_OVER_LIMIT(HttpStatus.BAD_REQUEST, "문제은행은 최대 30개까지 생성 가능합니다."),
 
+    //Study Todo
+    INVALID_STATUS(HttpStatus.BAD_REQUEST, "올바른 Todo 상태가 아닙니다"),
+    NOT_FOUND_TODO(HttpStatus.NOT_FOUND,"존재하지 않는 Todo 입니다."),
+    NOT_STUDY_MEMBER(HttpStatus.UNAUTHORIZED, "스터디 멤버가 아닙니다."),
+
     //Study Management
     NOT_STUDY_ADMIN(HttpStatus.UNAUTHORIZED, "스터디 장이 아닙니다."),
     STILL_EXISTS_MEMBERS(HttpStatus.BAD_REQUEST, "스터디에 다른 멤버가 존재합니다."),
     NOT_AUTHORIZED_REQUEST_TODO(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String message;
