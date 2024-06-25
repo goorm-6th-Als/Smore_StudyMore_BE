@@ -18,5 +18,6 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
     List<StudyMember> findByMember_MemberPkAndRole(Long memberPk,String role);
     Long countAllByStudy_StudyPk(Long studyPk);
     Optional<StudyMember> deleteStudyMemberByStudy_StudyPkAndMember_MemberPk (Long studyPk, Long memberPk);
+    List<StudyMember> findByMember_MemberPk(Long memberPk);
 
 }

@@ -34,17 +34,34 @@ public class TokenProvider {
         String jwt = Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
                 .subject(userId).issuedAt(startedDate)
-                .claim("role","admin")  // 오브젝트 타입으로 넣기
                 .expiration(expiredDate).compact();
         return jwt;
     }
 
-    public String generateAccessToken(Long userId){
-        return create(String.valueOf(userId),accessTokenValidTime);
+    public String create(String userId, Long time,Map<String,String> claim){
+        Date startedDate = Date.from(Instant.now());
+        Date expiredDate = Date.from(Instant.now().plusMillis(time));
+
+        String jwt = Jwts.builder()
+                .signWith(key, SignatureAlgorithm.HS256)
+                .subject(userId).issuedAt(startedDate)
+                .claims(claim)  // 오브젝트 타입으로 넣기
+                .expiration(expiredDate).compact();
+        return jwt;
     }
 
-    public String generateRefreshToken(Long userId){
-        return create(String.valueOf(userId),refreshTokenValidTime);
+    public String generateAccessToken(Long userId,Map<String,String> claim){
+        if (claim.isEmpty()){
+            return create(String.valueOf(userId),accessTokenValidTime);
+        }
+        return create(String.valueOf(userId),accessTokenValidTime,claim);
+    }
+
+    public String generateRefreshToken(Long userId,Map<String,String> claim){
+        if (claim.isEmpty()){
+            return create(String.valueOf(userId),accessTokenValidTime);
+        }
+        return create(String.valueOf(userId),accessTokenValidTime,claim);
     }
 
     public String validate(String jwt) {
