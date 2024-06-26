@@ -1,9 +1,7 @@
 package com.als.SMore.domain.repository;
 
-import com.als.SMore.domain.entity.Member;
-import com.als.SMore.domain.entity.Study;
-import com.als.SMore.domain.entity.StudyEnterMember;
-import com.als.SMore.domain.entity.StudyMember;
+import com.als.SMore.domain.entity.*;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +43,7 @@ class StudyResponseEnterMemberRepositoryTest {
         Study study = studyRepository.save(Study.builder().member(member).studyName("놀자")
                 .build());
         StudyEnterMember studyEnterMember = StudyEnterMember.builder().study(study).member(member)
-                .entrerStatus("대기").build();
+                .enterStatus(StudyEnterMemberStatus.REJECTED).content("ji").createDate(LocalDateTime.now()).build();
 
         StudyEnterMember st = studyEnterMemberRepository.save(studyEnterMember);
 
