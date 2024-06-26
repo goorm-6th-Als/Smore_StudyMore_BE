@@ -1,40 +1,53 @@
-
-
 package com.als.SMore.study.problem.service;
 
-import com.als.SMore.domain.entity.Member;
-import com.als.SMore.domain.entity.Study;
-import com.als.SMore.study.problem.DTO.DTOAndPermission;
-import com.als.SMore.study.problem.DTO.request.ProblemBankUpdateRequestDTO;
-import com.als.SMore.study.problem.DTO.response.ProblemBankResponseDTO;
-import com.als.SMore.study.problem.DTO.response.ProblemTitleResponseDTO;
+
+import com.als.SMore.study.problem.DTO.request.problem.ProblemCreateRequestDTO;
+import com.als.SMore.study.problem.DTO.request.problem.ProblemGetAllRequestDTO;
+import com.als.SMore.study.problem.DTO.request.problem.ProblemUpdateRequestDTO;
+import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
+import com.als.SMore.study.problem.DTO.response.problem.ProblemSummaryResponseDTO;
+import com.als.SMore.study.problem.DTO.response.problem.ProblemUpdateResponseDTO;
 
 import java.util.List;
 
 public interface ProblemService {
-    //스터디당 30개 이하
-    void createProblemBank(Long memberPk, Long studyPk, String bankName);
 
-    //<readOnly>
-    //문제 그룹 리스트
-    List<ProblemBankResponseDTO> getAllProblemBank(Long memberPk, Long studyPk);
+    void createProblem(Long memberPk, ProblemCreateRequestDTO problemCreateRequestDTO);
 
-    //<readOnly>
-    //문제 그룹
-    ProblemBankResponseDTO getProblemBank(Long problemBankPk, Long memberPk);
+    /**
+     * problemBankPk를 통해서 요약된 문제들을 불러옵니다
+     * @param problemBankPk 문제 은행의 Pk
+     * @return pk, title, writer
+     */
+    List<ProblemSummaryResponseDTO> getAllProblemSummary(Long problemBankPk);
 
-    //문제그룹당 100개 이하
+    /**
+     * 받은 문제은행Pk들을 조회 후 최대 100문제까지 불러옵니다.
+     * 문제는 랜덤, 보기는 순서대로 나옵니다.
+     * @param problemGetAllRequestDTO 문제 은행의 pk들과 최대 문제 수
+     * @return 문제들의 전반적인 정보와 문제의 보기들(ProblemOption)
+     */
+    List<ProblemResponseDTO> getAllProblem(ProblemGetAllRequestDTO problemGetAllRequestDTO);
 
+    /**
+     * 수정용으로 제작됐습니다
+     * @param problemPk
+     * @return
+     */
+    ProblemUpdateResponseDTO getProblem(Long problemPk);
 
-    void deleteProblemBank(Long memberPk, Long problemBankPk);
+    /**
+     * 문제와 보기들을 한 번에 받아 처리합니다.
+     * @param problemUpdateRequestDTO 변경될 내용
+     * @param memberPk 작성자 혹은 방장인지 확인
+     */
+    void updateProblem(ProblemUpdateRequestDTO problemUpdateRequestDTO,Long memberPk);
 
-    ProblemBankResponseDTO updateProblemBank(Long memberPk, ProblemBankUpdateRequestDTO problemBankUpdateRequestDTO);
+    /**
+     * 권한을 확인 후 삭제합니다.
+     * @param problemPk 삭제될 문제
+     * @param memberPk 작성자 혹은 방장인지 확인
+     */
 
-    //<readOnly>
-    //문제 리스트
-    void createProblem();
-
-    List<ProblemTitleResponseDTO> getAllProblemTitle(Long ProblemBankPk);
-
-
+    void deleteProblem(Long problemPk, Long memberPk);
 }
