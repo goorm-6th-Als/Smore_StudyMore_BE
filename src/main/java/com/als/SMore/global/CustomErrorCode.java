@@ -44,7 +44,10 @@ public enum CustomErrorCode {
     //Study Management
     NOT_STUDY_ADMIN(HttpStatus.UNAUTHORIZED, "스터디 장이 아닙니다."),
     STILL_EXISTS_MEMBERS(HttpStatus.BAD_REQUEST, "스터디에 다른 멤버가 존재합니다."),
-    NOT_AUTHORIZED_REQUEST_TODO(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
+    NOT_AUTHORIZED_REQUEST_TODO(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
+
+    //StudyBoard
+    NOT_FOUND_STUDY_BOARD(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 게시물 입니다.");
 
 
     private final HttpStatus httpStatus;

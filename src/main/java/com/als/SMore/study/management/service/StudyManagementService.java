@@ -34,7 +34,7 @@ public class StudyManagementService {
         Study study = studyRepository.findById(studyPk)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + studyPk));
         StudyDetail studyDetail = studyDetailRepository.findByStudy(study);
-        StudyBoard studyBoard = studyBoardRepository.findByStudy(study);
+        StudyBoard studyBoard = studyBoardRepository.findByAdTitleContainingIgnoreCaseOrderByModifyDateDesc(study);
 
         StudyDetail updatedStudyDetail = studyUpdateDTO.updateDetailEntity(studyDetail);
         StudyBoard updatedStudyBoard = studyUpdateDTO.updateBoardEntity(studyBoard);

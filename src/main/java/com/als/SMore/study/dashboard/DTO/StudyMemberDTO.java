@@ -12,6 +12,7 @@ import lombok.Getter;
 public class StudyMemberDTO {
     private Long memberPk;
     private String nickName;
+    private String profileImg;
     private String role;
     private LocalDate enterDate;
 
@@ -20,6 +21,7 @@ public class StudyMemberDTO {
         return StudyMemberDTO.builder()
                 .memberPk(member.getMemberPk())
                 .nickName(member.getNickName())
+                .profileImg(member.getProfileImg())
                 .role(studyMember.getRole())
                 .enterDate(studyMember.getEnterDate())
                 .build();

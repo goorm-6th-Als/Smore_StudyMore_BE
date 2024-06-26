@@ -18,12 +18,14 @@ public class StudyDashboardController {
 
     /**
      * 스터디에 참여중인 모든 멤버를 조회
+     *
      * @param studyPk 스터디 PK
      * @return 스터디 멤버 목록과 함께 OK 응답 반환
      */
 
     @GetMapping("/members")
-    public ResponseEntity<List<StudyMemberDTO>> getStudyMembers(@PathVariable Long studyPk) {
+    public ResponseEntity<List<StudyMemberDTO>> getStudyMembers(
+            @PathVariable Long studyPk) {
         List<StudyMemberDTO> studyMembers = studyDashboardService.getStudyMembers(studyPk);
         return ResponseEntity.ok(studyMembers);
     }

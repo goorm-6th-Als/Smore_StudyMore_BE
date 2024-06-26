@@ -3,6 +3,8 @@ package com.als.SMore.study.studyCRUD.service;
 import com.als.SMore.domain.entity.StudyBoard;
 import com.als.SMore.domain.repository.StudyBoardRepository;
 import com.als.SMore.study.studyCRUD.DTO.StudyBoardDTO;
+import com.als.SMore.global.CustomErrorCode;
+import com.als.SMore.global.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,18 +30,18 @@ public class StudyBoardService {
     }
 
     /**
-     * 스터디 게시물 상세 조회하기.
+     * 스터디 게시물 상세 조회하기
      * @param id 조회할 StudyBoard의 ID
      * @return 조회된 StudyBoardDTO
      */
     public StudyBoardDTO getStudyBoardById(Long id) {
         StudyBoard studyBoard = studyBoardRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 studyBoard ID: " + id));
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_BOARD));
         return StudyBoardDTO.fromEntity(studyBoard, true);
     }
 
     /**
-     * StudyBoard  페이징
+     * StudyBoard 페이징
      * @param pageable 페이지 정보
      * @return StudyBoardDTO의 페이지 객체
      */
@@ -47,15 +49,16 @@ public class StudyBoardService {
         return studyBoardRepository.findAll(pageable)
                 .map(studyBoard -> StudyBoardDTO.fromEntity(studyBoard, false));
     }
-//
-//    /**
-//     * 스터디 보드 검색 기능 수정날짜로 정렬
-//     * @param keyword 검색할 문자열
-//     * @param pageable 페이지 정보
-//     * @return 검색된 StudyBoardDTO의 페이지 객체
-//     */
+
+    /**
+     * 스터디 보드 검색 기능 수정날짜로 정렬
+     * @param keyword 검색할 문자열
+     * @param pageable 페이지 정보
+     * @return 검색된 StudyBoardDTO의 페이지 객체
+     */
     public Page<StudyBoardDTO> searchStudyBoards(String keyword, Pageable pageable) {
         return studyBoardRepository.searchByAdTitle(keyword, pageable)
                 .map(studyBoard -> StudyBoardDTO.fromEntity(studyBoard, false));
     }
 }
+
