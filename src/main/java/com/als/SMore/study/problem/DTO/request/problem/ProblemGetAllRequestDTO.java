@@ -8,6 +8,6 @@ import java.util.List;
 @Builder
 @Getter
 public class ProblemGetAllRequestDTO {
-    private List<Long> pk;
+    private List<Long> studyProblemBankPk;
     private int max;
 }

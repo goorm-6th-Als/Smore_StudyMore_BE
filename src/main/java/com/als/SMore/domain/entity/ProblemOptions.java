@@ -1,5 +1,6 @@
 package com.als.SMore.domain.entity;
 
+import com.als.SMore.study.problem.DTO.request.problem.ProblemOptionRequestDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemOptionResponseDTO;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
@@ -27,7 +28,7 @@ public class ProblemOptions {
     @Column(name = "options_content", nullable = false)
     private String optionsContent;
 
-    public void updateAll(ProblemOptionResponseDTO dto) {
+    public void updateAll(ProblemOptionRequestDTO dto) {
         this.optionsNum = dto.getNum();
         this.optionsContent = dto.getContent();
     }

@@ -12,8 +12,8 @@ public class ProblemUpdateRequestDTO {
     private Long problemPk;
     private String problemTitle;
     private String problemContent;
-    private Long problemAnswerPk;
+    private Integer answer;
     private String ProblemExplanation;
 
-    private List<ProblemOptionResponseDTO> problemOptionResponseDTOList;
+    private List<ProblemOptionRequestDTO> problemOptionRequestDTOList;
 }

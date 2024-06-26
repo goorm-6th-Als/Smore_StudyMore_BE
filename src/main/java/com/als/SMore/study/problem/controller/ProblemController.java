@@ -58,7 +58,6 @@ public class ProblemController {
     //만드는거
     @PostMapping
     public void createProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemCreateRequestDTO problemCreateRequestDTO) {
-        log.info("problemCreateRequestDTO.toString = {}", problemCreateRequestDTO.toString());
         problemService.createProblem(getMemberPk(), problemCreateRequestDTO);
 
     }

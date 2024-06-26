@@ -48,6 +48,9 @@ public class Problem {
         this.problemTitle = dto.getProblemTitle();
         this.problemContent = dto.getProblemContent();
         this.problemExplanation = dto.getProblemExplanation();
-        this.problemAnswerPk = dto.getProblemAnswerPk();
+    }
+
+    public void updateProblemAnswerPk(Long problemAnswerPk){
+        this.problemAnswerPk = problemAnswerPk;
     }
 }

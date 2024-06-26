@@ -6,9 +6,12 @@ import com.als.SMore.domain.entity.ProblemOptions;
 import com.als.SMore.domain.entity.StudyProblemBank;
 import com.als.SMore.domain.repository.ProblemOptionsRepository;
 import com.als.SMore.domain.repository.ProblemRepository;
+import com.als.SMore.global.CustomErrorCode;
+import com.als.SMore.global.CustomException;
 import com.als.SMore.log.timeTrace.TimeTrace;
 import com.als.SMore.study.problem.DTO.request.problem.ProblemCreateRequestDTO;
 import com.als.SMore.study.problem.DTO.request.problem.ProblemGetAllRequestDTO;
+import com.als.SMore.study.problem.DTO.request.problem.ProblemOptionRequestDTO;
 import com.als.SMore.study.problem.DTO.request.problem.ProblemUpdateRequestDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemOptionResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
@@ -24,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -35,7 +39,7 @@ public class ProblemServiceImpl implements ProblemService {
     private final ProblemRepository problemRepository;
     private final ProblemOptionsRepository problemOptionsRepository;
 
-    private ProblemOptionResponseDTO problemOptionsToProblemOptionResponseDTO(ProblemOptions problemOptions){
+    private ProblemOptionResponseDTO problemOptionsToProblemOptionResponseDTO(ProblemOptions problemOptions) {
         return ProblemOptionResponseDTO.builder()
                 .problemOptionPk(problemOptions.getProblemOptionsPk())
                 .content(problemOptions.getOptionsContent())
@@ -43,7 +47,7 @@ public class ProblemServiceImpl implements ProblemService {
                 .build();
     }
 
-    private ProblemResponseDTO problemAndProblemOptionResponseDTOToProblemResponseDTO(Problem problem, List<ProblemOptionResponseDTO> problemOptionResponseDTOList){
+    private ProblemResponseDTO problemAndProblemOptionResponseDTOToProblemResponseDTO(Problem problem, List<ProblemOptionResponseDTO> problemOptionResponseDTOList) {
         return ProblemResponseDTO.builder()
                 .problemPk(problem.getProblemPk())
                 .memberNickname(problem.getMember().getNickName())
@@ -55,7 +59,8 @@ public class ProblemServiceImpl implements ProblemService {
                 .options(problemOptionResponseDTOList)
                 .build();
     }
-    private ProblemUpdateResponseDTO problemAndProblemOptionResponseDTOToProblemUpdateResponseDTO(Problem problem, List<ProblemOptionResponseDTO> problemOptionResponseDTOList){
+
+    private ProblemUpdateResponseDTO problemAndProblemOptionResponseDTOToProblemUpdateResponseDTO(Problem problem, List<ProblemOptionResponseDTO> problemOptionResponseDTOList) {
         return ProblemUpdateResponseDTO.builder()
                 .problemPk(problem.getProblemPk())
                 .memberNickname(problem.getMember().getNickName())
@@ -69,6 +74,32 @@ public class ProblemServiceImpl implements ProblemService {
                 .build();
     }
 
+    private Long saveProblemOptionList(List<ProblemOptionRequestDTO> problemOptionRequestDTOList, Integer answerNum, Problem problem) {
+        Long result = 0L;
+        List<ProblemOptions> problemOptions = new ArrayList<>();
+        //문제 리스트 저장
+        for (ProblemOptionRequestDTO problemOptionRequestDTO : problemOptionRequestDTOList) {
+            problemOptions.add(ProblemOptions.builder()
+                    .optionsContent(problemOptionRequestDTO.getContent())
+                    .problem(problem)
+                    .optionsNum(problemOptionRequestDTO.getNum())
+                    .build());
+        }
+        problemOptions = problemOptionsRepository.saveAll(problemOptions);
+        //정답 저장
+        for (ProblemOptions problemOption : problemOptions) {
+            if (Objects.equals(problemOption.getOptionsNum(), answerNum)) {
+                result = problemOption.getProblemOptionsPk();
+                break;
+            }
+        }
+        return result;
+    }
+
+    private void deleteProblemOptionList(Problem problem) {
+        List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
+        problemOptionsRepository.deleteAll(problemOptions);
+    }
 
 
     @Override
@@ -76,7 +107,7 @@ public class ProblemServiceImpl implements ProblemService {
         Member member = problemValidator.getMember(memberPk);
         StudyProblemBank problemBank = problemValidator.getStudyProblemBank(problemCreateRequestDTO.getStudyProblemBankPk());
 
-        problemRepository.save(Problem.builder()
+        Problem problem = problemRepository.save(Problem.builder()
                 .createDate(LocalDate.now())
                 .problemContent(problemCreateRequestDTO.getContent())
                 .problemTitle(problemCreateRequestDTO.getTitle())
@@ -84,6 +115,12 @@ public class ProblemServiceImpl implements ProblemService {
                 .member(member)
                 .studyProblemBank(problemBank)
                 .build());
+        //answerPk 컬럼 업데이트 & 문제옵션 리스트 저장
+        problem.updateProblemAnswerPk(
+                saveProblemOptionList(problemCreateRequestDTO.getProblemOptionRequestDTOList()
+                        , problemCreateRequestDTO.getAnswer()
+                        , problem
+                ));
     }
 
 
@@ -100,7 +137,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Transactional(readOnly = true)
     public List<ProblemResponseDTO> getAllProblem(ProblemGetAllRequestDTO problemGetAllRequestDTO) {
         List<Problem> problems = new ArrayList<>();
-        for (Long problemPk : problemGetAllRequestDTO.getPk()) {
+        for (Long problemPk : problemGetAllRequestDTO.getStudyProblemBankPk()) {
             StudyProblemBank studyProblemBank = problemValidator.getStudyProblemBank(problemPk);
             problems.addAll(problemRepository.findByStudyProblemBank(studyProblemBank));
         }
@@ -111,10 +148,10 @@ public class ProblemServiceImpl implements ProblemService {
         List<ProblemResponseDTO> ResultProblems = new ArrayList<>();
         for (int i = 0; i < max; i++) {
             //난수 생성
-            int random = (int) (Math.random() *  problems.size());
+            int random = (int) (Math.random() * problems.size());
 
             // 랜덤 문제 조회
-            Problem problem= problems.get(random);
+            Problem problem = problems.get(random);
 
             //랜덤 문제의 선택지들 조회
             List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
@@ -150,16 +187,27 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public void updateProblem(ProblemUpdateRequestDTO problemUpdateRequestDTO, Long memberPk) {
 
+
+
         Problem problem = problemValidator.getProblem(problemUpdateRequestDTO.getProblemPk());
 
-        problemValidator.isManager(memberPk, problem.getStudyProblemBank());
+        if (!problemValidator.isManager(memberPk, problem.getStudyProblemBank()))
+            throw new CustomException(CustomErrorCode.UNAUTHORIZED_ACCESS);
+        ;
 
         List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
-
         problem.updateAll(problemUpdateRequestDTO);
-        for (int i = 0; i <problemOptions.size(); i++) {
-            problemOptions.get(i).updateAll(problemUpdateRequestDTO.getProblemOptionResponseDTOList().get(i));
-        }
+        //문제옵션들 싹 다 지우고
+        deleteProblemOptionList(problem);
+        //다시 저장
+        Long answerPk = saveProblemOptionList(
+                problemUpdateRequestDTO.getProblemOptionRequestDTOList()
+                , problemUpdateRequestDTO.getAnswer()
+                , problem
+        );
+        //정답도 다시 업데이트
+        problem.updateProblemAnswerPk(answerPk);
+
     }
 
     @Override
@@ -167,8 +215,9 @@ public class ProblemServiceImpl implements ProblemService {
 
         Problem problem = problemValidator.getProblem(problemPk);
 
-        problemValidator.isManager(memberPk, problem.getStudyProblemBank());
-
+        if (!problemValidator.isManager(memberPk, problem.getStudyProblemBank()))
+            throw new CustomException(CustomErrorCode.UNAUTHORIZED_ACCESS);
+        deleteProblemOptionList(problem);
         problemRepository.delete(problem);
 
     }
