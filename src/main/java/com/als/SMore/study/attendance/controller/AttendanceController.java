@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 
 @RestController
-@RequestMapping("/study")
+@RequestMapping("/study/{studyPk}/attendance")
 @RequiredArgsConstructor
 public class AttendanceController {
     final private AttendanceService attendanceService;
@@ -22,22 +22,22 @@ public class AttendanceController {
         return 588968050131947446L;
     }
 
-    @PostMapping("/{studyPk}/attendance/start")
+    @PostMapping("/start")
     public LocalDateTime start(@PathVariable Long studyPk){
         return attendanceService.attendanceStart(getMember(), studyPk);
     }
 
-    @PostMapping("/{studyPk}/attendance/stop")
+    @PostMapping("/stop")
     public Long end(@PathVariable Long studyPk){
        return attendanceService.attendanceEnd(getMember(), studyPk);
     }
 
-    @GetMapping("/{studyPk}/attendance/my-study-time")
+    @GetMapping("/my-study-time")
     public Long getTime(@PathVariable Long studyPk){
         return attendanceService.getLearningSeconds(getMember(), studyPk);
     }
 
-    @GetMapping("/{studyPk}/attendance/my-study-month")
+    @GetMapping("/my-study-month")
     public LearningMonthListResponseDTO getMonth(@PathVariable Long studyPk, @RequestBody LearningMonthRequestDTO learningMonthRequestDTO){
         System.out.println(learningMonthRequestDTO.getMonth());
         return attendanceService.getLearningMonth(getMember(), studyPk, learningMonthRequestDTO);

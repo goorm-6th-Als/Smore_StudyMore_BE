@@ -1,4 +1,4 @@
-package com.als.SMore.study.problem.DTO.request;
+package com.als.SMore.study.problem.DTO.request.problemBank;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

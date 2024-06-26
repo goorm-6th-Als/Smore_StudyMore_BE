@@ -2,24 +2,17 @@ package com.als.SMore.study.attendance.service.impl;
 
 import com.als.SMore.domain.entity.*;
 import com.als.SMore.domain.repository.*;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
 import com.als.SMore.study.attendance.DTO.request.LearningMonthRequestDTO;
 import com.als.SMore.study.attendance.DTO.response.LearningMonthListResponseDTO;
-import com.als.SMore.study.attendance.DTO.response.LearningMonthResponseDTO;
-import com.als.SMore.study.attendance.exception.AttendanceErrorCode;
-import com.als.SMore.study.attendance.exception.AttendanceException;
 import com.als.SMore.study.attendance.service.AttendanceService;
 import com.als.SMore.study.attendance.validator.AttendanceValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -27,10 +20,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class AttendanceServiceImpl implements AttendanceService {
-    final private MemberRepository memberRepository;
-    final private StudyRepository studyRepository;
     final private AttendanceCheckRepository attendanceCheckRepository;
-    final private StudyMemberRepository studyMemberRepository;
     final private StudyLearningTimeRepository studyLearningTimeRepository;
     final private AttendanceValidator attendanceValidator;
     
