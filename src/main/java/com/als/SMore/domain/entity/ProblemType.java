@@ -22,4 +22,5 @@ public class ProblemType {
 
     @Column(name = "type_content")
     private String typeContent;
+
 }

@@ -40,7 +40,7 @@ public class PersonalTodoDTO {
                 .scheduleStatus(personalTodoDTO.getScheduleStatus())
                 .scheduleContent(personalTodoDTO.getScheduleContent())
                 .modifyDate(LocalDate.now())
-                .createDate(personalTodoDTO.getCreateDate())
+                .createDate(LocalDate.now())
                 .build();
     }
 

@@ -8,6 +8,8 @@ import com.als.SMore.domain.repository.MemberRepository;
 import com.als.SMore.domain.repository.PersonalTodoRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
+import com.als.SMore.global.CustomErrorCode;
+import com.als.SMore.global.CustomException;
 import com.als.SMore.study.todo.DTO.PersonalTodoDTO;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +27,59 @@ public class PersonalTodoService {
     private final StudyMemberRepository studyMemberRepository;
 
     /**
+     * 새로운 PersonalTodo 항목을 생성
+     *
+     * @param personalTodoDTO 생성할 PersonalTodoDTO 객체
+     * @param studyPk         스터디 PK
+     * @return 생성된 PersonalTodoDTO 객체
+     */
+    public PersonalTodoDTO createPersonalTodo(PersonalTodoDTO personalTodoDTO, Long studyPk) {
+
+        Study study = studyRepository.findById(studyPk)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY));
+        Member member = memberRepository.findById(personalTodoDTO.getMemberPk())
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
+
+        if (!isMemberOfStudy(member, study)) {
+            throw new CustomException(CustomErrorCode.NOT_STUDY_MEMBER);
+        }
+
+        PersonalTodo personalTodo = PersonalTodoDTO.toEntity(personalTodoDTO, member, study);
+        personalTodo = personalTodoRepository.save(personalTodo);
+        return PersonalTodoDTO.fromEntity(personalTodo);
+    }
+
+    /**
+     * 스터디 전체 Todo 조회
+     * @param studyPk 스터디 PK
+     * @return PersonalTodoDTO 목록
+     */
+    public List<PersonalTodoDTO> getAllTodos(Long studyPk) {
+        return personalTodoRepository.findByStudyStudyPk(studyPk).stream()
+                .map(PersonalTodoDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 특정 Todo 조회
+     * @param studyPk 스터디 PK
+     * @param todoPk  Todo PK
+     * @return PersonalTodoDTO 객체
+     */
+    @Transactional(readOnly = true)
+    public PersonalTodoDTO getTodoDetail(Long studyPk, Long todoPk) {
+        PersonalTodo personalTodo = personalTodoRepository.findById(todoPk)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_TODO));
+
+        if (!personalTodo.getStudy().getStudyPk().equals(studyPk)) {
+            throw new CustomException(CustomErrorCode.NOT_FOUND_STUDY);
+        }
+
+        return PersonalTodoDTO.fromEntity(personalTodo);
+    }
+
+
+    /**
      * 상태에 따른 모든 PersonalTodo 항목을 조회
      * @param studyPk 스터디 PK
      * @param status  상태
@@ -35,7 +90,7 @@ public class PersonalTodoService {
         try {
             todoStatus = TodoStatus.fromDisplayName(status);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("status가 올바르지 않습니다: " + status);
+            throw new CustomException(CustomErrorCode.INVALID_STATUS);
         }
         return personalTodoRepository.findByStudyStudyPkAndScheduleStatus(studyPk, todoStatus).stream()
                 .map(PersonalTodoDTO::fromEntity)
@@ -43,22 +98,21 @@ public class PersonalTodoService {
     }
 
     /**
-     * 새로운 PersonalTodo 항목을 생성
-     * @param personalTodoDTO 생성할 PersonalTodoDTO 객체
-     * @return 생성된 PersonalTodoDTO 객체
+     * PersonalTodo 항목을 업데이트, 작성자만 가능
+     * @param todoPk          업데이트할 PersonalTodo의 PK
+     * @param personalTodoDTO 업데이트할 PersonalTodoDTO 객체
+     * @return 업데이트된 PersonalTodoDTO 객체
      */
-    public PersonalTodoDTO createPersonalTodo(PersonalTodoDTO personalTodoDTO) {
+    @Transactional
+    public PersonalTodoDTO updatePersonalTodo(Long todoPk, PersonalTodoDTO personalTodoDTO, Long memberPk) {
+        PersonalTodo personalTodo = personalTodoRepository.findById(todoPk)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_TODO));
 
-        Study study = studyRepository.findById(personalTodoDTO.getStudyPk())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 스터디 PK: " + personalTodoDTO.getStudyPk()));
-        Member member = memberRepository.findById(personalTodoDTO.getMemberPk())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 멤버 PK: " + personalTodoDTO.getMemberPk()));
-
-        if (!isMemberOfStudy(member, study)) {
-            throw new IllegalArgumentException("멤버가 스터디에 속해 있지 않습니다.");
+        if (!personalTodo.getMember().getMemberPk().equals(memberPk)) {
+            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_TODO);
         }
-        //서비스 계층과 컨트롤러 분리용
-        PersonalTodo personalTodo = PersonalTodoDTO.toEntity(personalTodoDTO, member, study);
+
+        personalTodo = personalTodoDTO.updateEntity(personalTodo);
         personalTodo = personalTodoRepository.save(personalTodo);
         return PersonalTodoDTO.fromEntity(personalTodo);
     }
@@ -74,35 +128,34 @@ public class PersonalTodoService {
     }
 
     /**
-     * PersonalTodo 항목을 업데이트
-     * @param todoPk 업데이트할 PersonalTodo의 PK
-     * @param personalTodoDTO 업데이트할 PersonalTodoDTO 객체
-     * @return 업데이트된 PersonalTodoDTO 객체
+     * PersonalTodo 항목을 삭제, 작성자와 스터디 관리자만 가능
+     *
+     * @param todoPk   삭제할 PersonalTodo의 PK
+     * @param memberPk 멤버 PK
      */
     @Transactional
-    public PersonalTodoDTO updatePersonalTodo(Long todoPk, PersonalTodoDTO personalTodoDTO) {
+    public void deletePersonalTodoById(Long todoPk, Long memberPk) {
         PersonalTodo personalTodo = personalTodoRepository.findById(todoPk)
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 TODO PK: " + todoPk));
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_TODO));
 
-        personalTodo = personalTodoDTO.updateEntity(personalTodo);
-        personalTodo = personalTodoRepository.save(personalTodo);
-        return PersonalTodoDTO.fromEntity(personalTodo);
-    }
+        if (!personalTodo.getMember().getMemberPk().equals(memberPk) &&
+                !isAdmin(personalTodo.getStudy().getStudyPk(), memberPk)) {
+            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_TODO);
+        }
 
-    /*
-     * 스터디 전체 todo 조회
-     */
-    public List<PersonalTodoDTO> getAllTodos(Long studyPk) {
-        return personalTodoRepository.findByStudyStudyPk(studyPk).stream()
-                .map(PersonalTodoDTO::fromEntity)
-                .collect(Collectors.toList());
+        personalTodoRepository.deleteById(todoPk);
     }
 
     /**
-     * PersonalTodo 항목을 삭제합니다.
-     * @param todoPk 삭제할 PersonalTodo의 PK
+     * 멤버가 스터디의 장인지 확인
+     *
+     * @param studyPk  스터디 PK
+     * @param memberPk 멤버 PK
+     * @return 멤버가 스터디의 관리자일때 true
      */
-    public void deletePersonalTodoById(Long todoPk) {
-        personalTodoRepository.deleteById(todoPk);
+    @Transactional(readOnly = true)
+    public boolean isAdmin(Long studyPk, Long memberPk) {
+        return studyMemberRepository.existsByStudyStudyPkAndMemberMemberPkAndRole(studyPk, memberPk, "admin");
     }
+
 }
