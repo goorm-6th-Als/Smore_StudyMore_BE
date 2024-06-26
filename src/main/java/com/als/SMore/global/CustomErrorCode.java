@@ -32,6 +32,7 @@ public enum CustomErrorCode {
 
     //problem
     NOT_FOUND_PROBLEM_BANK(HttpStatus.NOT_FOUND, "없는 문제은행 입니다."),
+    NOT_FOUND_PROBLEM(HttpStatus.NOT_FOUND, "없는 문제 입니다."),
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "방장이나 작성자만 접근 가능합니다"),
     INVALID_TITLE_BANK_NAME(HttpStatus.BAD_REQUEST, "문제은행 이름은 공백 포함 1자 이상 30자 이하로 해주세요."),
     PROBLEM_BANK_COUNT_OVER_LIMIT(HttpStatus.BAD_REQUEST, "문제은행은 최대 30개까지 생성 가능합니다."),
