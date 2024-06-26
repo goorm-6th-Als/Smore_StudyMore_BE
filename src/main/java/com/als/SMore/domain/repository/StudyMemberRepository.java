@@ -20,4 +20,12 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
     Optional<StudyMember> deleteStudyMemberByStudy_StudyPkAndMember_MemberPk (Long studyPk, Long memberPk);
     List<StudyMember> findByMember_MemberPk(Long memberPk);
 
+    // 스터디 장 확인
+    boolean existsByStudyStudyPkAndMemberMemberPkAndRole(Long studyPk, Long memberPk, String role);
+    // 스터디 삭제 시 인원 체크
+    long countByStudyStudyPk(Long studyPk);
+    long countByStudyStudyPkAndRole(Long studyPk, String admin);
+
+    // 스터디 참여인원 확인
+    List<StudyMember> findByStudyStudyPk(Long studyPk);
 }

@@ -32,12 +32,13 @@ public class StudyBoardController {
 
     /**
      * 특정 StudyBoard 엔티티를 조회하는 엔드포인트
-     * @param id 조회할 StudyBoard 엔티티의 ID
+     * @param studyBoardPk 조회할 StudyBoard 엔티티의 ID
      * @return 조회된 StudyBoard 엔티티의 DTO와 함께 OK 응답 반환
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<StudyBoardDTO> getStudyBoardById(@PathVariable Long id) {
-        return ResponseEntity.ok(studyBoardService.getStudyBoardById(id));
+    @GetMapping("/{studyBoardPk}")
+    public ResponseEntity<StudyBoardDTO> getStudyBoardById(
+            @PathVariable Long studyBoardPk) {
+        return ResponseEntity.ok(studyBoardService.getStudyBoardById(studyBoardPk));
     }
 
     /**
