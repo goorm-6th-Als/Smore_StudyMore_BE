@@ -31,11 +31,11 @@ public class StudyBoardService {
 
     /**
      * 스터디 게시물 상세 조회하기
-     * @param id 조회할 StudyBoard의 ID
+     * @param studyBoardPk 조회할 StudyBoard의 PK
      * @return 조회된 StudyBoardDTO
      */
-    public StudyBoardDTO getStudyBoardById(Long id) {
-        StudyBoard studyBoard = studyBoardRepository.findById(id)
+    public StudyBoardDTO getStudyBoardByPk(Long studyBoardPk) {
+        StudyBoard studyBoard = studyBoardRepository.findById(studyBoardPk)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_BOARD));
         return StudyBoardDTO.fromEntity(studyBoard, true);
     }

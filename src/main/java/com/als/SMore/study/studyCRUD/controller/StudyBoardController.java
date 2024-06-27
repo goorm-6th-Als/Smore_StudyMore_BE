@@ -36,9 +36,9 @@ public class StudyBoardController {
      * @return 조회된 StudyBoard 엔티티의 DTO와 함께 OK 응답 반환
      */
     @GetMapping("/{studyBoardPk}")
-    public ResponseEntity<StudyBoardDTO> getStudyBoardById(
+    public ResponseEntity<StudyBoardDTO> getStudyBoardByPk(
             @PathVariable Long studyBoardPk) {
-        return ResponseEntity.ok(studyBoardService.getStudyBoardById(studyBoardPk));
+        return ResponseEntity.ok(studyBoardService.getStudyBoardByPk(studyBoardPk));
     }
 
     /**
