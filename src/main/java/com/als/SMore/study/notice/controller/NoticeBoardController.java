@@ -6,6 +6,7 @@ import com.als.SMore.study.notice.DTO.MessageResponseDTO;
 import com.als.SMore.study.notice.DTO.NoticeRequestDTO;
 import com.als.SMore.study.notice.DTO.NoticeResponseDTO;
 import com.als.SMore.study.notice.service.NoticeBoardService;
+import com.als.SMore.user.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -35,27 +36,21 @@ public class NoticeBoardController {
     }
 
     @PostMapping
-    public NoticeResponseDTO createNotice(@PathVariable Long studyPK, @RequestBody NoticeRequestDTO requestDTO, @RequestParam String requestorPk){
-        //방장 본인 인지 검증하는것 헤더에서 PK가져오는것으로 변경 해야함.
-        Long requestorPkLong = Long.parseLong(requestorPk);
-        return noticeBoardService.createNotice(studyPK, requestDTO, requestorPkLong);
+    public NoticeResponseDTO createNotice(@PathVariable Long studyPK, @RequestBody NoticeRequestDTO requestDTO){
+        Long memberPk = MemberUtil.getUserPk();
+        return noticeBoardService.createNotice(studyPK, requestDTO, memberPk);
     }
 
     @PutMapping("/{noticeBoardPK}")
-    public NoticeResponseDTO updateNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestBody NoticeRequestDTO requestDTO, @RequestParam String requestorPk){
-        //방장 본인 인지 검증하는것 헤더에서 PK가져오는것으로 변경 해야함.
-
-
-        Long requestorPkLong = Long.parseLong(requestorPk);
-        return noticeBoardService.updateNotice(studyPK, noticeBoardPK, requestDTO , requestorPkLong);
+    public NoticeResponseDTO updateNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestBody NoticeRequestDTO requestDTO){
+        Long memberPk = MemberUtil.getUserPk();
+        return noticeBoardService.updateNotice(studyPK, noticeBoardPK, requestDTO , memberPk);
     }
 
     @DeleteMapping("/{noticeBoardPK}")
     public MessageResponseDTO deleteNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestParam String requestorPk){
-        //방장 본인 인지 검증하는것 헤더에서 PK가져오는것으로 변경 해야함.
-        Long requestorPkLong = Long.parseLong(requestorPk);
-
-        return noticeBoardService.deleteNotice(studyPK, noticeBoardPK, requestorPkLong);
+        Long memberPk = MemberUtil.getUserPk();
+        return noticeBoardService.deleteNotice(studyPK, noticeBoardPK, memberPk);
     }
 
 }
