@@ -56,7 +56,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Collections.singletonList("https://smore-project-gold.vercel.app/"));
+        config.setAllowedOrigins(Collections.singletonList("https://smore-stydy-more-fe.vercel.app"));
         config.setAllowedMethods(Collections.singletonList("*"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Collections.singletonList("*"));
