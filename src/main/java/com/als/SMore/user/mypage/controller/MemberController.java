@@ -2,6 +2,7 @@ package com.als.SMore.user.mypage.controller;
 
 import com.als.SMore.user.mypage.dto.request.NicknameRequest;
 import com.als.SMore.user.mypage.dto.response.MemberProfileResponse;
+import com.als.SMore.user.mypage.dto.response.MessageResponse;
 import com.als.SMore.user.mypage.dto.response.NicknameResponse;
 import com.als.SMore.user.mypage.dto.response.ProfileImgResponse;
 import com.als.SMore.user.mypage.service.AwsFileService;
@@ -45,8 +46,9 @@ public class MemberController {
         return ResponseEntity.ok(ProfileImgResponse.builder().profileImage(img).build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMember(@PathVariable(name = "id") Long userId){
-        return ResponseEntity.ok("굿");
+    @DeleteMapping()
+    public ResponseEntity<MessageResponse> deleteMember(){
+        MessageResponse messageResponse = memberService.deleteMember();
+        return ResponseEntity.ok(messageResponse);
     }
 }
