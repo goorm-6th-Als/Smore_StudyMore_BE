@@ -6,16 +6,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/study")
 @RequiredArgsConstructor
 public class StudyController {
@@ -36,15 +29,12 @@ public class StudyController {
     /**
      * 특정 스터디 조회
      * @param studyPk 조회할 스터디의 PK
-     * @param model 뷰에 전달할 모델 객체
-     * @return 스터디 페이지 이름
+     * @return 스터디 이름과 함께 응답
      */
     @GetMapping("/{studyPk}")
-    public String getStudy(@PathVariable Long studyPk, Model model) {
+    public ResponseEntity<String> getStudy(@PathVariable Long studyPk) {
         String studyName = studyService.getStudyNameById(studyPk);
-        model.addAttribute("studyPk", studyPk);
-        model.addAttribute("studyName", studyName);
-        return "studyPage";
+        return ResponseEntity.ok(studyName);
     }
 
     /**
