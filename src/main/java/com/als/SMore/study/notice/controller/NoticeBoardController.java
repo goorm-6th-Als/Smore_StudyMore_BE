@@ -23,34 +23,34 @@ public class NoticeBoardController {
     private final NoticeBoardService noticeBoardService;
 
     @GetMapping("/{noticeBoardPK}")
-    public NoticeResponseDTO getNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK){
-        return noticeBoardService.getNotice(studyPK, noticeBoardPK);
+    public NoticeResponseDTO getNotice(@PathVariable String studyPK, @PathVariable String noticeBoardPK){
+        return noticeBoardService.getNotice(Long.parseLong(studyPK), Long.parseLong(noticeBoardPK));
     }
 
     @GetMapping
-    public List<NoticeResponseDTO> getAllNotice(@PathVariable Long studyPK){
-        List<NoticeBoard> allNotice = noticeBoardService.getAllNotice(studyPK);
+    public List<NoticeResponseDTO> getAllNotice(@PathVariable String studyPK){
+        List<NoticeBoard> allNotice = noticeBoardService.getAllNotice(Long.parseLong(studyPK));
         return allNotice.stream()
                 .map(NoticeResponseDTO::new)
                 .collect(Collectors.toList());
     }
 
     @PostMapping
-    public NoticeResponseDTO createNotice(@PathVariable Long studyPK, @RequestBody NoticeRequestDTO requestDTO){
+    public NoticeResponseDTO createNotice(@PathVariable String studyPK, @RequestBody NoticeRequestDTO requestDTO){
         Long memberPk = MemberUtil.getUserPk();
-        return noticeBoardService.createNotice(studyPK, requestDTO, memberPk);
+        return noticeBoardService.createNotice(Long.parseLong(studyPK), requestDTO, memberPk);
     }
 
     @PutMapping("/{noticeBoardPK}")
-    public NoticeResponseDTO updateNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestBody NoticeRequestDTO requestDTO){
+    public NoticeResponseDTO updateNotice(@PathVariable String studyPK, @PathVariable String noticeBoardPK, @RequestBody NoticeRequestDTO requestDTO){
         Long memberPk = MemberUtil.getUserPk();
-        return noticeBoardService.updateNotice(studyPK, noticeBoardPK, requestDTO , memberPk);
+        return noticeBoardService.updateNotice(Long.parseLong(studyPK), Long.parseLong(noticeBoardPK), requestDTO , memberPk);
     }
 
     @DeleteMapping("/{noticeBoardPK}")
-    public MessageResponseDTO deleteNotice(@PathVariable Long studyPK, @PathVariable Long noticeBoardPK, @RequestParam String requestorPk){
+    public MessageResponseDTO deleteNotice(@PathVariable String studyPK, @PathVariable String noticeBoardPK){
         Long memberPk = MemberUtil.getUserPk();
-        return noticeBoardService.deleteNotice(studyPK, noticeBoardPK, memberPk);
+        return noticeBoardService.deleteNotice(Long.parseLong(studyPK), Long.parseLong(noticeBoardPK), memberPk);
     }
 
 }
