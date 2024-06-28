@@ -8,6 +8,7 @@ import com.als.SMore.user.mystudy.dto.response.EnterStudyResponse;
 import com.als.SMore.user.mystudy.dto.response.StudyListResponse;
 import com.als.SMore.user.mystudy.dto.response.StudyResponse;
 import com.als.SMore.user.login.util.MemberUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -52,16 +53,6 @@ public class MyStudyService {
             );
         }
 
-        /*for (StudyMember studyMember : admin) {
-            Long studyMemberCount = studyMemberRepository.countAllByStudy_StudyPk(studyMember.getStudy().getStudyPk());
-            StudyDetail studyDetail = studyDetailRepository.findByStudy(studyMember.getStudy());
-            Study study = studyRepository.findById(studyMember.getStudy().getStudyPk()).orElseThrow(IllegalAccessError::new);
-            StudyResponse studyResponse = StudyResponse.builder().studyPk(study.getStudyPk()).studyName(study.getStudyName())
-                    .studyImg(studyDetail.getImageUri()).studyStartDate(studyDetail.getStartDate()).studyEndDate(studyDetail.getCloseDate())
-                    .studyPersonNum(studyMemberCount).build();
-            studyList.add(studyResponse);
-        }*/
-
         // admin 에서 나온 studyPk를 통해 스터디의 정보를 조회해야 한다.
         return StudyListResponse.builder().studyList(studyList).build();
     }
@@ -91,6 +82,7 @@ public class MyStudyService {
         return studyListResponse.toBuilder().studyList(studyList).build();
     }
 
+    @Transactional
     public EnterStudyResponse applyMemberByStudy(Long studyPk) {
         List<StudyEnterMember> studyEnterMembers = studyEnterMemberRepository.findAllByStudy_StudyPk(studyPk);
         List<EnterStudy> enterStudies = new ArrayList<>();
@@ -100,14 +92,19 @@ public class MyStudyService {
         }
 
         for (StudyEnterMember studyEnterMember : studyEnterMembers) {
-            Member member = memberRepository.findById(studyPk).orElseThrow(IllegalAccessError::new);
-            enterStudies.add(EnterStudy.builder().userId(member.getUserId()).nickname(member.getNickName()).profileURL(member.getProfileImg())
-                            .content(studyEnterMember.getContent()).build());
+            Member member = memberRepository.findById(studyEnterMember.getMember().getMemberPk()).orElseThrow(IllegalAccessError::new);
+            enterStudies.add(EnterStudy.builder()
+                    .userId(member.getUserId())
+                    .nickname(member.getNickName())
+                    .profileURL(member.getProfileImg())
+                    .content(studyEnterMember.getContent())
+                    .build());
         }
         return EnterStudyResponse.builder().enterStudyList(enterStudies).build();
 
     }
 
+    @Transactional
     public boolean acceptMember(IsCheckedStatusRequest statusRequest){
 
         StudyDetail studyDetail = studyDetailRepository.findByStudy_StudyPk(statusRequest.getStudyPk()).orElseThrow(IllegalAccessError::new);
@@ -118,21 +115,28 @@ public class MyStudyService {
             return false;
         }
 
+        StudyEnterMember studyEnterMember = studyEnterMemberRepository.findStudyEnterMemberByMember_UserIdAndStudy_StudyPk(
+                statusRequest.getUserId(), statusRequest.getStudyPk()
+        ).orElseThrow(IllegalAccessError::new);
+
         // 유저 이메일과 studyPk가 동일한 컬럼을 삭제하고 반환
-        StudyEnterMember studyEnterMember = studyEnterMemberRepository.deleteStudyEnterMemberByMember_UserIdAndStudy_StudyPk(statusRequest.getUserId(), statusRequest.getStudyPk())
-                .orElseThrow(IllegalAccessError::new);
+        studyEnterMemberRepository
+                .deleteStudyEnterMemberByMember_UserIdAndStudy_StudyPk(
+                        statusRequest.getUserId(), statusRequest.getStudyPk()
+                );
 
-        StudyMember creatStudyMember = StudyMember.builder().member(studyEnterMember.getMember())
-                .study(studyEnterMember.getStudy()).enterDate(LocalDate.now()).build();
-
-        Study study = studyRepository.findById(studyEnterMember.getStudy().getStudyPk()).orElseThrow(IllegalAccessError::new);
-        study.getStudyMembers().add(creatStudyMember);
-        studyRepository.save(study);
+        StudyMember creatStudyMember = StudyMember.builder()
+                .member(studyEnterMember.getMember())
+                .study(studyEnterMember.getStudy())
+                .enterDate(LocalDate.now())
+                .role("user")
+                .build();
 
         studyMemberRepository.save(creatStudyMember);
         return true;
     }
 
+    @Transactional
     public void refuseMember(IsCheckedStatusRequest statusRequest){
         StudyEnterMember studyEnterMember = studyEnterMemberRepository.findStudyEnterMemberByMember_UserIdAndStudy_StudyPk(statusRequest.getUserId(), statusRequest.getStudyPk())
                 .orElseThrow(IllegalAccessError::new);
@@ -141,6 +145,7 @@ public class MyStudyService {
         studyEnterMemberRepository.save(renewStudyEnterMember);
     }
 
+    @Transactional
     public void resignMemberByStudy(Long studyPk) {
         Long userPk = MemberUtil.getUserPk();
         studyMemberRepository.deleteStudyMemberByStudy_StudyPkAndMember_MemberPk(studyPk,userPk);
