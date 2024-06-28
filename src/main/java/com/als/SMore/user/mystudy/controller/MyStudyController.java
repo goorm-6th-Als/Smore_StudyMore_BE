@@ -17,7 +17,7 @@ public class MyStudyController {
     private final MyStudyService myStudyService;
 
     // 내가 참여하는 스터디 get
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<StudyListResponse> enterStudy(){
         StudyListResponse studyListResponse = myStudyService.enterStudy();
         return ResponseEntity.ok(studyListResponse);
@@ -39,8 +39,11 @@ public class MyStudyController {
     // 신청한 사람들을 승낙하는 기능 post
     @PostMapping("/apply")
     public ResponseEntity<MessageResponse> acceptMember(@RequestBody IsCheckedStatusRequest statusRequest){
-        myStudyService.acceptMember(statusRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.builder().build());
+        if(!myStudyService.acceptMember(statusRequest)){
+            return ResponseEntity.ok(MessageResponse.builder().message("승인 실패").build());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(MessageResponse.builder().message("승인 성공").build());
     }
     // 신청한 사람들을 거절하는 기능 post
     @PostMapping("/refuse")
