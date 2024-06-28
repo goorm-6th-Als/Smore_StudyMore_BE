@@ -37,11 +37,11 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfiguration()));
         http.httpBasic(HttpBasicConfigurer::disable);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.disable());
+        http.formLogin(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(request -> request
-                        .requestMatchers("board/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/board/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, OAuth2LoginAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
