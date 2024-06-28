@@ -5,7 +5,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "member_token")
-@Getter @Builder
+@Getter
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberToken {
@@ -24,4 +25,10 @@ public class MemberToken {
 
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
+
+    @Column(name = "kakao_access_token", nullable = false)
+    private String kakaoAccessToken;
+
+    @Column(name = "kakao_refresh_token", nullable = false)
+    private String kakaoRefreshToken;
 }

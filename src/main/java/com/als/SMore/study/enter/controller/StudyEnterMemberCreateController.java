@@ -25,7 +25,8 @@ public class StudyEnterMemberCreateController {
      */
     @PostMapping
     public ResponseEntity<StudyEnterMemberDTO> createStudyEnterMember(
-            @RequestBody StudyEnterMemberDTO studyEnterMemberDTO, @PathVariable Long studyPk) {
+            @RequestBody StudyEnterMemberDTO studyEnterMemberDTO,
+            @PathVariable Long studyPk) {
         StudyEnterMemberDTO createdMember = studyEnterMemberService.createStudyEnterMember(studyEnterMemberDTO, studyPk);
         return ResponseEntity.status(201).body(createdMember);
     }

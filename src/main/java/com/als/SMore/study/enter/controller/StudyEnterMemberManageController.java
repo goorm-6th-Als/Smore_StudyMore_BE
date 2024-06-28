@@ -27,7 +27,8 @@ public class StudyEnterMemberManageController {
      * @return 모든 StudyEnterMemberDTO 리스트와 함께 OK 응답 반환
      */
     @GetMapping("/study/{studyPk}")
-    public ResponseEntity<List<StudyEnterMemberDTO>> getAllStudyEnterMembers(@PathVariable Long studyPk) {
+    public ResponseEntity<List<StudyEnterMemberDTO>> getAllStudyEnterMembers(
+            @PathVariable Long studyPk) {
         List<StudyEnterMemberDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembers(studyPk);
         return ResponseEntity.ok(studyEnterMembers);
     }
@@ -38,7 +39,8 @@ public class StudyEnterMemberManageController {
      * @return 해당 멤버의 모든 StudyEnterMemberDTO 리스트와 함께 OK 응답 반환
      */
     @GetMapping("/member/{memberPk}")
-    public ResponseEntity<List<StudyEnterMemberDTO>> getAllStudyEnterMembersByMember(@PathVariable Long memberPk) {
+    public ResponseEntity<List<StudyEnterMemberDTO>> getAllStudyEnterMembersByMember(
+            @PathVariable Long memberPk) {
         List<StudyEnterMemberDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembersByMember(memberPk);
         return ResponseEntity.ok(studyEnterMembers);
     }
@@ -62,7 +64,8 @@ public class StudyEnterMemberManageController {
      */
     @PutMapping("/{studyEnterMemberPk}")
     public ResponseEntity<StudyEnterMemberDTO> updateStudyEnterMember(
-            @PathVariable Long studyEnterMemberPk, @RequestBody StudyEnterMemberDTO studyEnterMemberDTO) {
+            @PathVariable Long studyEnterMemberPk,
+            @RequestBody StudyEnterMemberDTO studyEnterMemberDTO) {
         StudyEnterMemberDTO updatedMember = studyEnterMemberService.updateStudyEnterMember(studyEnterMemberPk, studyEnterMemberDTO);
         return ResponseEntity.ok(updatedMember);
     }
