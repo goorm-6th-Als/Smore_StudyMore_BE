@@ -78,31 +78,31 @@ public class PersonalTodoController {
 
     /**
      * PersonalTodo 항목의 상태 및 내용을 업데이트
+     * @param studyPk 스터디 PK
      * @param todoPk 업데이트할 PersonalTodo의 PK
      * @param personalTodoDTO 업데이트할 데이터가 담긴 DTO
-     * @param memberPk 요청자의 멤버 PK
      * @return 업데이트된 PersonalTodoDTO 객체와 함께 OK 응답 반환
      */
-    @PutMapping("/{todoPk}/{memberPk}")
+    @PutMapping("/{todoPk}")
     public ResponseEntity<PersonalTodoDTO> updateTodo(
             @PathVariable Long studyPk,
             @PathVariable Long todoPk,
-            @PathVariable Long memberPk,
             @RequestBody PersonalTodoDTO personalTodoDTO) {
-        PersonalTodoDTO updatedTodo = personalTodoService.updatePersonalTodo(todoPk, personalTodoDTO, memberPk);
+        PersonalTodoDTO updatedTodo = personalTodoService.updatePersonalTodo(studyPk, todoPk, personalTodoDTO);
         return ResponseEntity.ok(updatedTodo);
     }
 
     /**
      * PersonalTodo 삭제
+     * @param studyPk 스터디 PK
      * @param todoPk 삭제할 PersonalTodo의 PK
      * @return 삭제된 후 No Content 응답 반환
      */
-    @DeleteMapping("/{todoPk}/{memberPk}")
+    @DeleteMapping("/{todoPk}")
     public ResponseEntity<Void> deletePersonalTodo(
-            @PathVariable Long todoPk,
-            @PathVariable Long memberPk) {
-        personalTodoService.deletePersonalTodoById(todoPk, memberPk);
+            @PathVariable Long studyPk,
+            @PathVariable Long todoPk) {
+        personalTodoService.deletePersonalTodoById(todoPk);
         return ResponseEntity.noContent().build();
     }
 }
