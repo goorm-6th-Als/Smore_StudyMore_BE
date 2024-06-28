@@ -6,7 +6,7 @@ import com.als.SMore.study.notice.DTO.MessageResponseDTO;
 import com.als.SMore.study.notice.DTO.NoticeRequestDTO;
 import com.als.SMore.study.notice.DTO.NoticeResponseDTO;
 import com.als.SMore.study.notice.service.NoticeBoardService;
-import com.als.SMore.user.util.MemberUtil;
+import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

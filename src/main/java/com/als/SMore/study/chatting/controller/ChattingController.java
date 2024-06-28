@@ -2,7 +2,6 @@ package com.als.SMore.study.chatting.controller;
 
 import com.als.SMore.study.chatting.DTO.ChatMessageRequestDTO;
 import com.als.SMore.study.chatting.service.ChattingService;
-import com.als.SMore.user.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;

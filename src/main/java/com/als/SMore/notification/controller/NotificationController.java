@@ -1,7 +1,7 @@
 package com.als.SMore.notification.controller;
 
 import com.als.SMore.notification.service.NotificationService;
-import com.als.SMore.user.util.MemberUtil;
+import com.als.SMore.user.login.util.MemberUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

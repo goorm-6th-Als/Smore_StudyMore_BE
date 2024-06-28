@@ -9,7 +9,7 @@ import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.study.chatting.DTO.ChatMessage;
 import com.als.SMore.study.chatting.DTO.ChatMessageRequestDTO;
-import com.als.SMore.user.util.MemberUtil;
+import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
