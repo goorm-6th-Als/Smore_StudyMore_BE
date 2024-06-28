@@ -17,7 +17,7 @@ public class MyStudyController {
     private final MyStudyService myStudyService;
 
     // 내가 참여하는 스터디 get
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<StudyListResponse> enterStudy(){
         StudyListResponse studyListResponse = myStudyService.enterStudy();
         return ResponseEntity.ok(studyListResponse);
