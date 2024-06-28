@@ -10,7 +10,11 @@ import com.als.SMore.domain.repository.StudyBoardRepository;
 import com.als.SMore.domain.repository.StudyDetailRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
+import com.als.SMore.global.CustomErrorCode;
+import com.als.SMore.global.CustomException;
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
+import com.als.SMore.study.studyCRUD.mapper.StudyCreateMapper;
+import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,36 +31,41 @@ public class StudyService {
     private final StudyMemberRepository studyMemberRepository;
     private final StudyBoardRepository studyBoardRepository;
 
+    private static final int MAX_STUDY_PARTICIPATION = 5;
     /**
-     * 스터디를 생성하는 메서드.
-     * 방이 생성되면 studyMemberRepository에 admin으로 저장.
-     * @param studyCreateDTO 스터디 생성에 필요한 정보를 담은 DTO 객체
-     * @return 생성된 스터디 정보를 담은 StudyCreateDTO 객체
+     * 스터디 생성
+     * @param studyCreateDTO 생성할 스터디의 정보를 담은 DTO
+     * @return 생성된 스터디 정보를 담은 DTO와 함께 응답
      */
     @Transactional
     public StudyCreateDTO createStudy(StudyCreateDTO studyCreateDTO) {
-        Member member = memberRepository.findById(studyCreateDTO.getMemberPk())
-                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 memberPk: " + studyCreateDTO.getMemberPk()));
+        Long memberPk = MemberUtil.getUserPk();
+        logger.info("현재 사용자 PK: {}", memberPk);
 
-        Study study = StudyCreateDTO.toEntity(studyCreateDTO, member);
+        // 참여할 수 있는 스터디 최대 갯수 설정
+        if (studyMemberRepository.countByMemberMemberPk(memberPk) >= MAX_STUDY_PARTICIPATION) {
+            throw new CustomException(CustomErrorCode.MAX_STUDY_PARTICIPATION_EXCEEDED);
+        }
+        Member member = memberRepository.findById(memberPk)
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 memberPk: " + memberPk));
+
+        Study study = StudyCreateMapper.toStudy(studyCreateDTO, member);
         studyRepository.save(study);
-        logger.info("Study 생성: {}", study);
+        logger.info("Study 엔티티 생성 Study PK: {}", study.getStudyPk());
 
-        StudyDetail studyDetail = StudyCreateDTO.toDetailEntity(studyCreateDTO, study);
+        StudyDetail studyDetail = StudyCreateMapper.toStudyDetail(studyCreateDTO, study);
         studyDetailRepository.save(studyDetail);
-        logger.info("StudyDetail 생성: {}", studyDetail);
+        logger.info("StudyDetail 엔티티 생성");
 
-        StudyMember studyMember = StudyCreateDTO.toMemberEntity(studyCreateDTO, study, member);
+        StudyMember studyMember = StudyCreateMapper.toStudyMember(studyCreateDTO, study, member);
         studyMemberRepository.save(studyMember);
-        logger.info("StudyMember 생성: {}", studyMember);
+        logger.info("StudyMember 엔티티 생성");
 
-        StudyBoard studyBoard = StudyCreateDTO.toBoardEntity(studyCreateDTO, study);
+        StudyBoard studyBoard = StudyCreateMapper.toStudyBoard(studyCreateDTO, study);
         studyBoardRepository.save(studyBoard);
-        logger.info("StudyBoard 생성: {}", studyBoard);
-
+        logger.info("StudyBoard 엔티티 생성 StudyBoard PK: {}", studyBoard.getStudyBoardPk());
         return StudyCreateDTO.fromEntity(study, studyDetail);
     }
-
 
     /**
      * 스터디 이름을 ID로 조회하는 메서드.

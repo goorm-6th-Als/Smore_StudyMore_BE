@@ -43,6 +43,7 @@ public enum CustomErrorCode {
     NOT_STUDY_MEMBER(HttpStatus.UNAUTHORIZED, "스터디 멤버가 아닙니다."),
 
     //Study Management
+    MAX_STUDY_PARTICIPATION_EXCEEDED(HttpStatus.BAD_REQUEST,"스터디는 5개까지 참가 가능합니다."),
     NOT_STUDY_ADMIN(HttpStatus.UNAUTHORIZED, "스터디 장이 아닙니다."),
     STILL_EXISTS_MEMBERS(HttpStatus.BAD_REQUEST, "스터디에 다른 멤버가 존재합니다."),
     NOT_AUTHORIZED_REQUEST_TODO(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
