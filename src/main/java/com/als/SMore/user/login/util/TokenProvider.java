@@ -59,9 +59,9 @@ public class TokenProvider {
 
     public String generateRefreshToken(Long userId,Map<String,String> claim){
         if (claim.isEmpty()){
-            return create(String.valueOf(userId),accessTokenValidTime);
+            return create(String.valueOf(userId),refreshTokenValidTime);
         }
-        return create(String.valueOf(userId),accessTokenValidTime,claim);
+        return create(String.valueOf(userId),refreshTokenValidTime,claim);
     }
 
     public String validate(String jwt) {

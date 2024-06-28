@@ -31,7 +31,25 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
 
+            // 여기서 부터 다음 if문 부분은 삭제하거나 추후에 정리해야합니다.
+            String authorization = request.getHeader("Authorization");
+
+            if(authorization.startsWith("test")){
+                OAuth2User userDetails = userInfoService.loadUserByUserPk(Long.parseLong(authorization.substring(4)));
+
+                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                securityContext.setAuthentication(authenticationToken);
+                SecurityContextHolder.setContext(securityContext);
+                filterChain.doFilter(request,response);
+                return;
+            }
+
             String token = parseBearerToken(request);
+
             if ( token == null){
                 filterChain.doFilter(request,response);
                 return;
