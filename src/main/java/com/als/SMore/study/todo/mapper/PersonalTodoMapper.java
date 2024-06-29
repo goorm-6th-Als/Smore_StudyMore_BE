@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class PersonalTodoMapper {
 
-    public static PersonalTodoDTO toDTO(PersonalTodo personalTodo) {
+    public static PersonalTodoDTO fromEntity(PersonalTodo personalTodo) {
         return PersonalTodoDTO.builder()
                 .personalTodoPk(personalTodo.getPersonalTodoPk())
                 .studyPk(personalTodo.getStudy().getStudyPk())

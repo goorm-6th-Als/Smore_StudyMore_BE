@@ -53,7 +53,7 @@ public class PersonalTodoService {
 
         PersonalTodo personalTodo = PersonalTodoMapper.toEntity(personalTodoDTO, member, study, scheduleStatus);
         personalTodo = personalTodoRepository.save(personalTodo);
-        return PersonalTodoMapper.toDTO(personalTodo);
+        return PersonalTodoMapper.fromEntity(personalTodo);
     }
 
 
@@ -66,7 +66,7 @@ public class PersonalTodoService {
     public List<PersonalTodoDTO> getAllTodos(Long studyPk) {
         validateStudy(studyPk);
         return personalTodoRepository.findByStudyStudyPk(studyPk).stream()
-                .map(PersonalTodoMapper::toDTO)
+                .map(PersonalTodoMapper::fromEntity)
                 .collect(Collectors.toList());
     }
 
@@ -86,7 +86,7 @@ public class PersonalTodoService {
             throw new CustomException(CustomErrorCode.NOT_FOUND_STUDY);
         }
 
-        return PersonalTodoMapper.toDTO(personalTodo);
+        return PersonalTodoMapper.fromEntity(personalTodo);
     }
 
 
@@ -101,7 +101,7 @@ public class PersonalTodoService {
         validateStudy(studyPk);
         TodoStatus todoStatus = validateTodoStatus(status);
         return personalTodoRepository.findByStudyStudyPkAndScheduleStatus(studyPk, todoStatus).stream()
-                .map(PersonalTodoMapper::toDTO)
+                .map(PersonalTodoMapper::fromEntity)
                 .collect(Collectors.toList());
     }
 
@@ -122,14 +122,14 @@ public class PersonalTodoService {
                 .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_TODO));
 
         if (!personalTodo.getMember().getMemberPk().equals(memberPk)) {
-            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_TODO);
+            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_MEMBER);
         }
 
         TodoStatus scheduleStatus = validateTodoStatus(personalTodoDTO.getScheduleStatus());
 
         personalTodo = PersonalTodoMapper.updateEntity(personalTodoDTO, personalTodo, scheduleStatus);
         personalTodo = personalTodoRepository.save(personalTodo);
-        return PersonalTodoMapper.toDTO(personalTodo);
+        return PersonalTodoMapper.fromEntity(personalTodo);
     }
 
     /**
@@ -145,7 +145,7 @@ public class PersonalTodoService {
 
         if (!personalTodo.getMember().getMemberPk().equals(memberPk) &&
                 !isAdmin(personalTodo.getStudy().getStudyPk(), memberPk)) {
-            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_TODO);
+            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_MEMBER);
         }
 
         personalTodoRepository.deleteById(todoPk);
