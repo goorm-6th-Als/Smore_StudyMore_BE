@@ -47,7 +47,7 @@ public class StudyManagementService {
         studyDetailRepository.save(studyDetail);
         studyBoardRepository.save(studyBoard);
 
-        return StudyUpdateDTO.fromEntity(studyDetail);
+        return StudyUpdateMapper.fromEntity(studyDetail);
     }
 
     /**
@@ -58,7 +58,7 @@ public class StudyManagementService {
     public void deleteStudy(Long studyPk) throws CustomException {
         Long memberPk = validateAndGetMemberPk(studyPk);
         if (!isAdmin(studyPk, memberPk)) {
-            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_TODO);
+            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_MEMBER);
         }
         if (!areAllMembersAdmins(studyPk)) {
             throw new CustomException(CustomErrorCode.STILL_EXISTS_MEMBERS);
@@ -76,7 +76,7 @@ public class StudyManagementService {
     private Long validateAndGetMemberPk(Long studyPk) {
         Long memberPk = MemberUtil.getUserPk();
         if (!isAdmin(studyPk, memberPk)) {
-            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_TODO);
+            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_MEMBER);
         }
         return memberPk;
     }

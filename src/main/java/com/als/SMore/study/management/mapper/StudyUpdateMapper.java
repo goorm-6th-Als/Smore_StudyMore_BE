@@ -7,6 +7,15 @@ import java.time.LocalDate;
 
 public class StudyUpdateMapper {
 
+    public static StudyUpdateDTO fromEntity(StudyDetail studyDetail) {
+        return StudyUpdateDTO.builder()
+                .content(studyDetail.getContent())
+                .imageUri(studyDetail.getImageUri())
+                .maxPeople(studyDetail.getMaxPeople())
+                .closeDate(studyDetail.getCloseDate())
+                .build();
+    }
+
     public static StudyDetail updateStudyDetail(StudyDetail studyDetail, StudyUpdateDTO studyUpdateDTO) {
         return studyDetail.toBuilder()
                 .content(studyUpdateDTO.getContent() != null ? studyUpdateDTO.getContent() : studyDetail.getContent())
