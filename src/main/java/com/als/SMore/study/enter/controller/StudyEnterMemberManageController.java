@@ -20,7 +20,6 @@ public class StudyEnterMemberManageController {
 
     private final StudyEnterMemberService studyEnterMemberService;
 
-
     /**
      * 특정 스터디의 모든 가입 신청서 조회
      * @param studyPk 스터디 PK
@@ -41,7 +40,7 @@ public class StudyEnterMemberManageController {
     @GetMapping("/member/{memberPk}")
     public ResponseEntity<List<StudyEnterMemberDTO>> getAllStudyEnterMembersByMember(
             @PathVariable Long memberPk) {
-        List<StudyEnterMemberDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembersByMember(memberPk);
+        List<StudyEnterMemberDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembersByMember();
         return ResponseEntity.ok(studyEnterMembers);
     }
 
