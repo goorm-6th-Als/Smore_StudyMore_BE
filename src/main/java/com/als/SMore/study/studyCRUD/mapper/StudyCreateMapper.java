@@ -14,7 +14,7 @@ public class StudyCreateMapper {
     private static final Logger logger = LoggerFactory.getLogger(StudyCreateMapper.class);
 
     public static Study toStudy(StudyCreateDTO dto, Member member) {
-//        logger.info("Study 엔티티 생성");
+        logger.info("Study 엔티티 생성");
         return Study.builder()
                 .studyName(dto.getStudyName())
                 .member(member)
@@ -22,7 +22,7 @@ public class StudyCreateMapper {
     }
 
     public static StudyDetail toStudyDetail(StudyCreateDTO dto, Study study) {
-//        logger.info("StudyDetail 엔티티 생성");
+        logger.info("StudyDetail 엔티티 생성");
         return StudyDetail.builder()
                 .study(study)
                 .imageUri(dto.getImageUri())
@@ -34,7 +34,7 @@ public class StudyCreateMapper {
     }
 
     public static StudyMember toStudyMember(StudyCreateDTO dto, Study study, Member member) {
-//        logger.info("StudyMember 엔티티 생성");
+        logger.info("StudyMember 엔티티 생성");
         return StudyMember.builder()
                 .study(study)
                 .member(member)
@@ -44,7 +44,7 @@ public class StudyCreateMapper {
     }
 
     public static StudyBoard toStudyBoard(StudyCreateDTO dto, Study study) {
-//        logger.info("StudyBoard 엔티티 생성");
+        logger.info("StudyBoard 엔티티 생성");
         String adSummary = dto.getContent().length() > 30
                 ? dto.getContent().substring(0, 30) + "..."
                 : dto.getContent();
@@ -56,6 +56,19 @@ public class StudyCreateMapper {
                 .adSummary(adSummary)
                 .modifyDate(LocalDate.now())
                 .imageUri(dto.getImageUri())
+                .build();
+    }
+
+    public static StudyCreateDTO fromEntity(Study study, StudyDetail studyDetail) {
+        return StudyCreateDTO.builder()
+                .studyPk(study.getStudyPk())
+                .memberPk(study.getMember().getMemberPk())
+                .studyName(study.getStudyName())
+                .imageUri(studyDetail.getImageUri())
+                .maxPeople(studyDetail.getMaxPeople())
+                .content(studyDetail.getContent())
+                .startDate(studyDetail.getStartDate())
+                .closeDate(studyDetail.getCloseDate())
                 .build();
     }
 }

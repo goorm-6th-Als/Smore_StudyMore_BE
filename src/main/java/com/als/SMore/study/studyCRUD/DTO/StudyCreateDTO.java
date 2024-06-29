@@ -1,7 +1,5 @@
 package com.als.SMore.study.studyCRUD.DTO;
 
-import com.als.SMore.domain.entity.Study;
-import com.als.SMore.domain.entity.StudyDetail;
 import com.als.SMore.global.json.LongToStringSerializer;
 import com.als.SMore.global.json.StringToLongDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -27,17 +25,4 @@ public class StudyCreateDTO {
     private String content;
     private LocalDate startDate;
     private LocalDate closeDate;
-
-    public static StudyCreateDTO fromEntity(Study study, StudyDetail studyDetail) {
-        return StudyCreateDTO.builder()
-                .studyPk(study.getStudyPk())
-                .memberPk(study.getMember().getMemberPk())
-                .studyName(study.getStudyName())
-                .imageUri(studyDetail.getImageUri())
-                .maxPeople(studyDetail.getMaxPeople())
-                .content(studyDetail.getContent())
-                .startDate(studyDetail.getStartDate())
-                .closeDate(studyDetail.getCloseDate())
-                .build();
-    }
 }

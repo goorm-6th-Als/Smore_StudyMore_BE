@@ -64,7 +64,7 @@ public class StudyService {
         StudyBoard studyBoard = StudyCreateMapper.toStudyBoard(studyCreateDTO, study);
         studyBoardRepository.save(studyBoard);
         logger.info("StudyBoard 엔티티 생성 StudyBoard PK: {}", studyBoard.getStudyBoardPk());
-        return StudyCreateDTO.fromEntity(study, studyDetail);
+        return StudyCreateMapper.fromEntity(study, studyDetail);
     }
 
     /**
