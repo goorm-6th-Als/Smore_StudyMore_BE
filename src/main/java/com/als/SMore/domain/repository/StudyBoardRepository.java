@@ -1,6 +1,5 @@
 package com.als.SMore.domain.repository;
 
-import com.als.SMore.domain.entity.Study;
 import com.als.SMore.domain.entity.StudyBoard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +15,5 @@ public interface StudyBoardRepository extends JpaRepository<StudyBoard, Long> {
     @Query("SELECT sb FROM StudyBoard sb WHERE LOWER(sb.adTitle) LIKE LOWER(CONCAT('%', :keyword, '%')) ORDER BY sb.modifyDate DESC")
     Page<StudyBoard> searchByAdTitle(@Param("keyword") String keyword, Pageable pageable);
 
-    Page<StudyBoard> findByAdTitleContainingIgnoreCaseOrderByModifyDateDesc(String keyword, Pageable pageable);
-    StudyBoard findByAdTitleContainingIgnoreCaseOrderByModifyDateDesc(Study study);
+    StudyBoard findByStudyStudyPk(Long studyPk);
 }
