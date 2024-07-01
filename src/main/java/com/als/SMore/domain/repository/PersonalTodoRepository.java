@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface PersonalTodoRepository extends JpaRepository<PersonalTodo, Long> {
     List<PersonalTodo> findByStudyStudyPkAndScheduleStatus(Long studyPk, TodoStatus scheduleStatus);
     List<PersonalTodo> findByStudyStudyPk(Long studyPk);
+
+    List<PersonalTodo> findByMemberMemberPk(Long memberPk);
 }

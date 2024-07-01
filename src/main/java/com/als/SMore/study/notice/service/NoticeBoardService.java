@@ -3,6 +3,8 @@ package com.als.SMore.study.notice.service;
 import com.als.SMore.domain.entity.NoticeBoard;
 import com.als.SMore.domain.entity.Study;
 import com.als.SMore.domain.repository.NoticeBoardRepository;
+import com.als.SMore.notification.dto.NotificationRequestDto;
+import com.als.SMore.notification.service.NotificationService;
 import com.als.SMore.study.notice.DTO.MessageResponseDTO;
 import com.als.SMore.study.notice.DTO.NoticeRequestDTO;
 import com.als.SMore.study.notice.DTO.NoticeResponseDTO;
@@ -20,6 +22,7 @@ public class NoticeBoardService {
 
     private final NoticeBoardRepository noticeBoardRepository;
     private final NoticeValidator noticeValidator;
+    private final NotificationService notificationService;
 
     @Transactional(readOnly = true)
     public NoticeResponseDTO getNotice(Long studyPK, Long noticeBoardPK) {
@@ -34,31 +37,31 @@ public class NoticeBoardService {
         return noticeBoardRepository.findAllByStudy(study);
     }
 
-    public NoticeResponseDTO createNotice(Long studyPK, NoticeRequestDTO requestDTO, Long requestorPk) {
+    public NoticeResponseDTO createNotice(Long studyPK, NoticeRequestDTO requestDTO, Long memberPk) {
         //연관관계 주인 = noticeBoard (O) Study(X)
-        //유저 정보 받아오면, 유저 정보 + 스터디 PK로 방장이 맞는지 확인하도록.
-
-        noticeValidator.CheckIsItManagerOfStudy(studyPK,requestorPk);
+        noticeValidator.CheckIsItManagerOfStudy(studyPK,memberPk);
         noticeValidator.validateTitleLength(requestDTO.getNoticeTitle());
 
         Study study = noticeValidator.findStudyByStudyPk(studyPK);
         NoticeBoard noticeBoard = noticeBoardRepository.saveAndFlush(new NoticeBoard(requestDTO,study));
+        notify(memberPk, studyPK, "공지 생성 성공");
+
         return new NoticeResponseDTO(noticeBoard);
     }
 
-    public NoticeResponseDTO updateNotice(Long studyPK, Long noticeBoardPK, NoticeRequestDTO requestDTO, Long requestorPk) {
-        //유저 정보 받아오면, 유저 정보 + 스터디 PK로 방장이 맞는지 확인하도록.
-        noticeValidator.CheckIsItManagerOfStudy(studyPK,requestorPk);
+    public NoticeResponseDTO updateNotice(Long studyPK, Long noticeBoardPK, NoticeRequestDTO requestDTO, Long memberPk) {
+         noticeValidator.CheckIsItManagerOfStudy(studyPK,memberPk);
         noticeValidator.validateTitleLength(requestDTO.getNoticeTitle());
         Study study = noticeValidator.findStudyByStudyPk(studyPK);
         NoticeBoard noticeBoard = noticeValidator.findNoticeByBoardPkAndStudy(noticeBoardPK, study);
         noticeBoard.updateNotice(requestDTO);
+        notify(memberPk, studyPK, "공지 수정 성공");
 
         return new NoticeResponseDTO(noticeBoard, requestDTO);
     }
 
-    public MessageResponseDTO deleteNotice(Long studyPK, Long noticeBoardPK, Long requestorPk) {
-        noticeValidator.CheckIsItManagerOfStudy(studyPK,requestorPk);
+    public MessageResponseDTO deleteNotice(Long studyPK, Long noticeBoardPK, Long memberPk) {
+        noticeValidator.CheckIsItManagerOfStudy(studyPK,memberPk);
 
         Study study = noticeValidator.findStudyByStudyPk(studyPK);
         NoticeBoard noticeBoard = noticeValidator.findNoticeByBoardPkAndStudy(noticeBoardPK, study);
@@ -66,5 +69,15 @@ public class NoticeBoardService {
         noticeBoardRepository.delete(noticeBoard);
         return new MessageResponseDTO("삭제 완료");
     }
+
+    private void notify(Long receiverPk, Long studyPk, String content) {
+        NotificationRequestDto notificationRequest = NotificationRequestDto.builder()
+                .receiverPk(receiverPk)
+                .studyPk(studyPk)
+                .content(content)
+                .build();
+        notificationService.send(notificationRequest);
+    }
+
 
 }

@@ -48,8 +48,13 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
-    // AWS S3 의존성 추가
-    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+	implementation("org.springframework.security:spring-security-messaging")
+
+	// AWS S3 의존성 추가
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+
+	runtimeOnly 'com.h2database:h2'
+
 }
 
 // YML 파일

@@ -27,7 +27,7 @@ public class StudyEnterMemberCreateController {
     public ResponseEntity<StudyEnterMemberDTO> createStudyEnterMember(
             @RequestBody StudyEnterMemberDTO studyEnterMemberDTO,
             @PathVariable Long studyPk) {
-        StudyEnterMemberDTO createdMember = studyEnterMemberService.createStudyEnterMember(studyEnterMemberDTO, studyPk);
-        return ResponseEntity.status(201).body(createdMember);
+        StudyEnterMemberDTO createdStudyEnter = studyEnterMemberService.createStudyEnterMember(studyEnterMemberDTO, studyPk);
+        return ResponseEntity.status(201).body(createdStudyEnter);
     }
 }

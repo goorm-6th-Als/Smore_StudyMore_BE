@@ -14,8 +14,8 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     public void registerStompEndpoints(StompEndpointRegistry registry) { //핸드쉐이크 통신을 담당할 스톰프 엔드 포인트
         registry.addEndpoint( "/con") //WebSocket 연결 시 요청을 보낼 EndPoint
                 .setAllowedOriginPatterns("*")
-                .withSockJS() // websocket 관련 자바스크립트 라이브러리 SockJS 설정
-                .setHeartbeatTime(10000); // 클라이언트 - 서버 연결 상태 확인 주기 : 10초;
+                .withSockJS() ;// websocket 관련 자바스크립트 라이브러리 SockJS 설정
+//                .setHeartbeatTime(10000); // 클라이언트 - 서버 연결 상태 확인 주기 : 10초;
     }
 
     @Override //메시지 브로커 설정

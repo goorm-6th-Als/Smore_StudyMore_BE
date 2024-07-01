@@ -1,8 +1,11 @@
 package com.als.SMore.study.todo.controller;
 
 import com.als.SMore.study.todo.DTO.PersonalTodoDTO;
+import com.als.SMore.study.todo.mapper.PersonalTodoMapper;
 import com.als.SMore.study.todo.service.PersonalTodoService;
+import com.als.SMore.user.login.util.MemberUtil;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,32 +80,43 @@ public class PersonalTodoController {
     }
 
     /**
+     * 본인의 PersonalTodo 항목을 조회
+     * @param memberPk 멤버 PK
+     * @return 해당 멤버의 PersonalTodoDTO 목록과 OK 응답 반환
+     */
+    @GetMapping("/member")
+    public ResponseEntity<List<PersonalTodoDTO>> getTodosByMember(
+            @PathVariable Long studyPk) {
+        List<PersonalTodoDTO> todos = personalTodoService.getTodosByMember(studyPk);
+        return ResponseEntity.ok(todos);
+    }
+    /**
      * PersonalTodo 항목의 상태 및 내용을 업데이트
+     * @param studyPk 스터디 PK
      * @param todoPk 업데이트할 PersonalTodo의 PK
      * @param personalTodoDTO 업데이트할 데이터가 담긴 DTO
-     * @param memberPk 요청자의 멤버 PK
      * @return 업데이트된 PersonalTodoDTO 객체와 함께 OK 응답 반환
      */
-    @PutMapping("/{todoPk}/{memberPk}")
+    @PutMapping("/{todoPk}")
     public ResponseEntity<PersonalTodoDTO> updateTodo(
             @PathVariable Long studyPk,
             @PathVariable Long todoPk,
-            @PathVariable Long memberPk,
             @RequestBody PersonalTodoDTO personalTodoDTO) {
-        PersonalTodoDTO updatedTodo = personalTodoService.updatePersonalTodo(todoPk, personalTodoDTO, memberPk);
+        PersonalTodoDTO updatedTodo = personalTodoService.updatePersonalTodo(studyPk, todoPk, personalTodoDTO);
         return ResponseEntity.ok(updatedTodo);
     }
 
     /**
      * PersonalTodo 삭제
+     * @param studyPk 스터디 PK
      * @param todoPk 삭제할 PersonalTodo의 PK
      * @return 삭제된 후 No Content 응답 반환
      */
-    @DeleteMapping("/{todoPk}/{memberPk}")
+    @DeleteMapping("/{todoPk}")
     public ResponseEntity<Void> deletePersonalTodo(
-            @PathVariable Long todoPk,
-            @PathVariable Long memberPk) {
-        personalTodoService.deletePersonalTodoById(todoPk, memberPk);
+            @PathVariable Long studyPk,
+            @PathVariable Long todoPk) {
+        personalTodoService.deletePersonalTodoById(todoPk);
         return ResponseEntity.noContent().build();
     }
 }
