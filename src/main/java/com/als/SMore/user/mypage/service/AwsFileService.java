@@ -28,8 +28,8 @@ public class AwsFileService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    private String PROFILE_IMG_DIR = "profile/";
-    private String member_IMG_dir = "member/";
+    private String PROFILE_IMG_DIR = "dir/";
+    private String STUDY_IMG_DIR = "study/";
 
     private final MemberRepository memberRepository;
 
@@ -87,7 +87,38 @@ public class AwsFileService {
 
         memberRepository.save(modifiedMember);
 
-        return amazonS3Client.getUrl(bucket, randomFilename).toString();
+        return imgPosition;
+    }
+
+    public String saveStudyFile(MultipartFile file){
+        // 받은 이미지의 랜덤한 이름을 생성
+        String randomFilename = generateRandomFilename(file);
+        log.info("File upload started: " + randomFilename);
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+
+        try {
+            amazonS3Client.putObject(bucket, STUDY_IMG_DIR+randomFilename, file.getInputStream(), metadata);
+        } catch (AmazonS3Exception e) {
+            log.error("Amazon S3 error while uploading file: " + e.getMessage());
+            throw new IllegalArgumentException("에러");
+        } catch (SdkClientException e) {
+            log.error("AWS SDK client error while uploading file: " + e.getMessage());
+            throw new IllegalArgumentException("에러");
+        } catch (IOException e) {
+            log.error("IO error while uploading file: " + e.getMessage());
+            throw new IllegalArgumentException("에러");
+        }
+
+        log.info("File upload completed: " + randomFilename);
+
+        log.info("File upload completed: " + randomFilename);
+
+        String imgPosition = amazonS3Client.getUrl(bucket, STUDY_IMG_DIR+randomFilename).toString();
+
+        return imgPosition;
     }
 
     // 랜덤파일명 생성 (파일명 중복 방지)
