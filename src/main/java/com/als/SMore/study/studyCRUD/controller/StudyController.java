@@ -2,9 +2,13 @@ package com.als.SMore.study.studyCRUD.controller;
 
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
 import com.als.SMore.study.studyCRUD.service.StudyService;
+import com.als.SMore.user.mypage.service.AwsFileService;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudyController {
 
     private final StudyService studyService;
+    private final AwsFileService awsFileService;
 
     /**
      * 스터디 생성
