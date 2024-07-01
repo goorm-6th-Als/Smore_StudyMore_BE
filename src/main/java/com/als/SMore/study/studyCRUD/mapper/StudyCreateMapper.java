@@ -21,11 +21,11 @@ public class StudyCreateMapper {
                 .build();
     }
 
-    public static StudyDetail toStudyDetail(StudyCreateDTO dto, Study study) {
+    public static StudyDetail toStudyDetail(StudyCreateDTO dto, Study study, String imageUrl) {
         logger.info("StudyDetail 엔티티 생성");
         return StudyDetail.builder()
                 .study(study)
-                .imageUri(dto.getImageUri())
+                .imageUri(imageUrl) // 이미지 URL 설정
                 .maxPeople(dto.getMaxPeople())
                 .content(dto.getContent())
                 .startDate(dto.getStartDate())
