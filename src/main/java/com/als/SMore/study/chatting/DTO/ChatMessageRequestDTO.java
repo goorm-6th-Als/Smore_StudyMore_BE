@@ -1,7 +1,6 @@
 package com.als.SMore.study.chatting.DTO;
 
 
-import com.als.SMore.user.util.MemberUtil;
 import lombok.Getter;
 import lombok.Setter;
 
