@@ -25,17 +25,6 @@ public class StudyController {
     private final AwsFileService awsFileService;
 
     /**
-     * 스터디 대표 이미지 생성
-     * @param studyImage 스터디의 대표 이미지
-     * @return 생성된 스터디의 이미지 주소를 반환
-     */
-    @PostMapping("/image")
-    public ResponseEntity<String> createStudyImage(@RequestPart MultipartFile studyImage){
-        String studyImageUri = awsFileService.saveStudyFile(studyImage);
-        return ResponseEntity.ok(studyImageUri);
-    }
-
-    /**
      * 스터디 생성
      *
      * @param studyCreateDTO 생성할 스터디의 정보를 담은 DTO
