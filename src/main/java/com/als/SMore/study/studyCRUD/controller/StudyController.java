@@ -2,11 +2,13 @@ package com.als.SMore.study.studyCRUD.controller;
 
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
 import com.als.SMore.study.studyCRUD.service.StudyService;
+import com.als.SMore.user.mypage.service.AwsFileService;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/study")
@@ -14,6 +16,18 @@ import org.springframework.web.bind.annotation.*;
 public class StudyController {
 
     private final StudyService studyService;
+    private final AwsFileService awsFileService;
+
+    /**
+     * 스터디 대표 이미지 생성
+     * @param studyImage 스터디의 대표 이미지
+     * @return 생성된 스터디의 이미지 주소를 반환
+     */
+    @PostMapping("/image")
+    public ResponseEntity<String> createStudyImage(@RequestPart MultipartFile studyImage){
+        String studyImageUri = awsFileService.saveStudyFile(studyImage);
+        return ResponseEntity.ok(studyImageUri);
+    }
 
     /**
      * 스터디 생성
