@@ -9,6 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/study")
@@ -31,6 +37,7 @@ public class StudyController {
 
     /**
      * 스터디 생성
+     *
      * @param studyCreateDTO 생성할 스터디의 정보를 담은 DTO
      * @return 생성된 스터디 정보를 담은 DTO와 함께 응답
      */
@@ -42,6 +49,7 @@ public class StudyController {
 
     /**
      * 특정 스터디 조회
+     *
      * @param studyPk 조회할 스터디의 PK
      * @return 스터디 이름과 함께 응답
      */
@@ -49,26 +57,5 @@ public class StudyController {
     public ResponseEntity<String> getStudy(@PathVariable Long studyPk) {
         String studyName = studyService.getStudyNameById(studyPk);
         return ResponseEntity.ok(studyName);
-    }
-
-    /**
-     * 예외 처리
-     * @param e 처리할 예외
-     * @return 예외 메시지를 담은 응답
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("무슨 에러냐면 : " + e.getMessage());
-    }
-
-    /**
-     * JSON 에러 처리
-     * @param ex 처리할 예외
-     * @return 예외 메시지를 담은 응답
-     */
-    @ExceptionHandler(JsonMappingException.class)
-    public ResponseEntity<String> handleJsonMappingException(JsonMappingException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Json 관련 에러 발생 : " + ex.getMessage());
     }
 }

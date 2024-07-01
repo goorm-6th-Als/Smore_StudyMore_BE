@@ -8,6 +8,8 @@ import com.als.SMore.global.CustomErrorCode;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.dashboard.DTO.StudyMemberDTO;
 import com.als.SMore.study.dashboard.DTO.StudyRankingDTO;
+import com.als.SMore.study.dashboard.mapper.StudyMemberMapper;
+import com.als.SMore.study.dashboard.mapper.StudyRankingMapper;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -44,7 +46,7 @@ public class StudyDashboardService {
 
         return studyMembers.stream()
                 .sorted(comparator)
-                .map(StudyMemberDTO::fromEntity)
+                .map(StudyMemberMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -78,7 +80,7 @@ public class StudyDashboardService {
         // 공부 시간 순으로 정렬 후 StudyRankingDTO 리스트로 변환
         return studyTimes.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .map(entry -> StudyRankingDTO.fromEntity(entry.getKey(), entry.getValue()))
+                .map(entry -> StudyRankingMapper.toDTO(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 
