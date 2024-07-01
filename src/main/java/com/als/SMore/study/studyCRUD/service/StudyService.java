@@ -15,15 +15,19 @@ import com.als.SMore.global.CustomException;
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
 import com.als.SMore.study.studyCRUD.mapper.StudyCreateMapper;
 import com.als.SMore.user.login.util.MemberUtil;
+import com.als.SMore.user.mypage.service.AwsFileService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @Service
 @RequiredArgsConstructor
 public class StudyService {
+    private final AwsFileService awsFileService;
     private static final Logger logger = LoggerFactory.getLogger(StudyService.class);
     private final StudyRepository studyRepository;
     private final StudyDetailRepository studyDetailRepository;
@@ -38,11 +42,10 @@ public class StudyService {
      * @return 생성된 스터디 정보를 담은 DTO와 함께 응답
      */
     @Transactional
-    public StudyCreateDTO createStudy(StudyCreateDTO studyCreateDTO) {
+    public StudyCreateDTO createStudy(StudyCreateDTO studyCreateDTO, MultipartFile image) {
         Long memberPk = MemberUtil.getUserPk();
         logger.info("현재 사용자 PK: {}", memberPk);
 
-        // 참여할 수 있는 스터디 최대 갯수 설정
         if (studyMemberRepository.countByMemberMemberPk(memberPk) >= MAX_STUDY_PARTICIPATION) {
             throw new CustomException(CustomErrorCode.MAX_STUDY_PARTICIPATION_EXCEEDED);
         }
@@ -53,7 +56,10 @@ public class StudyService {
         studyRepository.save(study);
         logger.info("Study 엔티티 생성 Study PK: {}", study.getStudyPk());
 
-        StudyDetail studyDetail = StudyCreateMapper.toStudyDetail(studyCreateDTO, study);
+        String imageUrl = awsFileService.saveStudyFile(image); // S3에 이미지 저장
+        logger.info("이미지 주소 생성 : {}", imageUrl);
+
+        StudyDetail studyDetail = StudyCreateMapper.toStudyDetail(studyCreateDTO, study, imageUrl);
         studyDetailRepository.save(studyDetail);
         logger.info("StudyDetail 엔티티 생성");
 
@@ -78,4 +84,5 @@ public class StudyService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + studyPk));
         return study.getStudyName();
     }
+
 }
