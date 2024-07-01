@@ -8,20 +8,20 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class NoticeResponseDTO {
-    private Long noticeBoardPk;
+    private String noticeBoardPk;
     private String noticeTitle;
     private String noticeContent;
     private LocalDateTime time;
 
     public NoticeResponseDTO(NoticeBoard noticeBoard){
-        this.noticeBoardPk = noticeBoard.getNoticeBoardPk();
+        this.noticeBoardPk = String.valueOf(noticeBoard.getNoticeBoardPk());
         this.noticeTitle = noticeBoard.getNoticeTitle();
         this.noticeContent = noticeBoard.getNoticeContent();
         this.time = noticeBoard.getTime();
     }
 
     public NoticeResponseDTO(NoticeBoard noticeBoard, NoticeRequestDTO requestDTO){
-        this.noticeBoardPk = noticeBoard.getNoticeBoardPk();
+        this.noticeBoardPk = String.valueOf(noticeBoard.getNoticeBoardPk());
         this.noticeTitle = requestDTO.getNoticeTitle();
         this.noticeContent = requestDTO.getNoticeContent();
         this.time =noticeBoard.getTime();

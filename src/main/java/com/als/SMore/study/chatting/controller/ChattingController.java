@@ -23,15 +23,17 @@ public class ChattingController {
     private final ChattingService chattingService;
 
     @GetMapping("/chat/{studyPk}/enter")
-    public List<Object> getChattings(@PathVariable("studyPk") String StudyPk){
-        log.info("get Chattings 컨트롤러, StudyPk = {}",StudyPk);
+    public List<Object> getChattingList(@PathVariable("studyPk") String StudyPk){
+        log.info("getChattingList , StudyPk = {}",StudyPk);
+//        System.out.println(MemberUtil.getUserPk());
+//        System.out.println(MemberUtil.getNickname());
         return chattingService.getChattingHistory(StudyPk);
     }
 
 
     /**
      * 채팅 메시지 보내는 메서드
-     * @param ChatMessage messageId, studyPk, memberPk, memberName, content, time, profileImageUrl
+     * @param ChatMessage content
      * @param StudyPk 방 id
      * @param message 사용자가 보내는 메시지 내용
      */
@@ -39,12 +41,10 @@ public class ChattingController {
     public void sendMessage(@DestinationVariable("studyPk") String StudyPk,
                      @Payload ChatMessageRequestDTO requestDTO,
                      Message<?> message) {
-        //유저 디테일에서 Pk, name, profileImage등 받아서 DTO 변경
         log.info("ChattingController.sendMessage, getContent = {}",requestDTO.getContent());
-        log.info("ChattingController.sendMessage, getMemberName = {}",requestDTO.getMemberName());
-        log.info("ChattingController.sendMessage, getProfileImageUrl = {}",requestDTO.getProfileImageUrl());
+//        System.out.println(MemberUtil.getUserPk());
+//        System.out.println(MemberUtil.getNickname());
         log.info("ChattingController.sendMessage, message = {}",message);
-
         chattingService.saveAndSendMessage(StudyPk, requestDTO, message);
     }
 }
