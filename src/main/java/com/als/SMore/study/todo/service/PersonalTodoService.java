@@ -63,6 +63,7 @@ public class PersonalTodoService {
      * @param studyPk 스터디 PK
      * @return PersonalTodoDTO 목록
      */
+    @Transactional(readOnly = true)
     public List<PersonalTodoDTO> getAllTodos(Long studyPk) {
         validateStudy(studyPk);
         return personalTodoRepository.findByStudyStudyPk(studyPk).stream()
@@ -97,10 +98,29 @@ public class PersonalTodoService {
      * @param status  상태
      * @return PersonalTodoDTO 목록
      */
+    @Transactional(readOnly = true)
     public List<PersonalTodoDTO> getTodosByStatus(Long studyPk, String status) {
         validateStudy(studyPk);
         TodoStatus todoStatus = validateTodoStatus(status);
         return personalTodoRepository.findByStudyStudyPkAndScheduleStatus(studyPk, todoStatus).stream()
+                .map(PersonalTodoMapper::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 특정 멤버의 모든 PersonalTodo 항목을 조회
+     * @param memberPk 멤버 PK
+     * @return PersonalTodoDTO 목록
+     */
+    @Transactional(readOnly = true)
+    public List<PersonalTodoDTO> getTodosByMember(Long studyPk, Long memberPk) {
+        Study study = validateStudy(studyPk);
+        Member member = memberRepository.findById(memberPk)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
+        if (!isMemberOfStudy(member, study)) {
+            throw new CustomException(CustomErrorCode.NOT_STUDY_MEMBER);
+        }
+        return personalTodoRepository.findByMemberMemberPk(memberPk).stream()
                 .map(PersonalTodoMapper::fromEntity)
                 .collect(Collectors.toList());
     }

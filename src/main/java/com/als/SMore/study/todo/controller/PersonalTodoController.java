@@ -77,6 +77,19 @@ public class PersonalTodoController {
     }
 
     /**
+     * 특정 멤버의 모든 PersonalTodo 항목을 조회
+     * @param memberPk 멤버 PK
+     * @return 해당 멤버의 PersonalTodoDTO 목록과 OK 응답 반환
+     */
+    @GetMapping("/{memberPk}")
+    public ResponseEntity<List<PersonalTodoDTO>> getTodosByMember(
+            @PathVariable Long studyPk,
+            @PathVariable Long memberPk) {
+        List<PersonalTodoDTO> todos = personalTodoService.getTodosByMember(studyPk, memberPk);
+        return ResponseEntity.ok(todos);
+    }
+
+    /**
      * PersonalTodo 항목의 상태 및 내용을 업데이트
      * @param studyPk 스터디 PK
      * @param todoPk 업데이트할 PersonalTodo의 PK
