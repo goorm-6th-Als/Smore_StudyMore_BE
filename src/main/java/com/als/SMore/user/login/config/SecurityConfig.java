@@ -1,11 +1,14 @@
 package com.als.SMore.user.login.config;
 
 import com.als.SMore.user.login.service.KakaoMemberDetailsService;
+import com.als.SMore.user.login.util.CustomAccessDeniedHandler;
+import com.als.SMore.user.login.util.CustomAuthenticationEntryPointHandler;
 import com.als.SMore.user.login.util.JwtFilter;
 import com.als.SMore.user.login.util.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
+@EnableAspectJAutoProxy
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
@@ -29,6 +33,8 @@ public class SecurityConfig {
     private final KakaoMemberDetailsService kakaoMemberDetailsService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final JwtFilter jwtFilter;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPointHandler customAuthenticationEntryPointHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -49,7 +55,11 @@ public class SecurityConfig {
                         .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
                         .userInfoEndpoint(endpoint -> endpoint.userService(kakaoMemberDetailsService))
                         .successHandler(oAuth2SuccessHandler)
+                ).exceptionHandling(handling -> handling
+                        .authenticationEntryPoint(customAuthenticationEntryPointHandler)
+                        .accessDeniedHandler(customAccessDeniedHandler)
                 );
+        http.logout(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
