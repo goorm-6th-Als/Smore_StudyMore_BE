@@ -17,6 +17,7 @@ import com.als.SMore.study.problem.DTO.response.problem.ProblemOptionResponseDTO
 import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemSummaryResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemUpdateResponseDTO;
+import com.als.SMore.study.problem.mapper.ProblemMapper;
 import com.als.SMore.study.problem.service.ProblemService;
 import com.als.SMore.study.problem.validator.ProblemValidator;
 import lombok.RequiredArgsConstructor;
@@ -39,40 +40,6 @@ public class ProblemServiceImpl implements ProblemService {
     private final ProblemRepository problemRepository;
     private final ProblemOptionsRepository problemOptionsRepository;
 
-    private ProblemOptionResponseDTO problemOptionsToProblemOptionResponseDTO(ProblemOptions problemOptions) {
-        return ProblemOptionResponseDTO.builder()
-                .problemOptionPk(problemOptions.getProblemOptionsPk())
-                .content(problemOptions.getOptionsContent())
-                .num(problemOptions.getOptionsNum())
-                .build();
-    }
-
-    private ProblemResponseDTO problemAndProblemOptionResponseDTOToProblemResponseDTO(Problem problem, List<ProblemOptionResponseDTO> problemOptionResponseDTOList) {
-        return ProblemResponseDTO.builder()
-                .problemPk(problem.getProblemPk())
-                .memberNickname(problem.getMember().getNickName())
-                .studyBankName(problem.getStudyProblemBank().getBankName())
-                .problemTitle(problem.getProblemTitle())
-                .problemContent(problem.getProblemContent())
-                .problemExplanation(problem.getProblemExplanation())
-                .problemDate(problem.getCreateDate())
-                .options(problemOptionResponseDTOList)
-                .build();
-    }
-
-    private ProblemUpdateResponseDTO problemAndProblemOptionResponseDTOToProblemUpdateResponseDTO(Problem problem, List<ProblemOptionResponseDTO> problemOptionResponseDTOList) {
-        return ProblemUpdateResponseDTO.builder()
-                .problemPk(problem.getProblemPk())
-                .memberNickname(problem.getMember().getNickName())
-                .studyBankName(problem.getStudyProblemBank().getBankName())
-                .problemTitle(problem.getProblemTitle())
-                .problemContent(problem.getProblemContent())
-                .problemExplanation(problem.getProblemExplanation())
-                .problemDate(problem.getCreateDate())
-                .answerPk(problem.getProblemAnswerPk())
-                .options(problemOptionResponseDTOList)
-                .build();
-    }
 
     private Long saveProblemOptionList(List<ProblemOptionRequestDTO> problemOptionRequestDTOList, Integer answerNum, Problem problem) {
         Long result = 0L;
@@ -110,7 +77,6 @@ public class ProblemServiceImpl implements ProblemService {
         Problem problem = problemRepository.save(Problem.builder()
                 .createDate(LocalDate.now())
                 .problemContent(problemCreateRequestDTO.getContent())
-                .problemTitle(problemCreateRequestDTO.getTitle())
                 .problemExplanation(problemCreateRequestDTO.getExplanation())
                 .member(member)
                 .studyProblemBank(problemBank)
@@ -157,12 +123,12 @@ public class ProblemServiceImpl implements ProblemService {
             List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
             List<ProblemOptionResponseDTO> problemOptionResponseDTO = new ArrayList<>();
             for (ProblemOptions problemOption : problemOptions) {
-                problemOptionResponseDTO.add(problemOptionsToProblemOptionResponseDTO(problemOption));
+                problemOptionResponseDTO.add(ProblemMapper.problemOptionsToProblemOptionResponseDTO(problemOption));
             }
 
             //랜덤 문제와 보기들
             ResultProblems.add(
-                    problemAndProblemOptionResponseDTOToProblemResponseDTO(problem, problemOptionResponseDTO)
+                    ProblemMapper.problemAndProblemOptionResponseDTOToProblemResponseDTO(problem, problemOptionResponseDTO)
             );
 
             //선택됐던 문제 지우기
@@ -179,9 +145,9 @@ public class ProblemServiceImpl implements ProblemService {
         List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
         List<ProblemOptionResponseDTO> problemOptionResponseDTOList = new ArrayList<>();
         for (ProblemOptions problemOption : problemOptions) {
-            problemOptionResponseDTOList.add(problemOptionsToProblemOptionResponseDTO(problemOption));
+            problemOptionResponseDTOList.add(ProblemMapper.problemOptionsToProblemOptionResponseDTO(problemOption));
         }
-        return problemAndProblemOptionResponseDTOToProblemUpdateResponseDTO(problem, problemOptionResponseDTOList);
+        return ProblemMapper.problemAndProblemOptionResponseDTOToProblemUpdateResponseDTO(problem, problemOptionResponseDTOList);
     }
 
     @Override
