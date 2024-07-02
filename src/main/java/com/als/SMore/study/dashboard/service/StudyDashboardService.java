@@ -3,11 +3,14 @@ package com.als.SMore.study.dashboard.service;
 import com.als.SMore.domain.entity.AttendanceCheck;
 import com.als.SMore.domain.entity.Member;
 import com.als.SMore.domain.entity.Study;
+import com.als.SMore.domain.entity.StudyDetail;
 import com.als.SMore.domain.entity.StudyLearningTime;
 import com.als.SMore.domain.entity.StudyMember;
 import com.als.SMore.domain.repository.AttendanceCheckRepository;
+import com.als.SMore.domain.repository.StudyDetailRepository;
 import com.als.SMore.domain.repository.StudyLearningTimeRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
+import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.global.CustomErrorCode;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.dashboard.DTO.AttendanceStatusDTO;
@@ -37,6 +40,8 @@ public class StudyDashboardService {
     private final StudyMemberRepository studyMemberRepository;
     private final StudyLearningTimeRepository studyLearningTimeRepository;
     private final AttendanceCheckRepository attendanceCheckRepository;
+    private final StudyDetailRepository studyDetailRepository;
+    private final StudyRepository studyRepository;
 
     /**
      * 스터디에 참여중인 모든 멤버를 조회
@@ -46,11 +51,9 @@ public class StudyDashboardService {
      */
     @Transactional(readOnly = true)
     public List<StudyMemberDTO> getStudyMembers(Long studyPk) {
+        validateStudyExists(studyPk);
         List<StudyMember> studyMembers = studyMemberRepository.findByStudyStudyPk(studyPk);
 
-        if (studyMembers.isEmpty()) {
-            throw new CustomException(CustomErrorCode.NOT_FOUND_STUDY);
-        }
         // 방장 맨 앞에, 들어온 순서부터 reversed 로 comparing
         // 6월 10 > 6월 20
         Comparator<StudyMember> comparator = Comparator
@@ -64,6 +67,18 @@ public class StudyDashboardService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 스터디 content 조회
+     *
+     * @param studyPk 스터디 PK
+     * @return 스터디 content
+     */
+    @Transactional(readOnly = true)
+    public String getStudyContent(Long studyPk) {
+        StudyDetail studyDetail = studyDetailRepository.findByStudy_StudyPk(studyPk)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY));
+        return studyDetail.getContent();
+    }
 
     /**
      * 금일 공부 시간 랭킹 조회
@@ -73,17 +88,13 @@ public class StudyDashboardService {
      */
     @Transactional(readOnly = true)
     public List<StudyRankingDTO> getTodayStudyRanking(Long studyPk) {
+        validateStudyExists(studyPk);
         LocalDate today = LocalDate.now();
 
         // 스터디에 속한 모든 멤버 조회
         List<StudyMember> studyMembers = studyMemberRepository.findByStudyStudyPk(studyPk);
 
-        // 스터디 멤버가 없으면 CustomException 발생
-        if (studyMembers.isEmpty()) {
-            throw new CustomException(CustomErrorCode.NOT_FOUND_STUDY);
-        }
-
-        // 각 멤버의 오늘 공부 시간을 Map<Member, Long>으로 그룹화 및 합산
+        // 각 멤버의 오늘 공부 시간을 Map으로 정리
         Map<Member, Long> studyTimes = studyMembers.stream()
                 .flatMap(studyMember -> studyLearningTimeRepository.findByStudyMemberAndLearningDate(studyMember, today)
                         .stream())
@@ -92,7 +103,7 @@ public class StudyDashboardService {
                         Collectors.summingLong(StudyLearningTime::getLearningTime)
                 ));
 
-        // 공부 시간 순으로 정렬 후 StudyRankingDTO 리스트로 변환
+        // 공부 시간 순으로 정렬
         return studyTimes.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .map(entry -> StudyRankingMapper.toDTO(
@@ -100,7 +111,6 @@ public class StudyDashboardService {
                         entry.getValue()))
                 .collect(Collectors.toList());
     }
-
 
     /**
      * 모든 스터디 멤버의 출석 현황 조회
@@ -110,14 +120,8 @@ public class StudyDashboardService {
      */
     @Transactional(readOnly = true)
     public List<AttendanceStatusDTO> getAttendanceStatus(Long studyPk) {
+        validateStudyExists(studyPk);
         List<StudyMember> studyMembers = studyMemberRepository.findByStudyStudyPk(studyPk);
-
-        if (studyMembers.isEmpty()) {
-            throw new CustomException(CustomErrorCode.NOT_FOUND_STUDY);
-        }
-
-//        logger.info("StudyMembers: {}", studyMembers);
-
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();
         LocalDateTime todayEnd = todayStart.plusDays(1);
 
@@ -127,13 +131,28 @@ public class StudyDashboardService {
                 .map(studyMember -> {
                     Member member = studyMember.getMember();
                     Study study = studyMember.getStudy();
-                    boolean isAttended = attendanceCheckRepository.existsByMemberAndStudyAndAttendanceDateBetween(member, study, todayStart, todayEnd);
-                    Optional<AttendanceCheck> attendanceCheck = attendanceCheckRepository.findFirstByMemberAndStudyAndAttendanceDateBetweenOrderByAttendanceDateAsc(member, study, todayStart, todayEnd);
-                    LocalDateTime attendanceDate = attendanceCheck.map(AttendanceCheck::getAttendanceDate).orElse(LocalDateTime.MAX);
-                    String timeAgo = attendanceCheck.map(ac -> AttendanceStatusMapper.calculateTimeAgo(ac.getAttendanceDate())).orElse("결석");
+                    boolean isAttended = attendanceCheckRepository.existsByMemberAndStudyAndAttendanceDateBetween(
+                            member, study, todayStart, todayEnd);
+                    Optional<AttendanceCheck> attendanceCheck = attendanceCheckRepository.findFirstByMemberAndStudyAndAttendanceDateBetweenOrderByAttendanceDateAsc(
+                            member, study, todayStart, todayEnd);
+                    LocalDateTime attendanceDate = attendanceCheck.map(AttendanceCheck::getAttendanceDate)
+                            .orElse(LocalDateTime.MAX);
+                    String timeAgo = attendanceCheck.map(
+                            ac -> AttendanceStatusMapper.calculateTimeAgo(ac.getAttendanceDate())).orElse("결석");
                     return AttendanceStatusMapper.fromEntity(member, isAttended ? "출석" : "결석", attendanceDate, timeAgo);
                 })
                 .sorted(Comparator.comparing(AttendanceStatusDTO::getAttendanceDate))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 스터디가 존재하는지 확인하는 메서드
+     *
+     * @param studyPk 스터디 PK
+     */
+    private void validateStudyExists(Long studyPk) {
+        if (!studyRepository.existsById(studyPk)) {
+            throw new CustomException(CustomErrorCode.NOT_FOUND_STUDY);
+        }
     }
 }
