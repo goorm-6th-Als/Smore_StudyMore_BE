@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
-    @Query("SELECT new com.als.SMore.study.problem.DTO.response.problem.ProblemSummaryResponseDTO(p.problemPk, p.problemTitle, m.nickName) " +
+    @Query("SELECT new com.als.SMore.study.problem.DTO.response.problem.ProblemSummaryResponseDTO(p.problemPk, m.nickName) " +
             "FROM Problem p JOIN p.member m " +
             "WHERE p.studyProblemBank = :studyProblemBank")
     List<ProblemSummaryResponseDTO> findAllProblemSummaryByStudyProblem(StudyProblemBank studyProblemBank);
