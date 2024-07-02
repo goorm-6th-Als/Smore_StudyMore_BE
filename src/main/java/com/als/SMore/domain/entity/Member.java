@@ -36,7 +36,7 @@ public class Member {
     private List<AttendanceCheck> attendanceCheck;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Calender> calenders;
+    private List<Calendar> calendars;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<PersonalTodo> personalTodos;

@@ -3,6 +3,7 @@ package com.als.SMore.study.attendance.controller;
 import com.als.SMore.study.attendance.DTO.request.LearningMonthRequestDTO;
 import com.als.SMore.study.attendance.DTO.response.LearningMonthListResponseDTO;
 import com.als.SMore.study.attendance.service.AttendanceService;
+import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,7 @@ public class AttendanceController {
 
 
     private Long getMember(){
-
-        return 588968050131947446L;
+        return MemberUtil.getUserPk();
     }
 
     @PostMapping("/start")

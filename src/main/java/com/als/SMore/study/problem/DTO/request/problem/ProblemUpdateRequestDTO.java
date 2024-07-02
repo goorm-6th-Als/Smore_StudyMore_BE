@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 @Getter
 public class ProblemUpdateRequestDTO {
+
     private Long problemPk;
     private String problemTitle;
     private String problemContent;

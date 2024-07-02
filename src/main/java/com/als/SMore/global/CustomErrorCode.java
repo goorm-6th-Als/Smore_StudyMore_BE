@@ -48,6 +48,11 @@ public enum CustomErrorCode {
     STILL_EXISTS_MEMBERS(HttpStatus.BAD_REQUEST, "스터디에 다른 멤버가 존재합니다."),
     NOT_AUTHORIZED_REQUEST_MEMBER(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
 
+    //Calender
+    NOT_FOUND_CALENDER(HttpStatus.NOT_FOUND, "일정표를 찾을 수 없습니다."),
+    INVALID_ACCESS_CALENDER(HttpStatus.BAD_REQUEST, "잘못된 접근 입니다"),
+    UNAUTHORIZED_ACCESS_CALENDER(HttpStatus.UNAUTHORIZED, "방장이나 작성자만 접근 가능합니다"),
+
     //StudyBoard
     NOT_FOUND_STUDY_BOARD(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 게시물 입니다."),
 
