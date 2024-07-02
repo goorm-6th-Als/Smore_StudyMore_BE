@@ -34,4 +34,14 @@ public class LonginController {
                 .headers(httpHeaders)
                 .body(message);
     }
+
+    /**
+     * 로그아웃 API
+     * @return MessageResponse 로그아웃 메시지를 출력
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<MessageResponse> logout(){
+        MessageResponse messageResponse = userInfoService.logOut();
+        return ResponseEntity.ok(messageResponse);
+    }
 }
