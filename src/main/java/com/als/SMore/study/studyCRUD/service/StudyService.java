@@ -36,6 +36,8 @@ public class StudyService {
     private final StudyBoardRepository studyBoardRepository;
 
     private static final int MAX_STUDY_PARTICIPATION = 5;
+    private static final String DEFAULT_IMAGE_URL = "https://수연님이미지주소주세요";  // 스터디 기본 이미지 URL
+
     /**
      * 스터디 생성
      * @param studyCreateDTO 생성할 스터디의 정보를 담은 DTO
@@ -56,7 +58,8 @@ public class StudyService {
         studyRepository.save(study);
         logger.info("Study 엔티티 생성 Study PK: {}", study.getStudyPk());
 
-        String imageUrl = awsFileService.saveStudyFile(image); // S3에 이미지 저장
+        // 이미지가 없는 경우 기본 이미지 URL 사용
+        String imageUrl = (image != null && !image.isEmpty()) ? awsFileService.saveStudyFile(image) : DEFAULT_IMAGE_URL;
         logger.info("이미지 주소 생성 : {}", imageUrl);
 
         StudyDetail studyDetail = StudyCreateMapper.toStudyDetail(studyCreateDTO, study, imageUrl);

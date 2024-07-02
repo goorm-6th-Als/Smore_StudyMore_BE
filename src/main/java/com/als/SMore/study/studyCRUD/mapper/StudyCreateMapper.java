@@ -14,7 +14,6 @@ public class StudyCreateMapper {
     private static final Logger logger = LoggerFactory.getLogger(StudyCreateMapper.class);
 
     public static Study toStudy(StudyCreateDTO dto, Member member) {
-        logger.info("Study 엔티티 생성");
         return Study.builder()
                 .studyName(dto.getStudyName())
                 .member(member)
@@ -22,19 +21,18 @@ public class StudyCreateMapper {
     }
 
     public static StudyDetail toStudyDetail(StudyCreateDTO dto, Study study, String imageUrl) {
-        logger.info("StudyDetail 엔티티 생성");
+        LocalDate startDate = dto.getStartDate() != null ? dto.getStartDate() : LocalDate.now(); // 기본값으로 오늘 날짜 설정
         return StudyDetail.builder()
                 .study(study)
                 .imageUri(imageUrl) // 이미지 URL 설정
                 .maxPeople(dto.getMaxPeople())
                 .content(dto.getContent())
-                .startDate(dto.getStartDate())
+                .startDate(startDate)
                 .closeDate(dto.getCloseDate())
                 .build();
     }
 
     public static StudyMember toStudyMember(StudyCreateDTO dto, Study study, Member member) {
-        logger.info("StudyMember 엔티티 생성");
         return StudyMember.builder()
                 .study(study)
                 .member(member)
@@ -44,7 +42,6 @@ public class StudyCreateMapper {
     }
 
     public static StudyBoard toStudyBoard(StudyCreateDTO dto, Study study) {
-        logger.info("StudyBoard 엔티티 생성");
         String adSummary = dto.getContent().length() > 30
                 ? dto.getContent().substring(0, 30) + "..."
                 : dto.getContent();
