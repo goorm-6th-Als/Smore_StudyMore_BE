@@ -11,5 +11,4 @@ public class ProblemSummaryResponseDTO {
     @JsonSerialize(using = LongToStringSerializer.class)
     private Long Pk; // problem_Pk
     private String writer; //nickname
-    private String Title; //problemTitle
 }

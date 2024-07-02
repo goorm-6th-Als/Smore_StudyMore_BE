@@ -1,14 +1,14 @@
 package com.als.SMore.study.problem.DTO.response.problemBank;
 
 import com.als.SMore.global.json.LongToStringSerializer;
+import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
-@Setter
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProblemBankResponseDTO {
@@ -17,5 +17,6 @@ public class ProblemBankResponseDTO {
     private String ProblemBankName;
     private String writer;
     private boolean authority;
+    private List<ProblemResponseDTO> problemList;
 }
 

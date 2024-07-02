@@ -9,7 +9,6 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class ProblemCreateRequestDTO {
     private Long studyProblemBankPk;
-    private String title;
     private String content;
     private Integer answer;
     private String explanation;

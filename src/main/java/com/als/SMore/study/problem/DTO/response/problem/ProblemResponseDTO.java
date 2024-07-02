@@ -13,11 +13,13 @@ import java.util.List;
 public class ProblemResponseDTO {
     @JsonSerialize(using = LongToStringSerializer.class)
     private Long problemPk;
+    @JsonSerialize(using = LongToStringSerializer.class)
+    private Long answerPk;
     private String memberNickname;
     private String studyBankName;
-    private String problemTitle;
     private String problemContent;
     private String problemExplanation;
+
     private LocalDate problemDate;
     private List<ProblemOptionResponseDTO> options;
 }

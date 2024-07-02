@@ -31,9 +31,6 @@ public class Problem {
     @Column(name = "problem_answer_pk")
     private Long problemAnswerPk;
 
-    @Column(name = "problem_title")
-    private String problemTitle;
-
     @Column(name = "problem_content")
     private String problemContent;
 
@@ -45,7 +42,6 @@ public class Problem {
     private LocalDate createDate;
 
     public void updateAll(ProblemUpdateRequestDTO dto){
-        this.problemTitle = dto.getProblemTitle();
         this.problemContent = dto.getProblemContent();
         this.problemExplanation = dto.getProblemExplanation();
     }
