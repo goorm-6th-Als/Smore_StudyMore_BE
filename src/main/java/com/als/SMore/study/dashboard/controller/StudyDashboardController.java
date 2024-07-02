@@ -32,6 +32,17 @@ public class StudyDashboardController {
     }
 
     /**
+     * 스터디 content 조회
+     * @param studyPk 스터디 PK
+     * @return 스터디 content와 함께 응답
+     */
+    @GetMapping("/content")
+    public ResponseEntity<String> getStudyContent(@PathVariable Long studyPk) {
+        String content = studyDashboardService.getStudyContent(studyPk);
+        return ResponseEntity.ok(content);
+    }
+
+    /**
      * 금일 공부 시간 랭킹 조회
      *
      * @param studyPk 스터디 PK
