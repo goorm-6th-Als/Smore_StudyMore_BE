@@ -111,7 +111,7 @@ public class MyStudyService {
 
         Long userCount = studyMemberRepository.countAllByStudy_StudyPk(statusRequest.getStudyPk());
 
-        if(studyDetail.getMaxPeople() == (int) (userCount + 1)){
+        if(studyDetail.getMaxPeople() == userCount){
             return false;
         }
 

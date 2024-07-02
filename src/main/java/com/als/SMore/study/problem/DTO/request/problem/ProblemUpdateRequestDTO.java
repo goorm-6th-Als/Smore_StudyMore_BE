@@ -11,7 +11,6 @@ import java.util.List;
 public class ProblemUpdateRequestDTO {
 
     private Long problemPk;
-    private String problemTitle;
     private String problemContent;
     private Integer answer;
     private String ProblemExplanation;

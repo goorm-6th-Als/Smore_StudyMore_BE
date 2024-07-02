@@ -31,4 +31,7 @@ public interface StudyMemberRepository extends JpaRepository<StudyMember, Long> 
 
     // 참여중인 스터디 개수 파악
     long countByMemberMemberPk(Long memberPk);
+
+    // 스터디 멤버 찾기
+    Optional<StudyMember> findByStudyStudyPkAndMemberMemberPk(Long studyPk, Long memberPk);
 }

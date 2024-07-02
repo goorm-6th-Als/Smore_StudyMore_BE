@@ -3,12 +3,9 @@ package com.als.SMore.study.studyCRUD.controller;
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
 import com.als.SMore.study.studyCRUD.service.StudyService;
 import com.als.SMore.user.mypage.service.AwsFileService;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,20 +31,20 @@ public class StudyController {
     @PostMapping
     public ResponseEntity<StudyCreateDTO> createStudy(
             @RequestPart("studyCreateDTO") StudyCreateDTO studyCreateDTO,
-            @RequestPart("image") MultipartFile image) {
-        StudyCreateDTO createdStudy = studyService.createStudy(studyCreateDTO, image);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdStudy);
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+            StudyCreateDTO createdStudy = studyService.createStudy(studyCreateDTO, image);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdStudy);
     }
 
-    /**
-     * 특정 스터디 조회
-     *
-     * @param studyPk 조회할 스터디의 PK
-     * @return 스터디 이름과 함께 응답
-     */
-    @GetMapping("/{studyPk}")
-    public ResponseEntity<String> getStudy(@PathVariable Long studyPk) {
-        String studyName = studyService.getStudyNameById(studyPk);
-        return ResponseEntity.ok(studyName);
+        /**
+         * 특정 스터디 조회
+         *
+         * @param studyPk 조회할 스터디의 PK
+         * @return 스터디 이름과 함께 응답
+         */
+        @GetMapping("/{studyPk}")
+        public ResponseEntity<String> getStudy (@PathVariable Long studyPk){
+            String studyName = studyService.getStudyNameById(studyPk);
+            return ResponseEntity.ok(studyName);
     }
 }
