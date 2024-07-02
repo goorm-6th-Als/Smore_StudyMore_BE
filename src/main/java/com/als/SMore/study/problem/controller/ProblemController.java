@@ -7,6 +7,7 @@ import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemSummaryResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemUpdateResponseDTO;
 import com.als.SMore.study.problem.service.ProblemService;
+import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class ProblemController {
 
     private Long getMemberPk(){
 
-        return 588964788038193070L;
+        return MemberUtil.getUserPk();
     }
 
     // 문제 불러오기 (수정하기용)
