@@ -3,6 +3,7 @@ package com.als.SMore.study.problem.controller;
 import com.als.SMore.study.problem.DTO.request.problemBank.ProblemBankUpdateRequestDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankResponseDTO;
 import com.als.SMore.study.problem.service.ProblemBankService;
+import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class ProblemBankController{
     private final ProblemBankService problemBankService;
     private Long getMemberPk(){
 
-        return 588964788038193070L;
+        return MemberUtil.getUserPk();
     }
     //=======================================ProblemBank=============================
     @GetMapping("/bank")
