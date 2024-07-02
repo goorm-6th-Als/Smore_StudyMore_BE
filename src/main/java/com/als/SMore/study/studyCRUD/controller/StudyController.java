@@ -12,9 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/study")
@@ -31,8 +32,10 @@ public class StudyController {
      * @return 생성된 스터디 정보를 담은 DTO와 함께 응답
      */
     @PostMapping
-    public ResponseEntity<StudyCreateDTO> createStudy(@RequestBody StudyCreateDTO studyCreateDTO) {
-        StudyCreateDTO createdStudy = studyService.createStudy(studyCreateDTO);
+    public ResponseEntity<StudyCreateDTO> createStudy(
+            @RequestPart("studyCreateDTO") StudyCreateDTO studyCreateDTO,
+            @RequestPart("image") MultipartFile image) {
+        StudyCreateDTO createdStudy = studyService.createStudy(studyCreateDTO, image);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdStudy);
     }
 

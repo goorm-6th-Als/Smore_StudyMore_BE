@@ -1,5 +1,6 @@
 package com.als.SMore.study.dashboard.controller;
 
+import com.als.SMore.study.dashboard.DTO.AttendanceStatusDTO;
 import com.als.SMore.study.dashboard.DTO.StudyMemberDTO;
 import com.als.SMore.study.dashboard.DTO.StudyRankingDTO;
 import com.als.SMore.study.dashboard.service.StudyDashboardService;
@@ -41,5 +42,17 @@ public class StudyDashboardController {
             @PathVariable Long studyPk) {
         List<StudyRankingDTO> rankings = studyDashboardService.getTodayStudyRanking(studyPk);
         return ResponseEntity.ok(rankings);
+    }
+
+    /**
+     * 스터디 멤버 출석 현황 조회
+     *
+     * @param studyPk 스터디 PK
+     * @return StudyRankingDTO 리스트와 함께 OK 응답 반환
+     */
+    @GetMapping
+    public ResponseEntity<List<AttendanceStatusDTO>> getAttendanceStatus(@PathVariable Long studyPk) {
+        List<AttendanceStatusDTO> attendanceStatus = studyDashboardService.getAttendanceStatus(studyPk);
+        return ResponseEntity.ok(attendanceStatus);
     }
 }
