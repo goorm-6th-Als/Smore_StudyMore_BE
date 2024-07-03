@@ -34,7 +34,8 @@ public class JwtAop {
     @Around("@annotation(com.als.SMore.user.login.util.JwtAuthority)")
     private Object isCheckedStudyPkToAccessToken(final ProceedingJoinPoint joinPoint) throws Throwable {
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .currentRequestAttributes()).getRequest();
 
         // 토큰을 받아오기
         String token = request.getHeader("authorization").substring(7);
@@ -58,7 +59,8 @@ public class JwtAop {
             // studypk와 role 을 가지고 와야 한다.
             String role = studyMember.getRole();
             String renewToken = tokenProvider.createRenewToken(token, Long.parseLong(studyPk), role);
-            MemberToken memberToken = memberTokenRepository.findMemberTokenByMember_MemberPk(memberPk).orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_PK));
+            MemberToken memberToken = memberTokenRepository.findMemberTokenByMember_MemberPk(memberPk)
+                    .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_PK));
             memberToken = memberToken.toBuilder().accessToken(renewToken).build();
             memberTokenRepository.save(memberToken);
             throw new JwtAuthException(CustomErrorCode.JWT_AUTH_CODE,renewToken);
@@ -73,7 +75,8 @@ public class JwtAop {
     @Around("@annotation(com.als.SMore.user.login.util.JwtRole)")
     public Object isCheckedRole(final ProceedingJoinPoint joinPoint) throws Throwable {
         // request 랑 response 를 먼저 생성
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .currentRequestAttributes()).getRequest();
 
         // 토큰을 받아오기
         String token = request.getHeader("authorization").substring(7);
@@ -108,12 +111,19 @@ public class JwtAop {
             "&& !@annotation(com.als.SMore.user.login.util.JwtAuthority)")
     public Object isCheckedStudyPk(final ProceedingJoinPoint joinPoint) throws Throwable {
         // request 랑 response 를 먼저 생성
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .currentRequestAttributes()).getRequest();
 
         // 토큰을 받아오기
         String token = request.getHeader("authorization").substring(7);
 
         int index = 2;
+
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        JwtRole custom = methodSignature.getMethod().getAnnotation(JwtRole.class);
+        if(custom != null){
+            index = custom.index();
+        }
 
         log.info("인덱스의 값 : {}",index);
 
