@@ -12,6 +12,8 @@ import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
+import com.als.SMore.study.enter.DTO.StudyEnterMemberWithMemberInfoDTO;
+import com.als.SMore.study.enter.DTO.StudyEnterMemberWithStudyInfoDTO;
 import com.als.SMore.study.enter.mapper.StudyEnterMemberMapper;
 import com.als.SMore.user.login.util.MemberUtil;
 import java.util.List;
@@ -62,21 +64,21 @@ public class StudyEnterMemberService {
      * @return 해당 스터디의 모든 StudyEnterMemberDTO 리스트
      */
     @Transactional(readOnly = true)
-    public List<StudyEnterMemberDTO> getAllStudyEnterMembers(Long studyPk) {
+    public List<StudyEnterMemberWithMemberInfoDTO> getAllStudyEnterMembers(Long studyPk) {
         return studyEnterMemberRepository.findByStudyStudyPk(studyPk).stream()
-                .map(StudyEnterMemberMapper::toDTO)
+                .map(StudyEnterMemberMapper::toDTOWithMemberInfo)
                 .collect(Collectors.toList());
     }
 
     /**
-     * 특정 멤버의 모든 가입 신청서 조회
+     * 나의 모든 가입 신청서 조회
      * @return 해당 멤버의 모든 StudyEnterMemberDTO 리스트
      */
     @Transactional(readOnly = true)
-    public List<StudyEnterMemberDTO> getAllStudyEnterMembersByMember() {
+    public List<StudyEnterMemberWithStudyInfoDTO> getAllStudyEnterMembersByMember() {
         Long memberPk = MemberUtil.getUserPk();
         return studyEnterMemberRepository.findByMemberMemberPk(memberPk).stream()
-                .map(StudyEnterMemberMapper::toDTO)
+                .map(StudyEnterMemberMapper::toDTOWithStudyInfo)
                 .collect(Collectors.toList());
     }
 
