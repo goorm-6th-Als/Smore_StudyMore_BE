@@ -10,4 +10,10 @@ public class CustomExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e){
         return ErrorResponse.toResponse(e.getErrorCode());
     }
+
+    // 현재 코드에서 header를 성정하는 코드가 없어서 추가함
+    @ExceptionHandler(JwtAuthException.class)
+    protected ResponseEntity<ErrorResponse> handlerJwtAuthException(JwtAuthException jwt){
+        return ErrorResponse.toResponse(jwt);
+    }
 }

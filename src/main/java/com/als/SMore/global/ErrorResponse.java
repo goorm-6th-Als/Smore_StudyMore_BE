@@ -3,6 +3,7 @@ package com.als.SMore.global;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 @Getter
@@ -16,6 +17,18 @@ public class ErrorResponse {
                 .status(e.getHttpStatus())
                 .body(ErrorResponse.builder()
                         .message(e.getMessage())
+                        .build());
+    }
+
+    public static ResponseEntity<ErrorResponse> toResponse(JwtAuthException jwt){
+        HttpHeaders httpHeaders = new HttpHeaders();
+        CustomErrorCode customErrorCode = jwt.customErrorCode;
+        httpHeaders.set(HttpHeaders.AUTHORIZATION,jwt.getAccessToken());
+        return ResponseEntity
+                .status(customErrorCode.getHttpStatus())
+                .headers(httpHeaders)
+                .body(ErrorResponse.builder()
+                        .message(customErrorCode.getMessage())
                         .build());
     }
 }
