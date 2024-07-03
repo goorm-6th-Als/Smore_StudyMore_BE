@@ -58,7 +58,14 @@ public enum CustomErrorCode {
 
     //StudyEnter
     ALREADY_MEMBER(HttpStatus.BAD_REQUEST, "이미 가입한 스터디입니다."),
-    ALREADY_APPLIED(HttpStatus.BAD_REQUEST, "이미 신청한 스터디입니다.");
+    ALREADY_APPLIED(HttpStatus.BAD_REQUEST, "이미 신청한 스터디입니다."),
+
+    //aop 접근 error
+    NOT_FOUND_STUDY_PK(HttpStatus.UNAUTHORIZED,"해당한 권한이 없습니다"),
+    NOT_FOUND_ROLE(HttpStatus.UNAUTHORIZED,"접근이 허용되지 않았습니다"),
+
+    //aop 접근 새로운 accessToken 발급
+    JWT_AUTH_CODE(HttpStatus.OK,"새로운 권한이 발급되었습니다");
 
     private final HttpStatus httpStatus;
     private final String message;
