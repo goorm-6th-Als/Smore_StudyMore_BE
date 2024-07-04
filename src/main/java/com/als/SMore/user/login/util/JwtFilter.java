@@ -27,7 +27,6 @@ import java.io.IOException;
 import static com.als.SMore.user.login.util.ErrorCode.ACCESS_DENIED;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -36,70 +35,74 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            // 여기서 부터 다음 if문 부분은 삭제하거나 추후에 정리해야합니다.
-            String authorization = request.getHeader("Authorization");
-            if(authorization.startsWith("test")){
-                long id = Long.parseLong(authorization.substring(4));
-                log.info("id : {}",id);
+        String authorization = request.getHeader("Authorization");
+        if(authorization != null){
+            try {
+                // 여기서 부터 다음 if문 부분은 삭제하거나 추후에 정리해야합니다.
 
-                OAuth2User userDetails = userInfoService.loadUserByUserPk(id);
+                if(authorization.startsWith("test")){
+                    long id = Long.parseLong(authorization.substring(4));
+                    log.info("id : {}",id);
 
-                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-                AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    OAuth2User userDetails = userInfoService.loadUserByUserPk(id);
 
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                    AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                securityContext.setAuthentication(authenticationToken);
-                SecurityContextHolder.setContext(securityContext);
-            }else{
-                String token = parseBearerToken(request);
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                if ( token == null){
-                    filterChain.doFilter(request,response);
-                    return;
+                    securityContext.setAuthentication(authenticationToken);
+                    SecurityContextHolder.setContext(securityContext);
+                }else{
+                    String token = parseBearerToken(request);
+
+                    if ( token == null){
+                        filterChain.doFilter(request,response);
+                        return;
+                    }
+
+                    String userId = tokenProvider.validate(token);
+                    if(userId == null){
+                        filterChain.doFilter(request,response);
+                        return;
+                    }
+
+                    // 사용자의 jwt 에서 key 가지고 와서 db에
+                    OAuth2User userDetails = userInfoService.loadUserByUserPk(Long.parseLong(userId));
+
+                    SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                    AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    securityContext.setAuthentication(authenticationToken);
+                    SecurityContextHolder.setContext(securityContext);
                 }
 
-                String userId = tokenProvider.validate(token);
-                if(userId == null){
-                    filterChain.doFilter(request,response);
-                    return;
-                }
-
-                // 사용자의 jwt 에서 key 가지고 와서 db에
-                OAuth2User userDetails = userInfoService.loadUserByUserPk(Long.parseLong(userId));
-
-                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-                AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                securityContext.setAuthentication(authenticationToken);
-                SecurityContextHolder.setContext(securityContext);
+            } catch (SecurityException | MalformedJwtException e) {
+                log.info("JWT가 올바르게 구성되지 않았습니다.");
+                request.setAttribute("exception", ErrorCode.WRONG_TYPE_TOKEN.getCode());
+                return;
+            } catch (ExpiredJwtException e) {
+                log.info("JWT가 만료됨");
+                request.setAttribute("exception", ErrorCode.EXPIRED_TOKEN.getCode());
+                return;
+            } catch (UnsupportedJwtException e) {
+                log.info("지원되지 않는 JWT");
+                request.setAttribute("exception", ErrorCode.UNSUPPORTED_TOKEN.getCode());
+                return;
+            } catch (IllegalArgumentException e) {
+                log.info("JWT의 클래엠이 null 또는 비어 있음");
+                request.setAttribute("exception", ErrorCode.WRONG_TYPE_TOKEN.getCode());
+                return;
+            } catch (Exception exception){
+                exception.printStackTrace();
+                log.info("오류 발생");
+                setResponse(response,ACCESS_DENIED,HttpServletResponse.SC_BAD_REQUEST);
+                return;
             }
-
-        } catch (SecurityException | MalformedJwtException e) {
-            log.info("JWT가 올바르게 구성되지 않았습니다.");
-            request.setAttribute("exception", ErrorCode.WRONG_TYPE_TOKEN.getCode());
-            return;
-        } catch (ExpiredJwtException e) {
-            log.info("JWT가 만료됨");
-            request.setAttribute("exception", ErrorCode.EXPIRED_TOKEN.getCode());
-            return;
-        } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT");
-            request.setAttribute("exception", ErrorCode.UNSUPPORTED_TOKEN.getCode());
-            return;
-        } catch (IllegalArgumentException e) {
-            log.info("JWT의 클래엠이 null 또는 비어 있음");
-            request.setAttribute("exception", ErrorCode.WRONG_TYPE_TOKEN.getCode());
-            return;
-        } catch (Exception exception){
-            exception.printStackTrace();
-            log.info("오류 발생");
-            setResponse(response,ACCESS_DENIED,HttpServletResponse.SC_BAD_REQUEST);
-            return;
         }
+
         filterChain.doFilter(request,response);
     }
 

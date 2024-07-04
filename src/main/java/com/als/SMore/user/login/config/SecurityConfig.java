@@ -1,10 +1,8 @@
 package com.als.SMore.user.login.config;
 
 import com.als.SMore.user.login.service.KakaoMemberDetailsService;
-import com.als.SMore.user.login.util.CustomAccessDeniedHandler;
-import com.als.SMore.user.login.util.CustomAuthenticationEntryPointHandler;
-import com.als.SMore.user.login.util.JwtFilter;
-import com.als.SMore.user.login.util.OAuth2SuccessHandler;
+import com.als.SMore.user.login.service.UserInfoService;
+import com.als.SMore.user.login.util.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +30,8 @@ public class SecurityConfig {
 
     private final KakaoMemberDetailsService kakaoMemberDetailsService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
-    private final JwtFilter jwtFilter;
+    private final UserInfoService userInfoService;
+    private final TokenProvider tokenProvider;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final CustomAuthenticationEntryPointHandler customAuthenticationEntryPointHandler;
 
@@ -46,20 +45,23 @@ public class SecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/board/**").permitAll()
+                        .requestMatchers(
+                                "/board/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtFilter, OAuth2LoginAuthenticationFilter.class)
-                .oauth2Login(oauth2 -> oauth2
-                        .authorizationEndpoint(endpoint -> endpoint.baseUri("/oauth2/authorization/kakao"))
+                );
+        http.oauth2Login(oauth2 -> oauth2
+                        //.authorizationEndpoint(endpoint -> endpoint.baseUri("/oauth2/authorization/kakao"))
                         .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
                         .userInfoEndpoint(endpoint -> endpoint.userService(kakaoMemberDetailsService))
                         .successHandler(oAuth2SuccessHandler)
-                ).exceptionHandling(handling -> handling
+                );
+        http.exceptionHandling(handling -> handling
                         .authenticationEntryPoint(customAuthenticationEntryPointHandler)
                         .accessDeniedHandler(customAccessDeniedHandler)
                 );
-        http.logout(AbstractHttpConfigurer::disable);
+        //http.logout(AbstractHttpConfigurer::disable);
+        http.addFilterBefore(new JwtFilter(tokenProvider,userInfoService), OAuth2LoginAuthenticationFilter.class);
         return http.build();
     }
 
