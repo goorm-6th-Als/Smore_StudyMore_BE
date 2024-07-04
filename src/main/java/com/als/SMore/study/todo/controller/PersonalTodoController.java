@@ -1,11 +1,8 @@
 package com.als.SMore.study.todo.controller;
 
 import com.als.SMore.study.todo.DTO.PersonalTodoDTO;
-import com.als.SMore.study.todo.mapper.PersonalTodoMapper;
 import com.als.SMore.study.todo.service.PersonalTodoService;
-import com.als.SMore.user.login.util.MemberUtil;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,10 +78,9 @@ public class PersonalTodoController {
 
     /**
      * 본인의 PersonalTodo 항목을 조회
-     * @param memberPk 멤버 PK
      * @return 해당 멤버의 PersonalTodoDTO 목록과 OK 응답 반환
      */
-    @GetMapping("/member")
+    @GetMapping("/my")
     public ResponseEntity<List<PersonalTodoDTO>> getTodosByMember(
             @PathVariable Long studyPk) {
         List<PersonalTodoDTO> todos = personalTodoService.getTodosByMember(studyPk);
