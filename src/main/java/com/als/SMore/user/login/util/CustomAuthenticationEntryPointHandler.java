@@ -6,7 +6,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONObject;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,6 @@ public class CustomAuthenticationEntryPointHandler implements AuthenticationEntr
         Integer exception = (Integer)request.getAttribute("exception");
 
         if(exception == null) {
-            log.info("이것 때문인가요>?");
             setResponse(response, ErrorCode.UNKNOWN_ERROR,HttpServletResponse.SC_UNAUTHORIZED);
         }
         //잘못된 타입의 토큰인 경우
