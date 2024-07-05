@@ -2,11 +2,14 @@ package com.als.SMore.study.management.controller;
 
 import com.als.SMore.domain.entity.StudyBoard;
 import com.als.SMore.study.management.DTO.StudyBoardUpdateDTO;
+import com.als.SMore.study.management.DTO.StudyDataDTO;
 import com.als.SMore.study.management.DTO.StudyUpdateDTO;
 import com.als.SMore.study.management.service.StudyManagementService;
+import com.als.SMore.user.login.util.JwtRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,11 +26,25 @@ public class StudyManagementController {
     private final StudyManagementService studyManagementService;
 
     /**
+     * 스터디, 스터디 보드 정보 READ
+     * @param studyPk 조회 할 studyPk
+     * @return StudyDataDTO StudyDetail + StudyBoard
+     */
+    @JwtRole(index=3)
+    @GetMapping("/{studyPk}")
+    public ResponseEntity<StudyDataDTO> getStudyData(
+            @PathVariable Long studyPk) {
+        StudyDataDTO getStudy = studyManagementService.getStudyData(studyPk);
+        return ResponseEntity.ok(getStudy);
+    }
+
+    /**
      * 스터디 정보 업데이트
      * @param studyPk 업데이트할 스터디의 PK
      * @param studyUpdateDTO 업데이트할 스터디 정보를 담은 DTO
      * @return 업데이트된 스터디 정보를 담은 DTO와 함께 응답
      */
+    @JwtRole(index=3)
     @PutMapping("/{studyPk}")
     public ResponseEntity<StudyUpdateDTO> updateStudy(
             @PathVariable Long studyPk,
@@ -43,6 +60,7 @@ public class StudyManagementController {
      * @param image 업데이트할 이미지 파일
      * @return 업데이트된 스터디 보드 정보를 담은 DTO와 함께 응답
      */
+    @JwtRole(index=3)
     @PutMapping("/{studyPk}/board")
     public ResponseEntity<StudyBoard> updateStudyBoard(
             @PathVariable Long studyPk,
@@ -58,6 +76,7 @@ public class StudyManagementController {
      * @param studyPk 삭제할 스터디의 PK
      * @return No Content 상태의 응답
      */
+    @JwtRole(index=3)
     @DeleteMapping("/{studyPk}")
     public ResponseEntity<Void> deleteStudy(
             @PathVariable Long studyPk) {
@@ -72,6 +91,7 @@ public class StudyManagementController {
      * @param memberPk 퇴출할 멤버 PK
      * @return 퇴출된 멤버의 닉네임을 포함한 메시지
      */
+    @JwtRole(index=3)
     @DeleteMapping("/{studyPk}/member/{memberPk}")
     public ResponseEntity<String> expelStudyMember(
             @PathVariable Long studyPk,

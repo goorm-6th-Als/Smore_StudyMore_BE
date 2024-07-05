@@ -1,22 +1,19 @@
-package com.als.SMore.study.management.DTO;
-
+package com.als.SMore.study.dashboard.DTO;
 
 import com.als.SMore.global.json.LongToStringSerializer;
 import com.als.SMore.global.json.StringToLongDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class StudyBoardUpdateDTO {
+public class MonthlyAttendanceStatusDTO {
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
-    private Long studyBoardPk;
-
-    private String adTitle;
-    private String imageUrl;
-    private String adContent;
-    private String imageUri;
+    private Long memberPk;
+    private String attendanceStatus;
+    private LocalDateTime attendanceDate;
 }
