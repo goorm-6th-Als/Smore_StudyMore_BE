@@ -1,6 +1,7 @@
 package com.als.SMore.study.todo.controller;
 
 import com.als.SMore.study.todo.DTO.PersonalTodoDTO;
+import com.als.SMore.study.todo.DTO.PersonalTodoWithStatusDTO;
 import com.als.SMore.study.todo.service.PersonalTodoService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,6 @@ public class PersonalTodoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTodo);
     }
 
-
     /**
      * 상태에 따른 PersonalTodo 조회
      * @param studyPk 스터디 PK
@@ -44,10 +44,10 @@ public class PersonalTodoController {
      * @return 상태에 따른 PersonalTodoDTO 목록과 함께 OK 응답 반환
      */
     @GetMapping("/status")
-    public ResponseEntity<List<PersonalTodoDTO>> getTodosByStatus(
+    public ResponseEntity<List<PersonalTodoWithStatusDTO>> getTodosByStatus(
             @PathVariable Long studyPk,
             @RequestParam String status) {
-        List<PersonalTodoDTO> todos = personalTodoService.getTodosByStatus(studyPk, status);
+        List<PersonalTodoWithStatusDTO> todos = personalTodoService.getTodosByStatus(studyPk, status);
         return ResponseEntity.ok(todos);
     }
 
@@ -64,7 +64,7 @@ public class PersonalTodoController {
     }
 
     /**
-     * 트겆ㅇ PersonalTodo 조회
+     * 특정 PersonalTodo 조회
      * @param todoPk 투두 Pk
      * @return PersonalTodoDTO 목록과 OK 응답 반환
      */
