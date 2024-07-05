@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface StudyDetailRepository extends JpaRepository<StudyDetail, Long> {
     StudyDetail findByStudy(Study updatedStudy);
     Optional<StudyDetail> findByStudy_StudyPk (Long studyPk);
+
+    Optional<StudyDetail> findByStudyPk(Long studyPk);
 }
