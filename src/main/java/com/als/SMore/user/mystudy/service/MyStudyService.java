@@ -4,6 +4,7 @@ import com.als.SMore.domain.entity.*;
 import com.als.SMore.domain.repository.*;
 import com.als.SMore.notification.dto.NotificationRequestDto;
 import com.als.SMore.notification.service.NotificationService;
+import com.als.SMore.user.login.util.TokenProvider;
 import com.als.SMore.user.mystudy.dto.request.IsCheckedStatusRequest;
 import com.als.SMore.user.mystudy.dto.response.EnterStudy;
 import com.als.SMore.user.mystudy.dto.response.EnterStudyResponse;
@@ -30,8 +31,8 @@ public class MyStudyService {
     public StudyListResponse enterStudy(){
         List<StudyResponse> studyList = new ArrayList<StudyResponse>();
         Long userPk = MemberUtil.getUserPk();
-        // 운영중인 study의 목록을 받아야 한다.
-        List<StudyMember> admin = studyMemberRepository.findByMember_MemberPkAndRole(userPk, "user");
+        // 참가중인 study의 목록을 받아야 한다.
+        List<StudyMember> admin = studyMemberRepository.findByMember_MemberPkAndRole(userPk, "member");
 
         if(admin.isEmpty()){
             return StudyListResponse.builder().studyList(studyList).build();
