@@ -40,7 +40,13 @@ public class ProblemServiceImpl implements ProblemService {
     private final ProblemRepository problemRepository;
     private final ProblemOptionsRepository problemOptionsRepository;
 
-
+    /**
+     * 문제 옵션을 전부 저장한다
+     * @param problemOptionRequestDTOList
+     * @param answerNum 정답 번호
+     * @param problem
+     * @return
+     */
     private Long saveProblemOptionList(List<ProblemOptionRequestDTO> problemOptionRequestDTOList, Integer answerNum, Problem problem) {
         Long result = 0L;
         List<ProblemOptions> problemOptions = new ArrayList<>();
@@ -63,6 +69,10 @@ public class ProblemServiceImpl implements ProblemService {
         return result;
     }
 
+    /**
+     * 문제 옵션을 전부 지운다
+     * @param problem
+     */
     private void deleteProblemOptionList(Problem problem) {
         List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
         problemOptionsRepository.deleteAll(problemOptions);

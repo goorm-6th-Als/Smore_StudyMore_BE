@@ -1,31 +1,25 @@
 package com.als.SMore.study.dashboard.mapper;
 
 import com.als.SMore.domain.entity.Member;
-import com.als.SMore.study.dashboard.DTO.AttendanceStatusDTO;
+import com.als.SMore.study.dashboard.DTO.TodayAttendanceStatusDTO;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import org.springframework.stereotype.Component;
 
-public class AttendanceStatusMapper {
-    public static AttendanceStatusDTO toDTO(Member member, String attendanceStatus, LocalDateTime attendanceDate) {
-        return AttendanceStatusDTO.builder()
+@Component
+public class TodayAttendanceStatusMapper {
+
+    public static TodayAttendanceStatusDTO toDTO(Member member, String attendanceStatus, LocalDateTime attendanceDate, String timeAgo) {
+        return TodayAttendanceStatusDTO.builder()
                 .memberPk(member.getMemberPk())
                 .nickname(member.getNickName())
-                .attendanceStatus(attendanceStatus)
-                .attendanceDate(attendanceDate)
-                .build();
-    }
-
-    public static AttendanceStatusDTO fromEntity(Member member, String attendanceStatus, LocalDateTime attendanceDate, String timeAgo) {
-        return AttendanceStatusDTO.builder()
-                .memberPk(member.getMemberPk())
-                .nickname(member.getNickName())
+                .profileImg(member.getProfileImg()) // 프로필 이미지 추가
                 .attendanceStatus(attendanceStatus)
                 .attendanceDate(attendanceDate)
                 .timeAgo(timeAgo)
                 .build();
     }
 
-    // 추가된 메서드
     public static String calculateTimeAgo(LocalDateTime attendanceDate) {
         LocalDateTime now = LocalDateTime.now();
         Duration duration = Duration.between(attendanceDate, now);

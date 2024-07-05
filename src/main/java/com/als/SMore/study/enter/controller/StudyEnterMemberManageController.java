@@ -1,6 +1,8 @@
 package com.als.SMore.study.enter.controller;
 
 import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
+import com.als.SMore.study.enter.DTO.StudyEnterMemberWithMemberInfoDTO;
+import com.als.SMore.study.enter.DTO.StudyEnterMemberWithStudyInfoDTO;
 import com.als.SMore.study.enter.service.StudyEnterMemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,29 +25,27 @@ public class StudyEnterMemberManageController {
     /**
      * 특정 스터디의 모든 가입 신청서 조회
      * @param studyPk 스터디 PK
-     * @return 모든 StudyEnterMemberDTO 리스트와 함께 OK 응답 반환
+     * @return 해당 스터디의 모든 신청서 리스트와 Ok 반환
      */
     @GetMapping("/study/{studyPk}")
-    public ResponseEntity<List<StudyEnterMemberDTO>> getAllStudyEnterMembers(
+    public ResponseEntity<List<StudyEnterMemberWithMemberInfoDTO>> getAllStudyEnterMembers(
             @PathVariable Long studyPk) {
-        List<StudyEnterMemberDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembers(studyPk);
+        List<StudyEnterMemberWithMemberInfoDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembers(studyPk);
         return ResponseEntity.ok(studyEnterMembers);
     }
 
     /**
-     * 특정 멤버의 모든 가입 신청서 조회
-     * @param memberPk 멤버 PK
-     * @return 해당 멤버의 모든 StudyEnterMemberDTO 리스트와 함께 OK 응답 반환
+     * 나의 모든 가입 신청서 조회
+     * @return 해당 멤버의 모든 신청서 리스트와 Ok 반환
      */
-    @GetMapping("/member/{memberPk}")
-    public ResponseEntity<List<StudyEnterMemberDTO>> getAllStudyEnterMembersByMember(
-            @PathVariable Long memberPk) {
-        List<StudyEnterMemberDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembersByMember();
+    @GetMapping("/member")
+    public ResponseEntity<List<StudyEnterMemberWithStudyInfoDTO>> getAllStudyEnterMembersByMember(){
+        List<StudyEnterMemberWithStudyInfoDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembersByMember();
         return ResponseEntity.ok(studyEnterMembers);
     }
 
     /**
-     * 스터디 가입 신청서를 삭제합니다.
+     * 스터디 가입 신청서 삭제
      * @param studyEnterMemberPk 삭제할 StudyEnterMember의 PK
      * @return No Content 응답 반환
      */
@@ -56,7 +56,7 @@ public class StudyEnterMemberManageController {
     }
 
     /**
-     * 스터디 가입 신청서의 내용을 수정합니다.
+     * 스터디 가입 신청서 수정
      * @param studyEnterMemberPk 수정할 StudyEnterMember의 PK
      * @param studyEnterMemberDTO 수정할 StudyEnterMemberDTO 객체
      * @return 수정된 StudyEnterMemberDTO 객체와 함께 OK 응답 반환

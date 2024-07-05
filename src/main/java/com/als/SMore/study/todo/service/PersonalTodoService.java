@@ -11,6 +11,7 @@ import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.global.CustomErrorCode;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.todo.DTO.PersonalTodoDTO;
+import com.als.SMore.study.todo.DTO.PersonalTodoWithStatusDTO;
 import com.als.SMore.study.todo.mapper.PersonalTodoMapper;
 import com.als.SMore.user.login.util.MemberUtil;
 import java.util.List;
@@ -99,11 +100,14 @@ public class PersonalTodoService {
      * @return PersonalTodoDTO 목록
      */
     @Transactional(readOnly = true)
-    public List<PersonalTodoDTO> getTodosByStatus(Long studyPk, String status) {
+    public List<PersonalTodoWithStatusDTO> getTodosByStatus(Long studyPk, String status) {
         validateStudy(studyPk);
         TodoStatus todoStatus = validateTodoStatus(status);
         return personalTodoRepository.findByStudyStudyPkAndScheduleStatus(studyPk, todoStatus).stream()
-                .map(PersonalTodoMapper::fromEntity)
+                .map(personalTodo -> {
+                    Member member = personalTodo.getMember();
+                    return PersonalTodoMapper.toDTO(personalTodo, member);
+                })
                 .collect(Collectors.toList());
     }
 

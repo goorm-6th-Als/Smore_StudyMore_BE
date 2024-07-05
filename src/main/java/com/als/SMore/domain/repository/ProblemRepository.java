@@ -19,4 +19,6 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     List<Problem> findByStudyProblemBank(StudyProblemBank studyProblemBank);
 
+    int countByStudyProblemBank(StudyProblemBank studyProblemBank);
+
 }

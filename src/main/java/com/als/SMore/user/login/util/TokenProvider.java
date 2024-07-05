@@ -28,41 +28,41 @@ public class TokenProvider {
         key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String create(String userId, Long time){
+    public String create(String userPk, Long time){
         Date startedDate = Date.from(Instant.now());
         Date expiredDate = Date.from(Instant.now().plusMillis(time));
 
         String jwt = Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
-                .subject(userId).issuedAt(startedDate)
+                .subject(userPk).issuedAt(startedDate)
                 .expiration(expiredDate).compact();
         return jwt;
     }
 
-    public String create(String userId, Long time,Map<String,String> claim){
+    public String create(String userPk, Long time,Map<String,String> claim){
         Date startedDate = Date.from(Instant.now());
         Date expiredDate = Date.from(Instant.now().plusMillis(time));
 
         String jwt = Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
-                .subject(userId).issuedAt(startedDate)
+                .subject(userPk).issuedAt(startedDate)
                 .claims(claim)  // 오브젝트 타입으로 넣기
                 .expiration(expiredDate).compact();
         return jwt;
     }
 
-    public String generateAccessToken(Long userId,Map<String,String> claim){
+    public String generateAccessToken(Long userPk,Map<String,String> claim){
         if (claim.isEmpty()){
-            return create(String.valueOf(userId),accessTokenValidTime);
+            return create(String.valueOf(userPk),accessTokenValidTime);
         }
-        return create(String.valueOf(userId),accessTokenValidTime,claim);
+        return create(String.valueOf(userPk),accessTokenValidTime,claim);
     }
 
-    public String generateRefreshToken(Long userId,Map<String,String> claim){
+    public String generateRefreshToken(Long userPk,Map<String,String> claim){
         if (claim.isEmpty()){
-            return create(String.valueOf(userId),refreshTokenValidTime);
+            return create(String.valueOf(userPk),refreshTokenValidTime);
         }
-        return create(String.valueOf(userId),refreshTokenValidTime,claim);
+        return create(String.valueOf(userPk),refreshTokenValidTime,claim);
     }
 
     public String validate(String jwt) {
