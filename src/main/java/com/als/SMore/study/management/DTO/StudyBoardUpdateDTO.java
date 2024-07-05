@@ -16,6 +16,7 @@ public class StudyBoardUpdateDTO {
     private Long studyBoardPk;
 
     private String adTitle;
+    private String imageUrl;
     private String adContent;
     private String imageUri;
 }
