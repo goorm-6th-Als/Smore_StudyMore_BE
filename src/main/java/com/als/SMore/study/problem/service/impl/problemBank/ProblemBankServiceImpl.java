@@ -13,6 +13,7 @@ import com.als.SMore.study.problem.DTO.response.problem.ProblemOptionResponseDTO
 import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.PersonalProblemBankResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankResponseDTO;
+import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankSummaryResponseDTO;
 import com.als.SMore.study.problem.mapper.ProblemBankMapper;
 import com.als.SMore.study.problem.mapper.ProblemMapper;
 import com.als.SMore.study.problem.service.ProblemBankService;
@@ -151,6 +152,21 @@ public class ProblemBankServiceImpl implements ProblemBankService {
         }
 
         return personalProblemBankResponseDTOList;
+    }
+
+    @Override
+    public List<ProblemBankSummaryResponseDTO> getAllProblemBankSummary(Long studyPk) {
+
+        Study study = problemBankValidator.getStudy(studyPk);
+        List<StudyProblemBank> problemBankList = studyProblemBankRepository.findByStudyOrderByStudyProblemBankPkDesc(study);
+        List<ProblemBankSummaryResponseDTO> problemBankSummaryResponseDTOList = new ArrayList<>();
+        for (StudyProblemBank studyProblemBank : problemBankList) {
+
+            problemBankSummaryResponseDTOList.add(ProblemBankSummaryResponseDTO.of(
+                    studyProblemBank, problemRepository.countByStudyProblemBank(studyProblemBank))
+            );
+        }
+        return problemBankSummaryResponseDTOList;
     }
 
 

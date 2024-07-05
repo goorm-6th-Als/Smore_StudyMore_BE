@@ -34,4 +34,14 @@ public class AttendanceCheck {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "attendance_date_end")
     private LocalDateTime attendanceDateEnd;
+
+    public static AttendanceCheck of(Member member, Study study, LocalDateTime attendanceDate) {
+        return AttendanceCheck
+                .builder()
+                .attendanceDate(attendanceDate)
+                .attendanceDateEnd(attendanceDate)
+                .study(study)
+                .member(member)
+                .build();
+    }
 }

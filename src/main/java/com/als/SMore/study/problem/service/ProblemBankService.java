@@ -5,6 +5,7 @@ package com.als.SMore.study.problem.service;
 import com.als.SMore.study.problem.DTO.request.problemBank.ProblemBankUpdateRequestDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.PersonalProblemBankResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankResponseDTO;
+import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankSummaryResponseDTO;
 
 import java.util.List;
 
@@ -29,5 +30,5 @@ public interface ProblemBankService {
 
     List<PersonalProblemBankResponseDTO> getPersonalProblemBank(Long memberPk, Long studyPk);
 
-
+    List<ProblemBankSummaryResponseDTO> getAllProblemBankSummary(Long studyPk);
 }

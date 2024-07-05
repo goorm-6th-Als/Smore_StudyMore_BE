@@ -3,6 +3,7 @@ package com.als.SMore.study.problem.controller;
 import com.als.SMore.study.problem.DTO.request.problemBank.ProblemBankUpdateRequestDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.PersonalProblemBankResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankResponseDTO;
+import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankSummaryResponseDTO;
 import com.als.SMore.study.problem.service.ProblemBankService;
 import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +34,8 @@ public class ProblemBankController {
      * @return 문제은행 목록
      */
     @GetMapping("/bank")
-    public List<ProblemBankResponseDTO> getAllStudyProblemBank(@PathVariable Long studyPk) {
-        return problemBankService.getAllProblemBank(getMemberPk(), studyPk);
+    public List<ProblemBankSummaryResponseDTO> getAllStudyProblemBank(@PathVariable Long studyPk) {
+        return problemBankService.getAllProblemBankSummary(studyPk);
     }
 
     /**

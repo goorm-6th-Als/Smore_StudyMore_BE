@@ -36,8 +36,13 @@ public class ProblemController {
 
     //
     @GetMapping
-    public List<ProblemResponseDTO> getAllProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemGetAllRequestDTO problemGetAllRequestDTO) {
-        return problemService.getAllProblem(problemGetAllRequestDTO);
+    public List<ProblemResponseDTO> getAllProblem(@PathVariable("studyPk") Long studyPk,
+                                                  @RequestParam List<Long> studyProblemBankPk,
+                                                  @RequestParam Integer max) {
+        return problemService.getAllProblem(ProblemGetAllRequestDTO.builder().
+                studyProblemBankPk(studyProblemBankPk).
+                max(max).
+                build());
 
     }
     //문제 요약List (방장이나 작성자가 수정할 때 사용할 용도)

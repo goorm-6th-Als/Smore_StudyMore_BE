@@ -72,14 +72,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      */
     private AttendanceCheck createAttendance(Member member, Study study) {
         log.info("[createAttendance] Start");
-        LocalDateTime localDateTime = LocalDateTime.now();
-        AttendanceCheck attendanceCheck = AttendanceCheck
-                .builder()
-                .attendanceDate(localDateTime)
-                .attendanceDateEnd(localDateTime)
-                .study(study)
-                .member(member)
-                .build();
+        AttendanceCheck attendanceCheck = AttendanceCheck.of(member, study, LocalDateTime.now());
         return attendanceCheckRepository.save(attendanceCheck);
     }
 
