@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ProblemBankService {
     //스터디당 30개 이하
-    void createProblemBank(Long memberPk, Long studyPk, String bankName);
+    Long createProblemBank(Long memberPk, Long studyPk, String bankName);
 
     //<readOnly>
     //문제 그룹 리스트

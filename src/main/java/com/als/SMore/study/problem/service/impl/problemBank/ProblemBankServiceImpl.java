@@ -42,7 +42,7 @@ public class ProblemBankServiceImpl implements ProblemBankService {
     //=========================================== problemBank CRUD =====================================
 
     @Override
-    public void createProblemBank(Long memberPk, Long studyPk, String bankName) {
+    public Long createProblemBank(Long memberPk, Long studyPk, String bankName) {
         //제목 글자 수 확인(1 - 30)
         //문제은행 수 확인 (30이하)
 
@@ -53,12 +53,12 @@ public class ProblemBankServiceImpl implements ProblemBankService {
 
         Member member = attendanceValidator.getMember(memberPk);
 
-        studyProblemBankRepository.save(StudyProblemBank.builder()
+        return studyProblemBankRepository.save(StudyProblemBank.builder()
                 .bankName(bankName)
                 .member(member)
                 .study(study)
                 .build()
-        );
+        ).getStudyProblemBankPk();
     }
 
 
