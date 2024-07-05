@@ -2,6 +2,7 @@ package com.als.SMore.study.studyCRUD.controller;
 
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
 import com.als.SMore.study.studyCRUD.service.StudyService;
+import com.als.SMore.user.login.util.NotAop;
 import com.als.SMore.user.mypage.service.AwsFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class StudyController {
      * @param studyCreateDTO 생성할 스터디의 정보를 담은 DTO
      * @return 생성된 스터디 정보를 담은 DTO와 함께 응답
      */
+    @NotAop
     @PostMapping
     public ResponseEntity<StudyCreateDTO> createStudy(
             @RequestPart("studyCreateDTO") StudyCreateDTO studyCreateDTO,

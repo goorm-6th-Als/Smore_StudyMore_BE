@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class AttendanceStatusDTO {
+public class TodayAttendanceStatusDTO {
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long memberPk;
@@ -18,4 +18,5 @@ public class AttendanceStatusDTO {
     private String attendanceStatus;
     private LocalDateTime attendanceDate;
     private String timeAgo;
+    private String profileImg;
 }
