@@ -2,6 +2,7 @@ package com.als.SMore.study.enter.controller;
 
 import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
 import com.als.SMore.study.enter.service.StudyEnterMemberService;
+import com.als.SMore.user.login.util.NotAop;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ public class StudyEnterMemberCreateController {
      * @param studyPk 스터디 게시물 PK
      * @return 생성된 StudyEnterMemberDTO 객체와 함께 Created 응답 반환
      */
+    @NotAop
     @PostMapping
     public ResponseEntity<StudyEnterMemberDTO> createStudyEnterMember(
             @RequestBody StudyEnterMemberDTO studyEnterMemberDTO,
