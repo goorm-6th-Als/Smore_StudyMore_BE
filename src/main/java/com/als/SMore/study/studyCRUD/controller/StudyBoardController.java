@@ -37,6 +37,7 @@ public class StudyBoardController {
      * @param studyBoardPk 조회할 StudyBoard 엔티티의 ID
      * @return 조회된 StudyBoard 엔티티의 DTO와 함께 OK 응답 반환
      */
+    @NotAop
     @GetMapping("/{studyBoardPk}")
     public ResponseEntity<StudyBoardDTO> getStudyBoardByPk(
             @PathVariable Long studyBoardPk) {
