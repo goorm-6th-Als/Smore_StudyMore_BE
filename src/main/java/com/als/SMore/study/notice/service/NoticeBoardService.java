@@ -55,7 +55,7 @@ public class NoticeBoardService {
         Study study = noticeValidator.findStudyByStudyPk(studyPK);
         NoticeBoard noticeBoard = noticeValidator.findNoticeByBoardPkAndStudy(noticeBoardPK, study);
         noticeBoard.updateNotice(requestDTO);
-        notify(memberPk, studyPK, "공지 수정 성공");
+        notify(memberPk, studyPK, "공지 수정 성공"); //테스트 용으로 남겨둠. 추후 지울 예정
 
         return new NoticeResponseDTO(noticeBoard, requestDTO);
     }

@@ -17,15 +17,29 @@ public class AttendanceController {
     final private AttendanceService attendanceService;
 
 
-
+    /**
+     * SecurityContext에 저장된 유저의 pk를 조회
+     * @return MemberPk
+     */
     private Long getMember(){
         return MemberUtil.getUserPk();
     }
 
+    /**
+     * 출석 시작
+     * @param studyPk 스터디 Pk
+     * @return db에 저장된 시간을 반환
+     */
     @PostMapping("/start")
     public LocalDateTime start(@PathVariable Long studyPk){
         return attendanceService.attendanceStart(getMember(), studyPk);
     }
+
+    /**
+     * attendanceCheck에 출석 종료 시간 업데이트
+     * @param studyPk
+     * @return
+     */
 
     @PostMapping("/stop")
     public Long end(@PathVariable Long studyPk){
