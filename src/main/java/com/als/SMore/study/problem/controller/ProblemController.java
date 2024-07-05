@@ -10,6 +10,7 @@ import com.als.SMore.study.problem.service.ProblemService;
 import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,9 +59,10 @@ public class ProblemController {
 
     //만드는거
     @PostMapping
-    public void createProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemCreateRequestDTO problemCreateRequestDTO) {
+    public ResponseEntity<String> createProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemCreateRequestDTO problemCreateRequestDTO) {
+        System.out.println("ASDasdasdasdas");
         problemService.createProblem(getMemberPk(), problemCreateRequestDTO);
-
+        return ResponseEntity.ok(problemCreateRequestDTO.getStudyProblemBankPk().toString());
     }
 
 
