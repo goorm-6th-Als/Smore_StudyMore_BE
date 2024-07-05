@@ -16,6 +16,7 @@ import com.als.SMore.study.enter.DTO.StudyEnterMemberWithMemberInfoDTO;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberWithStudyInfoDTO;
 import com.als.SMore.study.enter.mapper.StudyEnterMemberMapper;
 import com.als.SMore.user.login.util.MemberUtil;
+import com.als.SMore.user.login.util.NotAop;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class StudyEnterMemberService {
      * @param studyPk 스터디 PK
      * @return StudyEnterMemberDTO 객체
      */
+    @NotAop
     @Transactional
     public StudyEnterMemberDTO createStudyEnterMember(StudyEnterMemberDTO studyEnterMemberDTO, Long studyPk) {
         Long memberPk = MemberUtil.getUserPk();  // 토큰에서 memberPk 가져오기
@@ -63,6 +65,7 @@ public class StudyEnterMemberService {
      * @param studyPk 스터디 PK
      * @return 해당 스터디의 모든 StudyEnterMemberDTO 리스트
      */
+    @NotAop
     @Transactional(readOnly = true)
     public List<StudyEnterMemberWithMemberInfoDTO> getAllStudyEnterMembers(Long studyPk) {
         return studyEnterMemberRepository.findByStudyStudyPk(studyPk).stream()
@@ -74,6 +77,7 @@ public class StudyEnterMemberService {
      * 나의 모든 가입 신청서 조회
      * @return 해당 멤버의 모든 StudyEnterMemberDTO 리스트
      */
+    @NotAop
     @Transactional(readOnly = true)
     public List<StudyEnterMemberWithStudyInfoDTO> getAllStudyEnterMembersByMember() {
         Long memberPk = MemberUtil.getUserPk();
@@ -88,6 +92,7 @@ public class StudyEnterMemberService {
      * @param studyEnterMemberDTO 수정할 내용이 담긴 StudyEnterMemberDTO 객체
      * @return 수정된 StudyEnterMemberDTO 객체
      */
+    @NotAop
     @Transactional
     public StudyEnterMemberDTO updateStudyEnterMember(Long studyEnterMemberPk, StudyEnterMemberDTO studyEnterMemberDTO) {
         StudyEnterMember studyEnterMember = studyEnterMemberRepository.findById(studyEnterMemberPk)
@@ -101,6 +106,7 @@ public class StudyEnterMemberService {
      *  스터디 가입 신청서 삭제
      * @param studyEnterMemberPk 삭제할 StudyEnterMember의 PK
      */
+    @NotAop
     @Transactional
     public void deleteStudyEnterMember(Long studyEnterMemberPk) {
         Long memberPk = MemberUtil.getUserPk();
