@@ -2,6 +2,9 @@ package com.als.SMore.user.mystudy.service;
 
 import com.als.SMore.domain.entity.*;
 import com.als.SMore.domain.repository.*;
+import com.als.SMore.notification.dto.NotificationRequestDto;
+import com.als.SMore.notification.service.NotificationService;
+import com.als.SMore.user.login.util.TokenProvider;
 import com.als.SMore.user.mystudy.dto.request.IsCheckedStatusRequest;
 import com.als.SMore.user.mystudy.dto.response.EnterStudy;
 import com.als.SMore.user.mystudy.dto.response.EnterStudyResponse;
@@ -24,12 +27,12 @@ public class MyStudyService {
     private final StudyDetailRepository studyDetailRepository;
     private final MemberRepository memberRepository;
     private final StudyRepository studyRepository;
-
+    private final NotificationService notificationService;
     public StudyListResponse enterStudy(){
         List<StudyResponse> studyList = new ArrayList<StudyResponse>();
         Long userPk = MemberUtil.getUserPk();
-        // 운영중인 study의 목록을 받아야 한다.
-        List<StudyMember> admin = studyMemberRepository.findByMember_MemberPkAndRole(userPk, "user");
+        // 참가중인 study의 목록을 받아야 한다.
+        List<StudyMember> admin = studyMemberRepository.findByMember_MemberPkAndRole(userPk, "member");
 
         if(admin.isEmpty()){
             return StudyListResponse.builder().studyList(studyList).build();
@@ -100,6 +103,9 @@ public class MyStudyService {
                     .content(studyEnterMember.getContent())
                     .build());
         }
+        //스터디 방장에게 "스터디 가입 신청 요청이 있습니다." 알림
+        Member studyManager = studyRepository.findMemberByStudyPk(studyPk);
+        notify(studyManager.getMemberPk(), studyPk,"스터디 가입 신청 요청이 있습니다.");
         return EnterStudyResponse.builder().enterStudyList(enterStudies).build();
 
     }
@@ -131,7 +137,8 @@ public class MyStudyService {
                 .enterDate(LocalDate.now())
                 .role("user")
                 .build();
-
+        //스터디 신청한 사람한테 "스터디 가입 신청이 승낙되었습니다." 알림
+        notify(studyEnterMember.getMember().getMemberPk(), studyEnterMember.getStudy().getStudyPk(), "스터디 가입 신청이 승낙되었습니다.");
         studyMemberRepository.save(creatStudyMember);
         return true;
     }
@@ -142,6 +149,8 @@ public class MyStudyService {
                 .orElseThrow(IllegalAccessError::new);
 
         StudyEnterMember renewStudyEnterMember = studyEnterMember.toBuilder().enterStatus(StudyEnterMemberStatus.REJECTED).build();
+        //스터디 신청이 거절된 유저에게 "스터디 가입 신청이 거절되었습니다." 알림.
+        notify(studyEnterMember.getMember().getMemberPk(), studyEnterMember.getStudy().getStudyPk(), "스터디 가입 신청이 거절되었습니다.");
         studyEnterMemberRepository.save(renewStudyEnterMember);
     }
 
@@ -149,5 +158,15 @@ public class MyStudyService {
     public void resignMemberByStudy(Long studyPk) {
         Long userPk = MemberUtil.getUserPk();
         studyMemberRepository.deleteStudyMemberByStudy_StudyPkAndMember_MemberPk(studyPk,userPk);
+    }
+
+
+    private void notify(Long receiverPk, Long studyPk, String content) {
+        NotificationRequestDto notificationRequest = NotificationRequestDto.builder()
+                .receiverPk(receiverPk)
+                .studyPk(studyPk)
+                .content(content)
+                .build();
+        notificationService.send(notificationRequest);
     }
 }

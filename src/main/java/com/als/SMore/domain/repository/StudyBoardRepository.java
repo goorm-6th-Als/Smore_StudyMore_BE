@@ -17,4 +17,5 @@ public interface StudyBoardRepository extends JpaRepository<StudyBoard, Long> {
     Page<StudyBoard> searchByAdTitle(@Param("keyword") String keyword, Pageable pageable);
 
     Optional<StudyBoard> findByStudyStudyPk(Long studyPk);
+
 }

@@ -5,6 +5,7 @@ import com.als.SMore.domain.entity.PersonalTodo;
 import com.als.SMore.domain.entity.Study;
 import com.als.SMore.domain.entity.TodoStatus;
 import com.als.SMore.study.todo.DTO.PersonalTodoDTO;
+import com.als.SMore.study.todo.DTO.PersonalTodoWithStatusDTO;
 import java.time.LocalDate;
 
 public class PersonalTodoMapper {
@@ -39,6 +40,20 @@ public class PersonalTodoMapper {
                 .scheduleStatus(status != null ? status : personalTodo.getScheduleStatus())
                 .scheduleContent(personalTodoDTO.getScheduleContent() != null ? personalTodoDTO.getScheduleContent() : personalTodo.getScheduleContent())
                 .modifyDate(LocalDate.now())
+                .build();
+    }
+
+    public static PersonalTodoWithStatusDTO toDTO(PersonalTodo personalTodo, Member member) {
+        return PersonalTodoWithStatusDTO.builder()
+                .personalTodoPk(personalTodo.getPersonalTodoPk())
+                .studyPk(personalTodo.getStudy().getStudyPk())
+                .memberPk(member.getMemberPk())
+                .nickName(member.getNickName())
+                .profileImg(member.getProfileImg())
+                .scheduleStatus(personalTodo.getScheduleStatus().getDisplayName())
+                .scheduleContent(personalTodo.getScheduleContent())
+                .modifyDate(personalTodo.getModifyDate())
+                .createDate(personalTodo.getCreateDate())
                 .build();
     }
 }
