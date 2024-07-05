@@ -14,10 +14,12 @@ import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.global.CustomErrorCode;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.dashboard.DTO.MonthlyAttendanceStatusDTO;
+import com.als.SMore.study.dashboard.DTO.StudyDetailDTO;
 import com.als.SMore.study.dashboard.DTO.StudyMemberDTO;
 import com.als.SMore.study.dashboard.DTO.StudyRankingDTO;
 import com.als.SMore.study.dashboard.DTO.TodayAttendanceStatusDTO;
 import com.als.SMore.study.dashboard.mapper.MonthlyAttendanceStatusMapper;
+import com.als.SMore.study.dashboard.mapper.StudyDetailMapper;
 import com.als.SMore.study.dashboard.mapper.StudyMemberMapper;
 import com.als.SMore.study.dashboard.mapper.StudyRankingMapper;
 import com.als.SMore.study.dashboard.mapper.TodayAttendanceStatusMapper;
@@ -29,6 +31,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -71,16 +74,18 @@ public class StudyDashboardService {
     }
 
     /**
-     * 스터디 content 조회
+     * 스터디 정보 조회
      *
      * @param studyPk 스터디 PK
      * @return 스터디 content
      */
     @Transactional(readOnly = true)
-    public String getStudyContent(Long studyPk) {
+    public StudyDetailDTO getStudyContent(Long studyPk) {
+        Study study = studyRepository.findById(studyPk)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY));
         StudyDetail studyDetail = studyDetailRepository.findByStudy_StudyPk(studyPk)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY));
-        return studyDetail.getContent();
+        return StudyDetailMapper.toDTO(study,studyDetail);
     }
 
     /**
@@ -113,8 +118,6 @@ public class StudyDashboardService {
                         entry.getValue()))
                 .collect(Collectors.toList());
     }
-
-
 
     /**
      * 오늘의 출석 현황 조회
@@ -166,6 +169,7 @@ public class StudyDashboardService {
 
             List<MonthlyAttendanceStatusDTO> dailyStatus = studyMembers.stream()
                     .map(studyMember -> MonthlyAttendanceStatus(studyMember, dayStart, dayEnd))
+                    .filter(Objects::nonNull) // 출석한 경우만 필터링
                     .collect(Collectors.toList());
 
             monthlyAttendanceStatus.put(day, dailyStatus);
@@ -181,23 +185,12 @@ public class StudyDashboardService {
     private MonthlyAttendanceStatusDTO MonthlyAttendanceStatus(StudyMember studyMember, LocalDateTime startDate, LocalDateTime endDate) {
         Member member = studyMember.getMember();
         Study study = studyMember.getStudy();
-        boolean isAttended = attendanceCheckRepository.existsByMemberAndStudyAndAttendanceDateBetween(member, study, startDate, endDate);
         Optional<AttendanceCheck> attendanceCheck = attendanceCheckRepository.findFirstByMemberAndStudyAndAttendanceDateBetweenOrderByAttendanceDateAsc(member, study, startDate, endDate);
-        LocalDateTime attendanceDate = attendanceCheck.map(AttendanceCheck::getAttendanceDate).orElse(LocalDateTime.MAX);
-        return MonthlyAttendanceStatusMapper.toDTO(member, isAttended ? "출석" : "결석", attendanceDate);
-    }
 
-    /**
-     * 오늘 멤버가 출석했는지 반환
-     * @return 금일 출석 현황 리스트
-     */
-    private MonthlyAttendanceStatusDTO TodayAttendanceStatus(StudyMember studyMember, LocalDateTime startDate, LocalDateTime endDate) {
-        Member member = studyMember.getMember();
-        Study study = studyMember.getStudy();
-        boolean isAttended = attendanceCheckRepository.existsByMemberAndStudyAndAttendanceDateBetween(member, study, startDate, endDate);
-        Optional<AttendanceCheck> attendanceCheck = attendanceCheckRepository.findFirstByMemberAndStudyAndAttendanceDateBetweenOrderByAttendanceDateAsc(member, study, startDate, endDate);
-        LocalDateTime attendanceDate = attendanceCheck.map(AttendanceCheck::getAttendanceDate).orElse(LocalDateTime.MAX);
-        String timeAgo = attendanceCheck.map(ac -> TodayAttendanceStatusMapper.calculateTimeAgo(ac.getAttendanceDate())).orElse("결석");
-        return MonthlyAttendanceStatusMapper.toDTO(member, isAttended ? "출석" : "결석", attendanceDate);
+        if (attendanceCheck.isPresent()) {
+            LocalDate attendanceDate = LocalDate.from(attendanceCheck.get().getAttendanceDate());
+            return MonthlyAttendanceStatusMapper.toDTO(member, "출석", attendanceDate);
+        }
+        return null; // 출석하지 않은 경우 null 반환
     }
 }

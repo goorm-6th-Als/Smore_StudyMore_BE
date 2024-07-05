@@ -4,7 +4,7 @@ import com.als.SMore.global.json.LongToStringSerializer;
 import com.als.SMore.global.json.StringToLongDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,5 +15,5 @@ public class MonthlyAttendanceStatusDTO {
     @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long memberPk;
     private String attendanceStatus;
-    private LocalDateTime attendanceDate;
+    private LocalDate attendanceDate;
 }

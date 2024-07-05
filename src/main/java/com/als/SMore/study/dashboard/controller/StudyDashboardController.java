@@ -1,9 +1,10 @@
 package com.als.SMore.study.dashboard.controller;
 
 import com.als.SMore.study.dashboard.DTO.MonthlyAttendanceStatusDTO;
-import com.als.SMore.study.dashboard.DTO.TodayAttendanceStatusDTO;
+import com.als.SMore.study.dashboard.DTO.StudyDetailDTO;
 import com.als.SMore.study.dashboard.DTO.StudyMemberDTO;
 import com.als.SMore.study.dashboard.DTO.StudyRankingDTO;
+import com.als.SMore.study.dashboard.DTO.TodayAttendanceStatusDTO;
 import com.als.SMore.study.dashboard.service.StudyDashboardService;
 import java.util.List;
 import java.util.Map;
@@ -35,15 +36,15 @@ public class StudyDashboardController {
     }
 
     /**
-     * 스터디 content 조회
+     * 스터디 정보 조회
      *
      * @param studyPk 스터디 PK
      * @return 스터디 content와 함께 응답
      */
-    @GetMapping("/content")
-    public ResponseEntity<String> getStudyContent(@PathVariable Long studyPk) {
-        String content = studyDashboardService.getStudyContent(studyPk);
-        return ResponseEntity.ok(content);
+    @GetMapping
+    public ResponseEntity<StudyDetailDTO> getStudyContent(@PathVariable Long studyPk) {
+        StudyDetailDTO studyDetailDTO = studyDashboardService.getStudyContent(studyPk);
+        return ResponseEntity.ok(studyDetailDTO);
     }
 
     /**
