@@ -14,8 +14,6 @@ import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.PersonalProblemBankResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankSummaryResponseDTO;
-import com.als.SMore.study.problem.mapper.ProblemBankMapper;
-import com.als.SMore.study.problem.mapper.ProblemMapper;
 import com.als.SMore.study.problem.service.ProblemBankService;
 import com.als.SMore.study.problem.validator.ProblemBankValidator;
 import lombok.RequiredArgsConstructor;
@@ -53,12 +51,8 @@ public class ProblemBankServiceImpl implements ProblemBankService {
 
         Member member = attendanceValidator.getMember(memberPk);
 
-        return studyProblemBankRepository.save(StudyProblemBank.builder()
-                .bankName(bankName)
-                .member(member)
-                .study(study)
-                .build()
-        ).getStudyProblemBankPk();
+        return studyProblemBankRepository.save(StudyProblemBank.of(member, study, bankName))
+                .getStudyProblemBankPk();
     }
 
 
@@ -73,12 +67,8 @@ public class ProblemBankServiceImpl implements ProblemBankService {
 
         for (StudyProblemBank studyProblemBank : studyProblemBanks) {
 
-            problemBankResponseDTOList.add(ProblemBankResponseDTO.builder().
-                    pk(studyProblemBank.getStudyProblemBankPk()).
-                    ProblemBankName(studyProblemBank.getBankName()).
-                    writer(studyProblemBank.getMember().getNickName()).
-                    authority(problemBankValidator.isManager(memberPk, studyProblemBank)).
-                    build());
+            problemBankResponseDTOList.add(ProblemBankResponseDTO.
+                    of(studyProblemBank, problemBankValidator.isManager(memberPk, studyProblemBank)));
 
         }
         return problemBankResponseDTOList;
@@ -90,21 +80,19 @@ public class ProblemBankServiceImpl implements ProblemBankService {
         //problemBankPk 유효성 검사, 작성자 or 방장인 검사
 
         StudyProblemBank problemBank = problemBankValidator.getProblemBank(problemBankPk);
-        ProblemBankResponseDTO problemBankResponseDTO = ProblemBankResponseDTO.builder().
-                pk(problemBank.getStudyProblemBankPk()).
-                ProblemBankName(problemBank.getBankName()).
-                writer(problemBank.getMember().getNickName()).
-                authority(problemBankValidator.isManager(memberPk, problemBank)).
-                build();
+
+        ProblemBankResponseDTO problemBankResponseDTO = ProblemBankResponseDTO.
+                of(problemBank, problemBankValidator.isManager(memberPk, problemBank));
+
         List<ProblemResponseDTO> problemResponseDTOList = new ArrayList<>();
         List<Problem> problemList = problemRepository.findByStudyProblemBank(problemBank);
         for (Problem problem : problemList) {
             List<ProblemOptions> problemOptionList = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
             List<ProblemOptionResponseDTO> problemOptionResponseDTOList = new ArrayList<>();
             for (ProblemOptions options : problemOptionList) {
-                problemOptionResponseDTOList.add(ProblemMapper.problemOptionsToProblemOptionResponseDTO(options));
+                problemOptionResponseDTOList.add(ProblemOptionResponseDTO.of(options));
             }
-            problemResponseDTOList.add(ProblemMapper.problemAndProblemOptionResponseDTOToProblemResponseDTO(problem, problemOptionResponseDTOList));
+            problemResponseDTOList.add(ProblemResponseDTO.of(problem, problemOptionResponseDTOList));
         }
         problemBankResponseDTO = problemBankResponseDTO.toBuilder().problemList(problemResponseDTOList).build();
         return problemBankResponseDTO;
@@ -127,12 +115,7 @@ public class ProblemBankServiceImpl implements ProblemBankService {
                     bankName(problemBankUpdateRequestDTO.getProblemBankName()).
                     build());
         } else throw new CustomException(CustomErrorCode.UNAUTHORIZED_ACCESS);
-        return ProblemBankResponseDTO.builder().
-                pk(problemBank.getStudyProblemBankPk()).
-                ProblemBankName(problemBank.getBankName()).
-                writer(problemBank.getMember().getNickName()).
-                authority(problemBankValidator.isManager(memberPk, problemBank)).
-                build();
+        return ProblemBankResponseDTO.of(problemBank, problemBankValidator.isManager(memberPk, problemBank));
     }
 
 
@@ -145,9 +128,7 @@ public class ProblemBankServiceImpl implements ProblemBankService {
 
         for (StudyProblemBank studyProblemBank : problemBankList) {
             personalProblemBankResponseDTOList.add(
-                    ProblemBankMapper.studyProblemBankToPersonalProblemBankResponseDTO(
-                            studyProblemBank, problemRepository.countByStudyProblemBank(studyProblemBank)
-                    )
+                    PersonalProblemBankResponseDTO.of(studyProblemBank, problemRepository.countByStudyProblemBank(studyProblemBank))
             );
         }
 
@@ -160,8 +141,8 @@ public class ProblemBankServiceImpl implements ProblemBankService {
         Study study = problemBankValidator.getStudy(studyPk);
         List<StudyProblemBank> problemBankList = studyProblemBankRepository.findByStudyOrderByStudyProblemBankPkDesc(study);
         List<ProblemBankSummaryResponseDTO> problemBankSummaryResponseDTOList = new ArrayList<>();
-        for (StudyProblemBank studyProblemBank : problemBankList) {
 
+        for (StudyProblemBank studyProblemBank : problemBankList) {
             problemBankSummaryResponseDTOList.add(ProblemBankSummaryResponseDTO.of(
                     studyProblemBank, problemRepository.countByStudyProblemBank(studyProblemBank))
             );
