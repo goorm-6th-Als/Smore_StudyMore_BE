@@ -8,17 +8,18 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class PersonalProblemBankResponseDTO {
+public class ProblemBankSummaryResponseDTO {
     @JsonSerialize(using = LongToStringSerializer.class)
     private Long problemBankPk;
     private String problemBankName;
     private int count;
 
-    public static PersonalProblemBankResponseDTO of(StudyProblemBank studyProblemBank, int problemCnt) {
-        return PersonalProblemBankResponseDTO.builder().
+    public static ProblemBankSummaryResponseDTO of(StudyProblemBank studyProblemBank, int count){
+        return ProblemBankSummaryResponseDTO.builder().
                 problemBankPk(studyProblemBank.getStudyProblemBankPk()).
                 problemBankName(studyProblemBank.getBankName()).
-                count(problemCnt).
+                count(count).
                 build();
     }
+
 }

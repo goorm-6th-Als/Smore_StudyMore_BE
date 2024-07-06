@@ -1,5 +1,7 @@
 package com.als.SMore.domain.entity;
 
+import com.als.SMore.study.calendar.dto.request.CreateCalendarRequestDTO;
+import com.als.SMore.study.calendar.dto.request.UpdateCalendarRequestDTO;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,10 +37,20 @@ public class Calendar {
     @JoinColumn(name = "member_pk", nullable = false)
     private Member member;
 
-    public void updateContentAndDate(String calendarContent, LocalDate startDate, LocalDate endDate){
-        this.calendarContent = calendarContent;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public void updateContentAndDate(UpdateCalendarRequestDTO updateCalendarRequestDTO){
+        this.calendarContent = updateCalendarRequestDTO.getContent();
+        this.startDate = updateCalendarRequestDTO.getStartDate();
+        this.endDate = updateCalendarRequestDTO.getEndDate();
+    }
+
+    public static Calendar of(Member member, Study study, CreateCalendarRequestDTO createCalendarRequestDTO){
+        return Calendar.builder().
+                member(member).
+                study(study).
+                startDate(createCalendarRequestDTO.getStartDate()).
+                endDate(createCalendarRequestDTO.getEndDate()).
+                calendarContent(createCalendarRequestDTO.getContent()).
+                build();
     }
 
 

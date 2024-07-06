@@ -26,4 +26,13 @@ public class StudyProblemBank {
 
     @Column(name = "bank_name", nullable = false)
     private String bankName;
+
+    public static StudyProblemBank of(Member member, Study study, String bankName){
+        return StudyProblemBank.builder()
+                .bankName(bankName)
+                .member(member)
+                .study(study)
+                .build();
+    }
+
 }
