@@ -13,4 +13,6 @@ public interface StudyDetailRepository extends JpaRepository<StudyDetail, Long> 
     Optional<StudyDetail> findByStudy_StudyPk (Long studyPk);
 
     Optional<StudyDetail> findByStudyPk(Long studyPk);
+
+    Optional<StudyDetail> findByStudyStudyPk(Long studyPk);
 }
