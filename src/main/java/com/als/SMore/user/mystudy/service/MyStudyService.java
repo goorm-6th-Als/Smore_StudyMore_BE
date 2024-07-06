@@ -28,6 +28,8 @@ public class MyStudyService {
     private final MemberRepository memberRepository;
     private final StudyRepository studyRepository;
     private final NotificationService notificationService;
+
+    // 참석하는 스터디의 목록을 리턴하는 함수
     public StudyListResponse enterStudy(){
         List<StudyResponse> studyList = new ArrayList<StudyResponse>();
         Long userPk = MemberUtil.getUserPk();
@@ -135,7 +137,7 @@ public class MyStudyService {
                 .member(studyEnterMember.getMember())
                 .study(studyEnterMember.getStudy())
                 .enterDate(LocalDate.now())
-                .role("user")
+                .role("member")
                 .build();
         //스터디 신청한 사람한테 "스터디 가입 신청이 승낙되었습니다." 알림
         notify(studyEnterMember.getMember().getMemberPk(), studyEnterMember.getStudy().getStudyPk(), "스터디 가입 신청이 승낙되었습니다.");
@@ -148,12 +150,15 @@ public class MyStudyService {
         StudyEnterMember studyEnterMember = studyEnterMemberRepository.findStudyEnterMemberByMember_UserIdAndStudy_StudyPk(statusRequest.getUserId(), statusRequest.getStudyPk())
                 .orElseThrow(IllegalAccessError::new);
 
-        StudyEnterMember renewStudyEnterMember = studyEnterMember.toBuilder().enterStatus(StudyEnterMemberStatus.REJECTED).build();
+        studyEnterMemberRepository.delete(studyEnterMember);
         //스터디 신청이 거절된 유저에게 "스터디 가입 신청이 거절되었습니다." 알림.
         notify(studyEnterMember.getMember().getMemberPk(), studyEnterMember.getStudy().getStudyPk(), "스터디 가입 신청이 거절되었습니다.");
-        studyEnterMemberRepository.save(renewStudyEnterMember);
     }
 
+    /**
+     * 스터디 탈퇴하기
+     * @param studyPk 스터디Pk
+     */
     @Transactional
     public void resignMemberByStudy(Long studyPk) {
         Long userPk = MemberUtil.getUserPk();
