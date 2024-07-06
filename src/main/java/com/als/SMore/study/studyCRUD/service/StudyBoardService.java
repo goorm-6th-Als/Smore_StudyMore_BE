@@ -1,7 +1,9 @@
 package com.als.SMore.study.studyCRUD.service;
 
 import com.als.SMore.domain.entity.StudyBoard;
+import com.als.SMore.domain.entity.StudyDetail;
 import com.als.SMore.domain.repository.StudyBoardRepository;
+import com.als.SMore.domain.repository.StudyDetailRepository;
 import com.als.SMore.global.CustomErrorCode;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.studyCRUD.DTO.StudyBoardDTO;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudyBoardService {
     private static final Logger logger = LoggerFactory.getLogger(StudyService.class);
     private final StudyBoardRepository studyBoardRepository;
+    private final StudyDetailRepository studyDetailRepository;
 
     /**
      * 모든 StudyBoard 조회
@@ -28,8 +31,14 @@ public class StudyBoardService {
      */
     @Transactional(readOnly = true)
     public List<StudyBoardDTO> getAllStudyBoards() {
-        return studyBoardRepository.findAll().stream()
-                .map(studyBoard -> StudyBoardMapper.toDTO(studyBoard, false))
+        List<StudyBoard> studyBoards = studyBoardRepository.findAll();
+
+        return studyBoards.stream()
+                .map(studyBoard -> {
+                    StudyDetail studyDetail = studyDetailRepository.findByStudy_StudyPk(studyBoard.getStudy().getStudyPk())
+                            .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_DETAIL));
+                    return StudyBoardMapper.toDTO(studyBoard, studyDetail, false);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +54,10 @@ public class StudyBoardService {
                     logger.info("스터디 보드를 찾을 수 없습니다. ID: " + studyBoardPk);
                     return new CustomException(CustomErrorCode.NOT_FOUND_STUDY_BOARD);
                 });
-        return StudyBoardMapper.toDTO(studyBoard, true);
+        StudyDetail studyDetail = studyDetailRepository.findByStudyStudyPk(studyBoard.getStudy().getStudyPk())
+                .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_DETAIL));
+
+        return StudyBoardMapper.toDTO(studyBoard, studyDetail,true);
     }
 
     /**
@@ -56,7 +68,11 @@ public class StudyBoardService {
     @Transactional(readOnly = true)
     public Page<StudyBoardDTO> getStudyBoardsPage(Pageable pageable) {
         return studyBoardRepository.findAll(pageable)
-                .map(studyBoard -> StudyBoardMapper.toDTO(studyBoard, false));
+                .map(studyBoard -> {
+                    StudyDetail studyDetail = studyDetailRepository.findByStudyStudyPk(studyBoard.getStudy().getStudyPk())
+                            .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_DETAIL));
+                    return StudyBoardMapper.toDTO(studyBoard, studyDetail,true);
+                });
     }
 
     /**
@@ -68,7 +84,11 @@ public class StudyBoardService {
     @Transactional(readOnly = true)
     public Page<StudyBoardDTO> searchStudyBoards(String keyword, Pageable pageable) {
         return studyBoardRepository.searchByAdTitle(keyword, pageable)
-                .map(studyBoard -> StudyBoardMapper.toDTO(studyBoard, false));
+                .map(studyBoard -> {
+                    StudyDetail studyDetail = studyDetailRepository.findByStudyStudyPk(studyBoard.getStudy().getStudyPk())
+                            .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_DETAIL));
+                    return StudyBoardMapper.toDTO(studyBoard, studyDetail,true);
+                });
     }
 }
 
