@@ -11,7 +11,10 @@ import com.als.SMore.study.attendance.validator.AttendanceValidator;
 import com.als.SMore.study.problem.DTO.request.problemBank.ProblemBankUpdateRequestDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemOptionResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
+import com.als.SMore.study.problem.DTO.response.problemBank.PersonalProblemBankResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankResponseDTO;
+import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankSummaryResponseDTO;
+import com.als.SMore.study.problem.mapper.ProblemBankMapper;
 import com.als.SMore.study.problem.mapper.ProblemMapper;
 import com.als.SMore.study.problem.service.ProblemBankService;
 import com.als.SMore.study.problem.validator.ProblemBankValidator;
@@ -39,7 +42,7 @@ public class ProblemBankServiceImpl implements ProblemBankService {
     //=========================================== problemBank CRUD =====================================
 
     @Override
-    public void createProblemBank(Long memberPk, Long studyPk, String bankName) {
+    public Long createProblemBank(Long memberPk, Long studyPk, String bankName) {
         //제목 글자 수 확인(1 - 30)
         //문제은행 수 확인 (30이하)
 
@@ -50,12 +53,12 @@ public class ProblemBankServiceImpl implements ProblemBankService {
 
         Member member = attendanceValidator.getMember(memberPk);
 
-        studyProblemBankRepository.save(StudyProblemBank.builder()
+        return studyProblemBankRepository.save(StudyProblemBank.builder()
                 .bankName(bankName)
                 .member(member)
                 .study(study)
                 .build()
-        );
+        ).getStudyProblemBankPk();
     }
 
 
@@ -130,6 +133,40 @@ public class ProblemBankServiceImpl implements ProblemBankService {
                 writer(problemBank.getMember().getNickName()).
                 authority(problemBankValidator.isManager(memberPk, problemBank)).
                 build();
+    }
+
+
+    @Override
+    public List<PersonalProblemBankResponseDTO> getPersonalProblemBank(Long memberPk, Long studyPk) {
+        Member member = problemBankValidator.getMember(memberPk);
+        Study study = problemBankValidator.getStudy(studyPk);
+        List<StudyProblemBank> problemBankList = studyProblemBankRepository.findByMemberAndStudy(member, study);
+        List<PersonalProblemBankResponseDTO> personalProblemBankResponseDTOList = new ArrayList<>();
+
+        for (StudyProblemBank studyProblemBank : problemBankList) {
+            personalProblemBankResponseDTOList.add(
+                    ProblemBankMapper.studyProblemBankToPersonalProblemBankResponseDTO(
+                            studyProblemBank, problemRepository.countByStudyProblemBank(studyProblemBank)
+                    )
+            );
+        }
+
+        return personalProblemBankResponseDTOList;
+    }
+
+    @Override
+    public List<ProblemBankSummaryResponseDTO> getAllProblemBankSummary(Long studyPk) {
+
+        Study study = problemBankValidator.getStudy(studyPk);
+        List<StudyProblemBank> problemBankList = studyProblemBankRepository.findByStudyOrderByStudyProblemBankPkDesc(study);
+        List<ProblemBankSummaryResponseDTO> problemBankSummaryResponseDTOList = new ArrayList<>();
+        for (StudyProblemBank studyProblemBank : problemBankList) {
+
+            problemBankSummaryResponseDTOList.add(ProblemBankSummaryResponseDTO.of(
+                    studyProblemBank, problemRepository.countByStudyProblemBank(studyProblemBank))
+            );
+        }
+        return problemBankSummaryResponseDTOList;
     }
 
 

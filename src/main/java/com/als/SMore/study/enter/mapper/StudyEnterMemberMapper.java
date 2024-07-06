@@ -5,6 +5,8 @@ import com.als.SMore.domain.entity.Study;
 import com.als.SMore.domain.entity.StudyEnterMember;
 import com.als.SMore.domain.entity.StudyEnterMemberStatus;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
+import com.als.SMore.study.enter.DTO.StudyEnterMemberWithMemberInfoDTO;
+import com.als.SMore.study.enter.DTO.StudyEnterMemberWithStudyInfoDTO;
 import java.time.LocalDateTime;
 
 public class StudyEnterMemberMapper {
@@ -14,6 +16,30 @@ public class StudyEnterMemberMapper {
                 .studyEnterMemberPk(studyEnterMember.getStudyEnterMemberPk())
                 .studyPk(studyEnterMember.getStudy().getStudyPk())
                 .memberPk(studyEnterMember.getMember().getMemberPk())
+                .content(studyEnterMember.getContent())
+                .enterStatus(studyEnterMember.getEnterStatus())
+                .createDate(studyEnterMember.getCreateDate())
+                .build();
+    }
+
+    public static StudyEnterMemberWithMemberInfoDTO toDTOWithMemberInfo(StudyEnterMember studyEnterMember) {
+        return StudyEnterMemberWithMemberInfoDTO.builder()
+                .studyEnterMemberPk(studyEnterMember.getStudyEnterMemberPk())
+                .studyPk(studyEnterMember.getStudy().getStudyPk())
+                .memberPk(studyEnterMember.getMember().getMemberPk())
+                .nickName(studyEnterMember.getMember().getNickName())
+                .profileImg(studyEnterMember.getMember().getProfileImg())
+                .content(studyEnterMember.getContent())
+                .enterStatus(studyEnterMember.getEnterStatus())
+                .createDate(studyEnterMember.getCreateDate())
+                .build();
+    }
+
+    public static StudyEnterMemberWithStudyInfoDTO toDTOWithStudyInfo(StudyEnterMember studyEnterMember) {
+        return StudyEnterMemberWithStudyInfoDTO.builder()
+                .studyEnterMemberPk(studyEnterMember.getStudyEnterMemberPk())
+                .studyPk(studyEnterMember.getStudy().getStudyPk())
+                .studyName(studyEnterMember.getStudy().getStudyName())
                 .content(studyEnterMember.getContent())
                 .enterStatus(studyEnterMember.getEnterStatus())
                 .createDate(studyEnterMember.getCreateDate())

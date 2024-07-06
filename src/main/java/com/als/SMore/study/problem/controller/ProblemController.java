@@ -10,6 +10,7 @@ import com.als.SMore.study.problem.service.ProblemService;
 import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +36,13 @@ public class ProblemController {
 
     //
     @GetMapping
-    public List<ProblemResponseDTO> getAllProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemGetAllRequestDTO problemGetAllRequestDTO) {
-        return problemService.getAllProblem(problemGetAllRequestDTO);
+    public List<ProblemResponseDTO> getAllProblem(@PathVariable("studyPk") Long studyPk,
+                                                  @RequestParam List<Long> studyProblemBankPk,
+                                                  @RequestParam Integer max) {
+        return problemService.getAllProblem(ProblemGetAllRequestDTO.builder().
+                studyProblemBankPk(studyProblemBankPk).
+                max(max).
+                build());
 
     }
     //문제 요약List (방장이나 작성자가 수정할 때 사용할 용도)
@@ -58,9 +64,10 @@ public class ProblemController {
 
     //만드는거
     @PostMapping
-    public void createProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemCreateRequestDTO problemCreateRequestDTO) {
+    public ResponseEntity<String> createProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemCreateRequestDTO problemCreateRequestDTO) {
+        System.out.println("ASDasdasdasdas");
         problemService.createProblem(getMemberPk(), problemCreateRequestDTO);
-
+        return ResponseEntity.ok(problemCreateRequestDTO.getStudyProblemBankPk().toString());
     }
 
 

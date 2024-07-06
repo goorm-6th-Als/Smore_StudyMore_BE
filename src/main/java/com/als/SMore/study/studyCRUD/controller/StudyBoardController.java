@@ -2,6 +2,7 @@ package com.als.SMore.study.studyCRUD.controller;
 
 import com.als.SMore.study.studyCRUD.DTO.StudyBoardDTO;
 import com.als.SMore.study.studyCRUD.service.StudyBoardService;
+import com.als.SMore.user.login.util.NotAop;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ public class StudyBoardController {
      * 모든 StudyBoard를 확인하는 엔드포인트
      * @return 모든 StudyBoard 엔티티의 DTO 리스트와 함께 OK 응답 반환
      */
+    @NotAop
     @GetMapping
     public ResponseEntity<List<StudyBoardDTO>> getAllStudyBoards() {
         return ResponseEntity.ok(studyBoardService.getAllStudyBoards());
@@ -35,6 +37,7 @@ public class StudyBoardController {
      * @param studyBoardPk 조회할 StudyBoard 엔티티의 ID
      * @return 조회된 StudyBoard 엔티티의 DTO와 함께 OK 응답 반환
      */
+    @NotAop
     @GetMapping("/{studyBoardPk}")
     public ResponseEntity<StudyBoardDTO> getStudyBoardByPk(
             @PathVariable Long studyBoardPk) {
@@ -47,6 +50,7 @@ public class StudyBoardController {
      * @param size 페이지 크기 (한 페이지당 항목 수)
      * @return 요청된 페이지에 해당하는 StudyBoard 엔티티의 DTO 리스트와 함께 OK 응답 반환
      */
+    @NotAop
     @GetMapping("/page")
     public ResponseEntity<Page<StudyBoardDTO>> getStudyBoardsPage(
             @RequestParam(defaultValue = "1") int page,
@@ -63,6 +67,7 @@ public class StudyBoardController {
      * @param size 페이지 크기 (한 페이지당 항목 수)
      * @return 검색된 StudyBoard 엔티티의 DTO 리스트와 함께 OK 응답 반환
      */
+    @NotAop
     @GetMapping("/search")
     public ResponseEntity<Page<StudyBoardDTO>> searchStudyBoards(
             @RequestParam String keyword,

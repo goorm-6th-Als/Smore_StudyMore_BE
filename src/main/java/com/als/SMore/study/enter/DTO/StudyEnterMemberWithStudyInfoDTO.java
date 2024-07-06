@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Getter
 @Builder(toBuilder = true)
-public class StudyEnterMemberDTO {
+public class StudyEnterMemberWithStudyInfoDTO {
     @JsonSerialize(using = LongToStringSerializer.class)
     @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long studyEnterMemberPk;
@@ -20,9 +20,7 @@ public class StudyEnterMemberDTO {
     @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long studyPk;
 
-    @JsonSerialize(using = LongToStringSerializer.class)
-    @JsonDeserialize(using = StringToLongDeserializer.class)
-    private Long memberPk;
+    private String studyName;
     private String content;
     private StudyEnterMemberStatus enterStatus;
     private LocalDateTime createDate;
