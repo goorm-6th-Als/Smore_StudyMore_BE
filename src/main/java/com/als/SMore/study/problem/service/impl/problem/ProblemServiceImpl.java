@@ -17,7 +17,6 @@ import com.als.SMore.study.problem.DTO.response.problem.ProblemOptionResponseDTO
 import com.als.SMore.study.problem.DTO.response.problem.ProblemResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemSummaryResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problem.ProblemUpdateResponseDTO;
-import com.als.SMore.study.problem.mapper.ProblemMapper;
 import com.als.SMore.study.problem.service.ProblemService;
 import com.als.SMore.study.problem.validator.ProblemValidator;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -84,13 +82,7 @@ public class ProblemServiceImpl implements ProblemService {
         Member member = problemValidator.getMember(memberPk);
         StudyProblemBank problemBank = problemValidator.getStudyProblemBank(problemCreateRequestDTO.getStudyProblemBankPk());
 
-        Problem problem = problemRepository.save(Problem.builder()
-                .createDate(LocalDate.now())
-                .problemContent(problemCreateRequestDTO.getContent())
-                .problemExplanation(problemCreateRequestDTO.getExplanation())
-                .member(member)
-                .studyProblemBank(problemBank)
-                .build());
+        Problem problem = problemRepository.save(Problem.of(member, problemBank, problemCreateRequestDTO));
         //answerPk 컬럼 업데이트 & 문제옵션 리스트 저장
         problem.updateProblemAnswerPk(
                 saveProblemOptionList(problemCreateRequestDTO.getProblemOptionRequestDTOList()
@@ -133,13 +125,11 @@ public class ProblemServiceImpl implements ProblemService {
             List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
             List<ProblemOptionResponseDTO> problemOptionResponseDTO = new ArrayList<>();
             for (ProblemOptions problemOption : problemOptions) {
-                problemOptionResponseDTO.add(ProblemMapper.problemOptionsToProblemOptionResponseDTO(problemOption));
+                problemOptionResponseDTO.add(ProblemOptionResponseDTO.of(problemOption));
             }
 
             //랜덤 문제와 보기들
-            ResultProblems.add(
-                    ProblemMapper.problemAndProblemOptionResponseDTOToProblemResponseDTO(problem, problemOptionResponseDTO)
-            );
+            ResultProblems.add(ProblemResponseDTO.of(problem, problemOptionResponseDTO));
 
             //선택됐던 문제 지우기
             problems.remove(random);
@@ -155,23 +145,19 @@ public class ProblemServiceImpl implements ProblemService {
         List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
         List<ProblemOptionResponseDTO> problemOptionResponseDTOList = new ArrayList<>();
         for (ProblemOptions problemOption : problemOptions) {
-            problemOptionResponseDTOList.add(ProblemMapper.problemOptionsToProblemOptionResponseDTO(problemOption));
+            problemOptionResponseDTOList.add(ProblemOptionResponseDTO.of(problemOption));
         }
-        return ProblemMapper.problemAndProblemOptionResponseDTOToProblemUpdateResponseDTO(problem, problemOptionResponseDTOList);
+        return ProblemUpdateResponseDTO.of(problem, problemOptionResponseDTOList);
     }
 
     @Override
     public void updateProblem(ProblemUpdateRequestDTO problemUpdateRequestDTO, Long memberPk) {
 
-
-
         Problem problem = problemValidator.getProblem(problemUpdateRequestDTO.getProblemPk());
 
         if (!problemValidator.isManager(memberPk, problem.getStudyProblemBank()))
             throw new CustomException(CustomErrorCode.UNAUTHORIZED_ACCESS);
-        ;
 
-        List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
         problem.updateAll(problemUpdateRequestDTO);
         //문제옵션들 싹 다 지우고
         deleteProblemOptionList(problem);

@@ -1,5 +1,6 @@
 package com.als.SMore.domain.entity;
 
+import com.als.SMore.study.problem.DTO.request.problem.ProblemCreateRequestDTO;
 import com.als.SMore.study.problem.DTO.request.problem.ProblemUpdateRequestDTO;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.*;
@@ -48,5 +49,15 @@ public class Problem {
 
     public void updateProblemAnswerPk(Long problemAnswerPk){
         this.problemAnswerPk = problemAnswerPk;
+    }
+
+    public static Problem of(Member member, StudyProblemBank problemBank, ProblemCreateRequestDTO problemCreateRequestDTO){
+        return Problem.builder()
+                .createDate(LocalDate.now())
+                .problemContent(problemCreateRequestDTO.getContent())
+                .problemExplanation(problemCreateRequestDTO.getExplanation())
+                .member(member)
+                .studyProblemBank(problemBank)
+                .build();
     }
 }

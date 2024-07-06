@@ -12,7 +12,6 @@ import com.als.SMore.log.timeTrace.TimeTrace;
 import com.als.SMore.study.calendar.dto.request.CreateCalendarRequestDTO;
 import com.als.SMore.study.calendar.dto.request.UpdateCalendarRequestDTO;
 import com.als.SMore.study.calendar.dto.response.FindCalendarResponseDTO;
-import com.als.SMore.study.calendar.mapper.CalendarMapper;
 import com.als.SMore.study.calendar.service.CalendarService;
 import com.als.SMore.study.calendar.validator.CalendarValidator;
 import lombok.RequiredArgsConstructor;
@@ -52,24 +51,14 @@ public class CalendarServiceImpl implements CalendarService {
 
         Member member = calendarValidator.getMember(memberPk);
         Study study = calendarValidator.getStudy(studyPk);
-        calendarRepository.save(Calendar.builder().
-                member(member).
-                study(study).
-                startDate(createCalendarRequestDTO.getStartDate()).
-                endDate(createCalendarRequestDTO.getEndDate()).
-                calendarContent(createCalendarRequestDTO.getContent()).
-                build());
+        calendarRepository.save(Calendar.of(member, study, createCalendarRequestDTO));
     }
 
     @Override
     public void updateCalendar(Long memberPk, Long studyPk, UpdateCalendarRequestDTO updateCalendarRequestDTO) {
         adminValidator(studyPk, memberPk);
         Calendar calendar = calendarValidator.getCalendar(updateCalendarRequestDTO.getCalendarPk());
-        calendar.updateContentAndDate(
-                updateCalendarRequestDTO.getContent(),
-                updateCalendarRequestDTO.getStartDate(),
-                updateCalendarRequestDTO.getEndDate()
-        );
+        calendar.updateContentAndDate(updateCalendarRequestDTO);
 
     }
 
@@ -83,7 +72,7 @@ public class CalendarServiceImpl implements CalendarService {
     @Override
     public FindCalendarResponseDTO findCalendar(Long calendarPk) {
         Calendar calendar = calendarValidator.getCalendar(calendarPk);
-        return CalendarMapper.calendarToFindCalendarResponseDTO(calendar);
+        return FindCalendarResponseDTO.of(calendar);
 
     }
 
@@ -92,7 +81,7 @@ public class CalendarServiceImpl implements CalendarService {
         List<Calendar> calendarList = calendarRepository.findByStudy(calendarValidator.getStudy(studyPk));
         List<FindCalendarResponseDTO> findCalendarResponseDTOList = new ArrayList<>();
         for (Calendar calendar : calendarList) {
-            findCalendarResponseDTOList.add(CalendarMapper.calendarToFindCalendarResponseDTO(calendar));
+            findCalendarResponseDTOList.add(FindCalendarResponseDTO.of(calendar));
         }
         return findCalendarResponseDTOList;
     }

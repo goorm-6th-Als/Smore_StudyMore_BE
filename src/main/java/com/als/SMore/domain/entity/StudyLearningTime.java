@@ -33,4 +33,16 @@ public class StudyLearningTime {
     @Column(name = "learning_date")
     private LocalDate learningDate;
 
+    public static StudyLearningTime of(StudyMember studyMember) {
+        return StudyLearningTime.builder()
+                .learningDate(LocalDate.now())
+                .learningTime(0L)
+                .studyMember(studyMember)
+                .build();
+    }
+    public void updateLearningTime(Long learningTime) {
+        this.learningTime = this.learningTime+learningTime;
+    }
+
+
 }

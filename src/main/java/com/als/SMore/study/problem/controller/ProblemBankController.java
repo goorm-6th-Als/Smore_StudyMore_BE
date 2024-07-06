@@ -68,8 +68,8 @@ public class ProblemBankController {
      * @param problemBankMap 문제은행 정보 (문제은행 이름)
      */
     @PostMapping("/bank")
-    public ResponseEntity<Long> createProblemBank(@PathVariable Long studyPk, @RequestBody Map<String, String> problemBankMap) {
-        return ResponseEntity.ok(problemBankService.createProblemBank(getMemberPk(), studyPk, problemBankMap.get("problemName")));
+    public ResponseEntity<String> createProblemBank(@PathVariable Long studyPk, @RequestBody Map<String, String> problemBankMap) {
+        return ResponseEntity.ok(problemBankService.createProblemBank(getMemberPk(), studyPk, problemBankMap.get("problemName")).toString());
     }
 
     /**
