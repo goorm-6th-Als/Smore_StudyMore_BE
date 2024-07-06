@@ -11,11 +11,16 @@ import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.management.DTO.StudyBoardUpdateDTO;
 import com.als.SMore.study.management.DTO.StudyDataDTO;
+import com.als.SMore.study.management.DTO.StudyMemberWithOutAdminDTO;
 import com.als.SMore.study.management.DTO.StudyUpdateDTO;
 import com.als.SMore.study.management.mapper.StudyBoardMapper;
 import com.als.SMore.study.management.mapper.StudyDataMapper;
 import com.als.SMore.study.management.mapper.StudyUpdateMapper;
+import com.als.SMore.study.management.mapper.StudyMemberMapper;
 import com.als.SMore.user.mypage.service.AwsFileService;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +41,7 @@ public class StudyManagementService {
     /**
      * 기존 스터디, 스터디 보드 GET 메서드
      *
-     * @param studyPk        확인할 스터디의 PK
+     * @param studyPk 확인할 스터디의 PK
      * @return 현재 스터디, 스터디 보드의 데이터 반환
      */
     @Transactional
@@ -48,6 +53,23 @@ public class StudyManagementService {
         StudyBoard studyBoard = studyBoardRepository.findByStudyStudyPk(studyPk)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다.: " + studyPk));
         return StudyDataMapper.toDTO(study, studyDetail, studyBoard);
+    }
+
+    /**
+     * 방장을 제외한 스터디에 참여중인 모든 멤버를 조회
+     *
+     * @param studyPk 스터디 PK
+     * @return StudyMemberDTO 리스트
+     */
+    @Transactional(readOnly = true)
+    public List<StudyMemberWithOutAdminDTO> getAllStudyMembers(Long studyPk) {
+        List<StudyMember> studyMembers = studyMemberRepository.findByStudyStudyPk(studyPk);
+
+        return studyMembers.stream()
+                .filter(member -> !"admin".equals(member.getRole()))  // 방장 제외
+                .sorted(Comparator.comparing(StudyMember::getEnterDate))
+                .map(StudyMemberMapper::toDTOWithoutAdmin)
+                .collect(Collectors.toList());
     }
 
     /**
