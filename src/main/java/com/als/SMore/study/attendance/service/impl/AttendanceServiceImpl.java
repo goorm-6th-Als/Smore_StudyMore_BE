@@ -90,12 +90,9 @@ public class AttendanceServiceImpl implements AttendanceService {
         AttendanceCheck attendanceEnd = attendance.get();
 
         if (attendanceEndCheck(attendanceEnd)) {
-            attendanceEnd = attendanceEnd.toBuilder()
-                    .attendanceDateEnd(LocalDateTime.now())
-                    .build();
+            attendanceEnd.updateAttendanceDateEnd();
             log.info("퇴장 시간 = {}", attendanceEnd.getAttendanceDateEnd());
-            learningTime = setLearningTime(member, study, attendanceCheckRepository.save(attendanceEnd));
-            System.out.println(learningTime);
+            learningTime = setLearningTime(member, study, attendanceEnd);
             log.info("출석 종료 성공");
         }
         return learningTime;
@@ -122,11 +119,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @return 생성된 StudyLearningTime 객체
      */
     private StudyLearningTime createStudyLearningTime(StudyMember studyMember) {
-        return studyLearningTimeRepository.save(StudyLearningTime.builder()
-                .learningDate(LocalDate.now())
-                .learningTime(0L)
-                .studyMember(studyMember)
-                .build());
+        return studyLearningTimeRepository.save(StudyLearningTime.of(studyMember));
     }
 
     /**
@@ -141,10 +134,8 @@ public class AttendanceServiceImpl implements AttendanceService {
         Long learningTime = attendanceValidator.studyTimeCalculator(attendanceCheck);
 
         StudyLearningTime studyLearningTime = getLearningTime(studyMember);
-        studyLearningTime = studyLearningTime.toBuilder()
-                .learningTime(studyLearningTime.getLearningTime() + learningTime)
-                .build();
-        return studyLearningTimeRepository.save(studyLearningTime).getLearningTime();
+        studyLearningTime.updateLearningTime(learningTime);
+        return studyLearningTime.getLearningTime();
     }
 
     /**

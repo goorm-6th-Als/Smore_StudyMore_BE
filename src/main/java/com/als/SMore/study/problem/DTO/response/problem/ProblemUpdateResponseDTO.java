@@ -1,5 +1,6 @@
 package com.als.SMore.study.problem.DTO.response.problem;
 
+import com.als.SMore.domain.entity.Problem;
 import com.als.SMore.global.json.LongToStringSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Builder;
@@ -22,4 +23,17 @@ public class ProblemUpdateResponseDTO {
     @JsonSerialize(using = LongToStringSerializer.class)
     private Long answerPk;
     private List<ProblemOptionResponseDTO> options;
+
+    public static ProblemUpdateResponseDTO of(Problem problem, List<ProblemOptionResponseDTO> problemOptionResponseDTOList) {
+        return ProblemUpdateResponseDTO.builder()
+                .problemPk(problem.getProblemPk())
+                .memberNickname(problem.getMember().getNickName())
+                .studyBankName(problem.getStudyProblemBank().getBankName())
+                .problemContent(problem.getProblemContent())
+                .problemExplanation(problem.getProblemExplanation())
+                .problemDate(problem.getCreateDate())
+                .answerPk(problem.getProblemAnswerPk())
+                .options(problemOptionResponseDTOList)
+                .build();
+    }
 }
