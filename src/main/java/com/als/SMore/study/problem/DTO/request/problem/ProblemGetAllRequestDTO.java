@@ -9,5 +9,5 @@ import java.util.List;
 @Getter
 public class ProblemGetAllRequestDTO {
     private List<Long> studyProblemBankPk;
-    private int max;
+    private Integer max;
 }
