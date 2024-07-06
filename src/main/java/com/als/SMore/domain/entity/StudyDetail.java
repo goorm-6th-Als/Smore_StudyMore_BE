@@ -28,13 +28,13 @@ public class StudyDetail {
     @Column(name = "max_people", nullable = false)
     private int maxPeople;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "close_date")
+    @Column(name = "close_date", nullable = false)
     private LocalDate closeDate;
 
 }

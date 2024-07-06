@@ -55,7 +55,7 @@ public enum CustomErrorCode {
 
     //StudyBoard
     NOT_FOUND_STUDY_BOARD(HttpStatus.NOT_FOUND, "존재하지 않는 스터디 게시물 입니다."),
-
+    NOT_FOUND_STUDY_DETAIL(HttpStatus.NOT_FOUND, "존재하지 않는 studyDetail 입니다."),
     //StudyEnter
     ALREADY_MEMBER(HttpStatus.BAD_REQUEST, "이미 가입한 스터디입니다."),
     ALREADY_APPLIED(HttpStatus.BAD_REQUEST, "이미 신청한 스터디입니다."),

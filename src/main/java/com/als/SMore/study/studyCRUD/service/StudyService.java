@@ -13,7 +13,9 @@ import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.global.CustomErrorCode;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
+import com.als.SMore.study.studyCRUD.DTO.StudyNameDTO;
 import com.als.SMore.study.studyCRUD.mapper.StudyCreateMapper;
+import com.als.SMore.study.studyCRUD.mapper.StudyNameMapper;
 import com.als.SMore.user.login.util.MemberUtil;
 import com.als.SMore.user.mypage.service.AwsFileService;
 import lombok.RequiredArgsConstructor;
@@ -82,10 +84,10 @@ public class StudyService {
      * @return 스터디 이름
      */
     @Transactional(readOnly = true)
-    public String getStudyNameById(Long studyPk) {
+    public StudyNameDTO getStudyNameById(Long studyPk) {
         Study study = studyRepository.findById(studyPk)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + studyPk));
-        return study.getStudyName();
+        return StudyNameMapper.toDTO(study);
     }
 
 }
