@@ -2,7 +2,7 @@ package com.als.SMore.study.enter.controller;
 
 import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
 import com.als.SMore.study.enter.service.StudyEnterMemberService;
-import com.als.SMore.user.login.util.NotAop;
+import com.als.SMore.user.login.util.aop.annotation.NotAop;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

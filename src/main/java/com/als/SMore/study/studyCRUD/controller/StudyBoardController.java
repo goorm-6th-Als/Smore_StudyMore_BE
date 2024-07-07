@@ -2,7 +2,7 @@ package com.als.SMore.study.studyCRUD.controller;
 
 import com.als.SMore.study.studyCRUD.DTO.StudyBoardDTO;
 import com.als.SMore.study.studyCRUD.service.StudyBoardService;
-import com.als.SMore.user.login.util.NotAop;
+import com.als.SMore.user.login.util.aop.annotation.NotAop;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

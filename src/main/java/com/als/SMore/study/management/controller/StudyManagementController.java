@@ -7,7 +7,7 @@ import com.als.SMore.study.management.DTO.StudyDataDTO;
 import com.als.SMore.study.management.DTO.StudyMemberWithOutAdminDTO;
 import com.als.SMore.study.management.DTO.StudyUpdateDTO;
 import com.als.SMore.study.management.service.StudyManagementService;
-import com.als.SMore.user.login.util.JwtRole;
+import com.als.SMore.user.login.util.aop.annotation.JwtRole;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,7 @@ import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberWithMemberInfoDTO;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberWithStudyInfoDTO;
 import com.als.SMore.study.enter.service.StudyEnterMemberService;
-import com.als.SMore.user.login.util.NotAop;
+import com.als.SMore.user.login.util.aop.annotation.NotAop;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
