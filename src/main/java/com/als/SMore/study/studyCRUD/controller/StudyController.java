@@ -3,7 +3,7 @@ package com.als.SMore.study.studyCRUD.controller;
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
 import com.als.SMore.study.studyCRUD.DTO.StudyNameDTO;
 import com.als.SMore.study.studyCRUD.service.StudyService;
-import com.als.SMore.user.login.util.NotAop;
+import com.als.SMore.user.login.util.aop.annotation.NotAop;
 import com.als.SMore.user.mypage.service.AwsFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
