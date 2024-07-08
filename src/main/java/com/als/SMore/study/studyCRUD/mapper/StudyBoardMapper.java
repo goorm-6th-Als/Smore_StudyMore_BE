@@ -11,15 +11,14 @@ import com.als.SMore.global.CustomException;
 import com.als.SMore.study.studyCRUD.DTO.StudyBoardDTO;
 
 public class StudyBoardMapper {
-    public static StudyBoardDTO toDTO(StudyBoard studyBoard, StudyDetail studyDetail, Study study, Long curPeople,boolean includeContent) {
+    public static StudyBoardDTO toDTO(StudyBoard studyBoard, StudyDetail studyDetail, Study study, Long curPeople) {
         return StudyBoardDTO.builder()
                 .studyBoardPk(studyBoard.getStudyBoardPk())
                 .studyPk(studyBoard.getStudy().getStudyPk())
 
                 .studyName(study.getStudyName())
                 .adTitle(studyBoard.getAdTitle())
-                .adContent(includeContent ? studyBoard.getAdContent() : null)
-                .adSummary(includeContent ? null : studyBoard.getAdSummary())
+                .adContent(studyBoard.getAdContent())
                 .imageUri(studyDetail.getImageUri())
 
                 .curPeople(curPeople)
@@ -34,12 +33,12 @@ public class StudyBoardMapper {
     public static StudyBoardDTO toStudyBoard(StudyBoard studyBoard,
                                                  StudyRepository studyRepository,
                                                  StudyDetailRepository studyDetailRepository,
-                                                 StudyMemberRepository studyMemberRepository, boolean includeContent) {
+                                                 StudyMemberRepository studyMemberRepository) {
         long curPeople = studyMemberRepository.countByStudyStudyPk(studyBoard.getStudy().getStudyPk());
         Study study = studyRepository.findById(studyBoard.getStudy().getStudyPk())
                 .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY));
         StudyDetail studyDetail = studyDetailRepository.findByStudyStudyPk(studyBoard.getStudy().getStudyPk())
                 .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_DETAIL));
-        return toDTO(studyBoard, studyDetail, study, curPeople, includeContent);
+        return toDTO(studyBoard, studyDetail, study, curPeople);
     }
 }
