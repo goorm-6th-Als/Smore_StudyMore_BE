@@ -23,7 +23,6 @@ public class StudyBoardDTO {
 
     private String adTitle;
     private String adContent;
-    private String adSummary;
     private String imageUri;
 
     private long curPeople;

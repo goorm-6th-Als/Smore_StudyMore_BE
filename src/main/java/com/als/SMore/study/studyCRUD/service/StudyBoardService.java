@@ -39,8 +39,8 @@ public class StudyBoardService {
                         studyBoard,
                         studyRepository,
                         studyDetailRepository,
-                        studyMemberRepository,
-                        false))
+                        studyMemberRepository
+                        ))
                 .collect(Collectors.toList());
     }
 
@@ -56,7 +56,7 @@ public class StudyBoardService {
                     logger.info("스터디 보드를 찾을 수 없습니다. ID: " + studyBoardPk);
                     return new CustomException(CustomErrorCode.NOT_FOUND_STUDY_BOARD);
                 });
-        return StudyBoardMapper.toStudyBoard(studyBoard, studyRepository, studyDetailRepository, studyMemberRepository, true);
+        return StudyBoardMapper.toStudyBoard(studyBoard, studyRepository, studyDetailRepository, studyMemberRepository);
     }
 
     /**
@@ -71,8 +71,8 @@ public class StudyBoardService {
                         studyBoard,
                         studyRepository,
                         studyDetailRepository,
-                        studyMemberRepository,
-                        false));
+                        studyMemberRepository
+                ));
     }
 
     /**
@@ -88,8 +88,8 @@ public class StudyBoardService {
                         studyBoard,
                         studyRepository,
                         studyDetailRepository,
-                        studyMemberRepository,
-                        false));
+                        studyMemberRepository
+                        ));
     }
 }
 
