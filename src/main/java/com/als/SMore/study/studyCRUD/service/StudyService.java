@@ -38,7 +38,7 @@ public class StudyService {
     private final StudyBoardRepository studyBoardRepository;
 
     private static final int MAX_STUDY_PARTICIPATION = 5;
-    private static final String DEFAULT_IMAGE_URL = "https://수연님이미지주소주세요";  // 스터디 기본 이미지 URL
+    private static final String DEFAULT_IMAGE_URL = "https://smoreimg.s3.ap-northeast-2.amazonaws.com/study/smore.png";  // 스터디 기본 이미지 URL
 
     /**
      * 스터디 생성
