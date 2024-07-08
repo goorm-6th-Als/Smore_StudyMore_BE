@@ -10,6 +10,7 @@ import com.als.SMore.global.JwtAuthException;
 import com.als.SMore.user.login.util.MemberUtil;
 import com.als.SMore.user.login.util.TokenProvider;
 import com.als.SMore.user.login.util.aop.annotation.JwtRole;
+import com.als.SMore.user.login.util.aop.dto.AopDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,39 +30,27 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Order(1)
 @Component
 @RequiredArgsConstructor
-public class JwtGlobalAop {
+public class JwtGlobalAop extends BasicJwtAop{
 
     private final TokenProvider tokenProvider;
     private final MemberTokenRepository memberTokenRepository;
     private final StudyMemberRepository studyMemberRepository;
 
-
     @Around("controllerPointcut() " +
             "&& !@annotation(com.als.SMore.user.login.util.aop.annotation.NotAop) ")
     private Object isCheckedStudyPkToAccessToken(final ProceedingJoinPoint joinPoint) throws Throwable {
         log.info("전역 AOP");
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .currentRequestAttributes()).getRequest();
 
-        // 토큰을 받아오기
-        String token = request.getHeader("authorization").substring(7);
         Long memberPk = MemberUtil.getUserPk();
 
-        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        JwtRole custom = methodSignature.getMethod().getAnnotation(JwtRole.class);
-
-        int index = 2;
-        if(custom != null){
-            index = custom.index();
-        }
-
-        // URI 에서 studyPk를 가져옴
-        String studyPk = request.getServletPath().split("/")[index];
-        log.info("스터디 pk : {}",studyPk);
+        AopDto aopDto = super.getAopDto(request);
+        String studyPk = aopDto.getStudyPk();
+        String token = aopDto.getToken();
 
         // tokenProvider 에서 토큰에 studyPk에 관한 역할이 있는 지 판단함.
-        if(!tokenProvider.isCheckedRole(token,studyPk)){
+        if(!tokenProvider.isCheckedRole(aopDto.getToken(), studyPk)){
             // 인터셉터를 만들어서 연결을 끊어 버리자
             //setResponse(response,"study에대한 접근 권한이 없습니다", 403);
             StudyMember studyMember = studyMemberRepository.findByStudyStudyPkAndMemberMemberPk(
