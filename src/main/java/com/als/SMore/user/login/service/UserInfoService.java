@@ -6,6 +6,8 @@ import com.als.SMore.domain.entity.StudyMember;
 import com.als.SMore.domain.repository.MemberRepository;
 import com.als.SMore.domain.repository.MemberTokenRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
+import com.als.SMore.global.CustomErrorCode;
+import com.als.SMore.global.CustomException;
 import com.als.SMore.user.login.dto.UserInfo;
 import com.als.SMore.user.login.dto.UserInfoDetails;
 import com.als.SMore.user.login.dto.response.TokenResponse;
@@ -30,7 +32,8 @@ public class UserInfoService {
     private final MemberTokenRepository memberTokenRepository;
 
     public OAuth2User loadUserByUserPk(Long id) {
-        Member member = memberRepository.findById(id).get();
+        Member member = memberRepository.findById(id)
+                .orElseThrow(()-> new CustomException(CustomErrorCode.ERROR_PASSWORD));
         UserInfoDetails user = UserInfoDetails.builder()
                 .userId(member.getUserId())
                 .userPk(member.getMemberPk())
@@ -46,17 +49,10 @@ public class UserInfoService {
         Long userPk = MemberUtil.getUserPk();
         // 스터디에 가입된 정보를 조회함
         List<StudyMember> studyMemberList = studyMemberRepository.findByMember_MemberPk(userPk);
-        MemberToken memberToken = memberTokenRepository.findMemberTokenByMember_MemberPk(userPk)
-                .orElseThrow(IllegalArgumentException::new);
-
         Map<String,String> role = new HashMap<>();
         if(studyMemberList.isEmpty()){
             String accessToken = tokenProvider.generateAccessToken(userPk, role);
             String refreshToken = tokenProvider.generateRefreshToken(userPk, role);
-            memberToken = memberToken.toBuilder()
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken).build();
-            memberTokenRepository.save(memberToken);
             TokenResponse tokenResponse = TokenResponse.builder()
                     .accessToken(accessToken)
                     .refreshToken(refreshToken).build();
@@ -70,10 +66,6 @@ public class UserInfoService {
 
         String accessToken = tokenProvider.generateAccessToken(userPk, role);
         String refreshToken = tokenProvider.generateRefreshToken(userPk, role);
-        memberToken = memberToken.toBuilder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken).build();
-        memberTokenRepository.save(memberToken);
         TokenResponse tokenResponse = TokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken).build();
