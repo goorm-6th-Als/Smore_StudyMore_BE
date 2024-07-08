@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,8 +69,10 @@ public class ProblemBankController {
      * @param problemBankMap 문제은행 정보 (문제은행 이름)
      */
     @PostMapping("/bank")
-    public ResponseEntity<String> createProblemBank(@PathVariable Long studyPk, @RequestBody Map<String, String> problemBankMap) {
-        return ResponseEntity.ok(problemBankService.createProblemBank(getMemberPk(), studyPk, problemBankMap.get("problemName")).toString());
+    public Map<String, String> createProblemBank(@PathVariable Long studyPk, @RequestBody Map<String, String> problemBankMap) {
+        Map<String, String> resultMap = new HashMap<String, String>();
+        resultMap.put("problemBankPk", problemBankService.createProblemBank(getMemberPk(), studyPk, problemBankMap.get("problemName")).toString());
+        return resultMap;
     }
 
     /**
