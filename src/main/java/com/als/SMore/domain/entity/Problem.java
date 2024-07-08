@@ -3,11 +3,22 @@ package com.als.SMore.domain.entity;
 import com.als.SMore.study.problem.DTO.request.problem.ProblemCreateRequestDTO;
 import com.als.SMore.study.problem.DTO.request.problem.ProblemUpdateRequestDTO;
 import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.*;
-import lombok.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "problem")
@@ -28,6 +39,12 @@ public class Problem {
     @ManyToOne
     @JoinColumn(name = "study_problem_bank_pk", nullable = false)
     private StudyProblemBank studyProblemBank;
+
+    // Cascade 삭제조건 추가.
+    @OneToMany(mappedBy = "problemOptionsPk", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<ProblemOptions> problemOptions;
+    @OneToMany(mappedBy = "problemTypePk", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<ProblemType> problemTypes;
 
     @Column(name = "problem_answer_pk")
     private Long problemAnswerPk;

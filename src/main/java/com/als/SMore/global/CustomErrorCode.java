@@ -65,7 +65,7 @@ public enum CustomErrorCode {
     NOT_FOUND_ROLE(HttpStatus.UNAUTHORIZED,"접근이 허용되지 않았습니다"),
 
     //aop 접근 새로운 accessToken 발급
-    JWT_AUTH_CODE(HttpStatus.OK,"새로운 권한이 발급되었습니다");
+    JWT_AUTH_CODE(HttpStatus.BAD_REQUEST,"새로운 권한이 발급되었습니다");
 
     private final HttpStatus httpStatus;
     private final String message;

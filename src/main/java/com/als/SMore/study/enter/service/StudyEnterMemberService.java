@@ -16,7 +16,7 @@ import com.als.SMore.study.enter.DTO.StudyEnterMemberWithMemberInfoDTO;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberWithStudyInfoDTO;
 import com.als.SMore.study.enter.mapper.StudyEnterMemberMapper;
 import com.als.SMore.user.login.util.MemberUtil;
-import com.als.SMore.user.login.util.NotAop;
+import com.als.SMore.user.login.util.aop.annotation.NotAop;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;

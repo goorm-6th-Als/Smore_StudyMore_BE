@@ -19,10 +19,13 @@ public class StudyBoardDTO {
     @JsonDeserialize(using = StringToLongDeserializer.class)
     private Long studyPk;
 
+    private String studyName;
+
     private String adTitle;
     private String adContent;
-    private String adSummary;
+    private String imageUri;
 
+    private long curPeople;
     private int maxPeople;
     private LocalDate startDate;
     private LocalDate closeDate;

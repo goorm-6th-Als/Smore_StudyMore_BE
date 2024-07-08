@@ -121,7 +121,7 @@ public class StudyManagementService {
     @Transactional
     public void deleteStudy(Long studyPk) throws CustomException {
         List<StudyMember> studyMembers = studyMemberRepository.findByStudyStudyPk(studyPk);
-        if (!studyMembers.isEmpty()) {
+        if (studyMembers.size() > 1) {
             throw new CustomException(CustomErrorCode.STILL_EXISTS_MEMBERS);
         }
         Study study = studyRepository.findById(studyPk)

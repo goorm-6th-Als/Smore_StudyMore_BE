@@ -12,7 +12,7 @@ public class StudyDataDTO {
 //    private Long studyPk;
 
     private String studyName;
-//    private String imageUri;
+    private String imageUri;
     private int maxPeople;
     private String content;
     private LocalDate startDate;
