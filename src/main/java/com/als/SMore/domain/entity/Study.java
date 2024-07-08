@@ -30,18 +30,33 @@ public class Study {
     @Column(name = "study_pk")
     private Long studyPk;
 
-    // 스터디 디테일, 스터디 멤버, 스터디 보드 종속
+    // 스터디 디테일, 스터디 멤버, 스터디 보드
     @OneToOne(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private StudyDetail studyDetail;
-
     @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<StudyMember> studyMembers;
-
     @OneToOne(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private StudyBoard studyBoards;
 
-    @OneToMany(mappedBy = "study", cascade = CascadeType.ALL, orphanRemoval = true)
+    // 스터디 신청서
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<StudyEnterMember> studyEnterMembers;
+
+    // 스터디 내부 기능 공지사항, 일정, 캘린더, Todo, 문제
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<NoticeBoard> noticeBoards;
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<StudySchedule> studySchedules;
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Calendar> calendar;
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<PersonalTodo> personalTodos;
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<StudyProblemBank> studyProblemBanks;
+
+    //출석기록
+    @OneToMany(mappedBy = "study", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<AttendanceCheck> attendance_check;
 
     @ManyToOne
     @JoinColumn(name = "member_pk", nullable = false)
