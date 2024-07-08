@@ -72,7 +72,7 @@ public class StudyService {
         studyMemberRepository.save(studyMember);
         logger.info("StudyMember 엔티티 생성");
 
-        StudyBoard studyBoard = StudyCreateMapper.toStudyBoard(studyCreateDTO, study);
+        StudyBoard studyBoard = StudyCreateMapper.toStudyBoard(studyCreateDTO, study, imageUrl);
         studyBoardRepository.save(studyBoard);
         logger.info("StudyBoard 엔티티 생성 StudyBoard PK: {}", studyBoard.getStudyBoardPk());
         return StudyCreateMapper.fromEntity(study, studyDetail);

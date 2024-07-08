@@ -49,7 +49,7 @@ public class StudyCreateMapper {
                 .build();
     }
 
-    public static StudyBoard toStudyBoard(StudyCreateDTO dto, Study study) {
+    public static StudyBoard toStudyBoard(StudyCreateDTO dto, Study study, String imageUrl) {
         String adSummary = dto.getContent().length() > 30
                 ? dto.getContent().substring(0, 30) + "..."
                 : dto.getContent();
@@ -60,7 +60,7 @@ public class StudyCreateMapper {
                 .adContent(dto.getContent())
                 .adSummary(adSummary)
                 .modifyDate(LocalDate.now())
-                .imageUri(dto.getImageUri())
+                .imageUri(imageUrl)
                 .build();
     }
 
