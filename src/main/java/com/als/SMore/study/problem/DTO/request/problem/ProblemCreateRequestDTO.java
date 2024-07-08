@@ -10,8 +10,6 @@ import java.util.List;
 @Getter
 @Builder(toBuilder = true)
 public class ProblemCreateRequestDTO {
-    @JsonSerialize(using = LongToStringSerializer.class)
-
     private Long studyProblemBankPk;
     private String content;
     private Integer answer;
