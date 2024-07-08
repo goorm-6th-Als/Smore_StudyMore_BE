@@ -72,8 +72,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         if(memberToken1.isEmpty()){
             memberTokenRepository.save(MemberToken.builder()
                     .member(member)
-                    .accessToken(accessToken)
-                    .refreshToken(refreshToken)
                     .kakaoAccessToken(kakaoAccessToken)
                     .kakaoRefreshToken(kakaoRefreshToken)
                     .build());
@@ -83,8 +81,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                     memberToken.toBuilder()
                             .kakaoRefreshToken(kakaoRefreshToken)
                             .kakaoAccessToken(kakaoAccessToken)
-                            .accessToken(accessToken)
-                            .refreshToken(refreshToken).build()
+                            .build()
             );
 
         }

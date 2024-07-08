@@ -33,7 +33,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class JwtGlobalAop extends BasicJwtAop{
 
     private final TokenProvider tokenProvider;
-    private final MemberTokenRepository memberTokenRepository;
     private final StudyMemberRepository studyMemberRepository;
 
     @Around("controllerPointcut() " +
@@ -60,10 +59,6 @@ public class JwtGlobalAop extends BasicJwtAop{
             // studypk와 role 을 가지고 와야 한다.
             String role = studyMember.getRole();
             String renewToken = tokenProvider.createRenewToken(token, Long.parseLong(studyPk), role);
-            MemberToken memberToken = memberTokenRepository.findMemberTokenByMember_MemberPk(memberPk)
-                    .orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_PK));
-            memberToken = memberToken.toBuilder().accessToken(renewToken).build();
-            memberTokenRepository.save(memberToken);
             throw new JwtAuthException(CustomErrorCode.JWT_AUTH_CODE,renewToken);
         }
 
