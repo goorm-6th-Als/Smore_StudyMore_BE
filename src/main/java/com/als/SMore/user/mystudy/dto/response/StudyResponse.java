@@ -17,6 +17,7 @@ public class StudyResponse {
     private Long studyPk;
     private String studyName;
     private String studyImg;
+    private int maxPeople;
     private Long studyPersonNum;
     private LocalDate studyStartDate;
     private LocalDate studyEndDate;

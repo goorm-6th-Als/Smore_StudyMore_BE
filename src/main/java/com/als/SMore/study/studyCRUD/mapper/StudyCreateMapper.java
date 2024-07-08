@@ -14,18 +14,26 @@ public class StudyCreateMapper {
     private static final Logger logger = LoggerFactory.getLogger(StudyCreateMapper.class);
 
     public static Study toStudy(StudyCreateDTO dto, Member member) {
+        String lengthLimitStudyName = dto.getStudyName().length() > 10
+                ? dto.getStudyName().substring(0, 10)
+                : dto.getStudyName();
+
         return Study.builder()
-                .studyName(dto.getStudyName())
+                .studyName(lengthLimitStudyName)
                 .member(member)
                 .build();
     }
 
     public static StudyDetail toStudyDetail(StudyCreateDTO dto, Study study, String imageUrl) {
         LocalDate startDate = dto.getStartDate() != null ? dto.getStartDate() : LocalDate.now(); // 기본값으로 오늘 날짜 설정
+        int maxPeople = dto.getMaxPeople();
+        if (maxPeople < 2 || maxPeople > 6) {
+            throw new IllegalArgumentException("최대인원은 2 ~ 6 범위를 입력해야 합니다.");
+        }
         return StudyDetail.builder()
                 .study(study)
                 .imageUri(imageUrl) // 이미지 URL 설정
-                .maxPeople(dto.getMaxPeople())
+                .maxPeople(maxPeople)
                 .content(dto.getContent())
                 .startDate(startDate)
                 .closeDate(dto.getCloseDate())

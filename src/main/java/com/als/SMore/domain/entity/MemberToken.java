@@ -20,12 +20,6 @@ public class MemberToken {
     @JoinColumn(name = "member_pk")
     private Member member;
 
-    @Column(name = "access_token", nullable = false)
-    private String accessToken;
-
-    @Column(name = "refresh_token", nullable = false)
-    private String refreshToken;
-
     @Column(name = "kakao_access_token", nullable = false)
     private String kakaoAccessToken;
 
