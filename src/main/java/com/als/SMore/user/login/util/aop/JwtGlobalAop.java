@@ -38,7 +38,6 @@ public class JwtGlobalAop extends BasicJwtAop{
     @Around("controllerPointcut() " +
             "&& !@annotation(com.als.SMore.user.login.util.aop.annotation.NotAop) ")
     private Object isCheckedStudyPkToAccessToken(final ProceedingJoinPoint joinPoint) throws Throwable {
-        log.info("전역 AOP");
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .currentRequestAttributes()).getRequest();
 
@@ -63,7 +62,6 @@ public class JwtGlobalAop extends BasicJwtAop{
         }
 
         //log.info("닉네임 정보 : {}",nickname);
-        log.info("전역 끝남");
         System.out.println(request.getMethod()+" : "+request.getServletPath());
         return joinPoint.proceed();
     }

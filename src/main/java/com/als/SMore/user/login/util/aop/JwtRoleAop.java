@@ -29,7 +29,6 @@ public class JwtRoleAop extends BasicJwtAop{
     @Around("@annotation(com.als.SMore.user.login.util.aop.annotation.JwtRole)")
     public Object isCheckedRole(final ProceedingJoinPoint joinPoint) throws Throwable {
         // request 랑 response 를 먼저 생성
-        log.info("부분 AOP");
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .currentRequestAttributes()).getRequest();
 
@@ -46,7 +45,6 @@ public class JwtRoleAop extends BasicJwtAop{
             throw new CustomException(CustomErrorCode.NOT_FOUND_ROLE);
         }
 
-        log.info("부분 AOP 끝남");
         return joinPoint.proceed();
     }
 }
