@@ -8,6 +8,7 @@ import com.als.SMore.domain.repository.StudyBoardRepository;
 import com.als.SMore.domain.repository.StudyDetailRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
+import com.als.SMore.global.CustomErrorCode;
 import com.als.SMore.global.CustomException;
 import com.als.SMore.study.management.DTO.StudyBoardUpdateDTO;
 import com.als.SMore.study.management.DTO.StudyDataDTO;
@@ -15,8 +16,8 @@ import com.als.SMore.study.management.DTO.StudyMemberWithOutAdminDTO;
 import com.als.SMore.study.management.DTO.StudyUpdateDTO;
 import com.als.SMore.study.management.mapper.StudyBoardMapper;
 import com.als.SMore.study.management.mapper.StudyDataMapper;
-import com.als.SMore.study.management.mapper.StudyUpdateMapper;
 import com.als.SMore.study.management.mapper.StudyMemberMapper;
+import com.als.SMore.study.management.mapper.StudyUpdateMapper;
 import com.als.SMore.user.mypage.service.AwsFileService;
 import java.util.Comparator;
 import java.util.List;
@@ -115,13 +116,16 @@ public class StudyManagementService {
 
     /**
      * 스터디를 삭제하는 메서드
-     *
      * @param studyPk 삭제할 스터디의 PK
      */
     @Transactional
     public void deleteStudy(Long studyPk) throws CustomException {
+        List<StudyMember> studyMembers = studyMemberRepository.findByStudyStudyPk(studyPk);
+        if (!studyMembers.isEmpty()) {
+            throw new CustomException(CustomErrorCode.STILL_EXISTS_MEMBERS);
+        }
         Study study = studyRepository.findById(studyPk)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 스터디 입니다.: " + studyPk));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + studyPk));
         studyRepository.delete(study);
     }
 
@@ -140,4 +144,15 @@ public class StudyManagementService {
         studyMemberRepository.delete(studyMember);
         return studyMember.getMember().getNickName();
     }
+
+//    /**
+//     * 스터디 장인지 확인하는 메서드
+//     * @param studyPk 스터디 PK
+//     * @param memberPk 멤버 PK
+//     * @return 스터디 장이면 true, 아니면 false 반환
+//     */
+//    @Transactional(readOnly = true)
+//    public boolean isAdmin(Long studyPk, Long memberPk) {
+//        return studyMemberRepository.existsByStudyStudyPkAndMemberMemberPkAndRole(studyPk, memberPk, "admin");
+//    }
 }

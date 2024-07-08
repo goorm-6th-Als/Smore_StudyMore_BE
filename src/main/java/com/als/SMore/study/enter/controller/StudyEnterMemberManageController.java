@@ -1,7 +1,6 @@
 package com.als.SMore.study.enter.controller;
 
 import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
-import com.als.SMore.study.enter.DTO.StudyEnterMemberWithMemberInfoDTO;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberWithStudyInfoDTO;
 import com.als.SMore.study.enter.service.StudyEnterMemberService;
 import com.als.SMore.user.login.util.NotAop;
@@ -23,26 +22,25 @@ public class StudyEnterMemberManageController {
 
     private final StudyEnterMemberService studyEnterMemberService;
 
-    /**
-     * 특정 스터디의 모든 가입 신청서 조회
-     * @param studyPk 스터디 PK
-     * @return 해당 스터디의 모든 신청서 리스트와 Ok 반환
-     */
-
-    @GetMapping("/study/{studyPk}")
-    public ResponseEntity<List<StudyEnterMemberWithMemberInfoDTO>> getAllStudyEnterMembers(
-            @PathVariable Long studyPk) {
-        List<StudyEnterMemberWithMemberInfoDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembers(studyPk);
-        return ResponseEntity.ok(studyEnterMembers);
-    }
+//    /**
+//     * 특정 스터디의 모든 가입 신청서 조회
+//     * @param studyPk 스터디 PK
+//     * @return 해당 스터디의 모든 신청서 리스트와 Ok 반환
+//     */
+//
+//    @GetMapping("/{studyPk}")
+//    public ResponseEntity<List<StudyEnterMemberWithMemberInfoDTO>> getAllStudyEnterMembers(
+//            @PathVariable Long studyPk) {
+//        List<StudyEnterMemberWithMemberInfoDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembers(studyPk);
+//        return ResponseEntity.ok(studyEnterMembers);
+//    }
 
     /**
      * 나의 모든 가입 신청서 조회
      * @return 해당 멤버의 모든 신청서 리스트와 Ok 반환
      */
-
     @NotAop
-    @GetMapping("/member")
+    @GetMapping
     public ResponseEntity<List<StudyEnterMemberWithStudyInfoDTO>> getAllStudyEnterMembersByMember(){
         List<StudyEnterMemberWithStudyInfoDTO> studyEnterMembers = studyEnterMemberService.getAllStudyEnterMembersByMember();
         return ResponseEntity.ok(studyEnterMembers);

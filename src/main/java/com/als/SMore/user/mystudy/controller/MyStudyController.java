@@ -49,12 +49,12 @@ public class MyStudyController {
     @PostMapping("/refuse")
     public ResponseEntity<MessageResponse> refuseMember(@RequestBody IsCheckedStatusRequest statusRequest){
         myStudyService.refuseMember(statusRequest);
-        return ResponseEntity.ok(MessageResponse.builder().build());
+        return ResponseEntity.ok(MessageResponse.builder().message("삭제 되었습니다").build());
     }
     // 참여하는 스터디를 탈퇴하는 기능 delete
     @DeleteMapping("/{studyPk}")
     public ResponseEntity<MessageResponse> resignMemberByStudy(@PathVariable(name = "studyPk") Long studyPk) {
         myStudyService.resignMemberByStudy(studyPk);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(MessageResponse.builder().build());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(MessageResponse.builder().message("스터디의 탈퇴되었습니다").build());
     }
 }
