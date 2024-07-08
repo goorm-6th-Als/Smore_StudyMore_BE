@@ -65,7 +65,6 @@ public class ProblemController {
     //만드는거
     @PostMapping
     public ResponseEntity<String> createProblem(@PathVariable("studyPk") Long studyPk, @RequestBody ProblemCreateRequestDTO problemCreateRequestDTO) {
-        System.out.println("ASDasdasdasdas");
         problemService.createProblem(getMemberPk(), problemCreateRequestDTO);
         return ResponseEntity.ok(problemCreateRequestDTO.getStudyProblemBankPk().toString());
     }

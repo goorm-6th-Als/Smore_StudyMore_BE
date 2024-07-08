@@ -1,5 +1,7 @@
 package com.als.SMore.study.problem.DTO.request.problem;
 
+import com.als.SMore.global.json.LongToStringSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Builder;
 import lombok.Getter;
 
