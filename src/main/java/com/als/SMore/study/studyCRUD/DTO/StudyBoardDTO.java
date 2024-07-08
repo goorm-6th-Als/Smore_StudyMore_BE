@@ -22,5 +22,9 @@ public class StudyBoardDTO {
     private String adTitle;
     private String adContent;
     private String adSummary;
+
+    private int maxPeople;
+    private LocalDate startDate;
+    private LocalDate closeDate;
     private LocalDate modifyDate;
 }

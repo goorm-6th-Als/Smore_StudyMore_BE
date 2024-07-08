@@ -1,6 +1,7 @@
 package com.als.SMore.study.studyCRUD.controller;
 
 import com.als.SMore.study.studyCRUD.DTO.StudyCreateDTO;
+import com.als.SMore.study.studyCRUD.DTO.StudyNameDTO;
 import com.als.SMore.study.studyCRUD.service.StudyService;
 import com.als.SMore.user.login.util.aop.annotation.NotAop;
 import com.als.SMore.user.mypage.service.AwsFileService;
@@ -34,19 +35,20 @@ public class StudyController {
     public ResponseEntity<StudyCreateDTO> createStudy(
             @RequestPart("studyCreateDTO") StudyCreateDTO studyCreateDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) {
-            StudyCreateDTO createdStudy = studyService.createStudy(studyCreateDTO, image);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdStudy);
+        StudyCreateDTO createdStudy = studyService.createStudy(studyCreateDTO, image);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdStudy);
     }
 
-        /**
-         * 특정 스터디 조회
-         *
-         * @param studyPk 조회할 스터디의 PK
-         * @return 스터디 이름과 함께 응답
-         */
-        @GetMapping("/{studyPk}")
-        public ResponseEntity<String> getStudy (@PathVariable Long studyPk){
-            String studyName = studyService.getStudyNameById(studyPk);
-            return ResponseEntity.ok(studyName);
+    /**
+     * 특정 스터디 조회
+     *
+     * @param studyPk 조회할 스터디의 PK
+     * @return 스터디 이름과 함께 응답
+     */
+    @GetMapping("/{studyPk}")
+    public ResponseEntity<StudyNameDTO> getStudy(@PathVariable Long studyPk) {
+        StudyNameDTO studyNameDTO = studyService.getStudyNameById(studyPk);
+        return ResponseEntity.ok(studyNameDTO);
     }
 }
+

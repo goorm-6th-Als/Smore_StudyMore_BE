@@ -41,7 +41,8 @@ public class StudyBoardController {
     @GetMapping("/{studyBoardPk}")
     public ResponseEntity<StudyBoardDTO> getStudyBoardByPk(
             @PathVariable Long studyBoardPk) {
-        return ResponseEntity.ok(studyBoardService.getStudyBoardByPk(studyBoardPk));
+        StudyBoardDTO studyBoardDTO = studyBoardService.getStudyBoardByPk(studyBoardPk);
+        return ResponseEntity.ok(studyBoardDTO);
     }
 
     /**
