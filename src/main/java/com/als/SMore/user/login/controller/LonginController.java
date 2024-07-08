@@ -23,6 +23,7 @@ public class LonginController {
     @PostMapping("/login/re-token")
     public ResponseEntity<MessageResponse> createRenewToken(){
         TokenResponse tokenResponse = userInfoService.creatRenewToken();
+        // TODO 여기서 부터 32 번째 줄 까지 커스텀 ResponseEntity 만들기
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(HttpHeaders.AUTHORIZATION,tokenResponse.getAccessToken());
         httpHeaders.set("X-Refresh-Token",tokenResponse.getRefreshToken());

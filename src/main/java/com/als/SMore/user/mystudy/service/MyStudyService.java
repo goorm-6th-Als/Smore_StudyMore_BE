@@ -54,6 +54,7 @@ public class MyStudyService {
                             .studyStartDate(studyDetail.getStartDate())
                             .studyEndDate(studyDetail.getCloseDate())
                             .studyPersonNum(studyMemberCount)
+                            .maxPeople(studyDetail.getMaxPeople())
                             .build()
             );
         }
@@ -77,8 +78,13 @@ public class MyStudyService {
             Long studyMemberCount = studyMemberRepository.countAllByStudy_StudyPk(studyMember.getStudy().getStudyPk());
             StudyDetail studyDetail = studyDetailRepository.findByStudy(studyMember.getStudy());
             Study study = studyRepository.findById(studyMember.getStudy().getStudyPk()).orElseThrow(IllegalAccessError::new);
-            StudyResponse studyResponse = StudyResponse.builder().studyPk(study.getStudyPk()).studyName(study.getStudyName())
-                    .studyImg(studyDetail.getImageUri()).studyStartDate(studyDetail.getStartDate()).studyEndDate(studyDetail.getCloseDate())
+            StudyResponse studyResponse = StudyResponse.builder()
+                    .studyPk(study.getStudyPk())
+                    .studyName(study.getStudyName())
+                    .studyImg(studyDetail.getImageUri())
+                    .studyStartDate(studyDetail.getStartDate())
+                    .studyEndDate(studyDetail.getCloseDate())
+                    .maxPeople(studyDetail.getMaxPeople())
                     .studyPersonNum(studyMemberCount).build();
             studyList.add(studyResponse);
         }
