@@ -10,7 +10,7 @@ public class StudyDataMapper {
     public static StudyDataDTO toDTO(Study study,  StudyDetail studyDetail, StudyBoard studyBoard) {
         return StudyDataDTO.builder()
 //                .studyPk(studyDetail.getStudyPk())
-//                .imageUri(studyDataDTO.getImageUri())
+                .imageUri(studyBoard.getImageUri())
                 .studyName(study.getStudyName())
                 .maxPeople(studyDetail.getMaxPeople())
                 .content(studyDetail.getContent())
