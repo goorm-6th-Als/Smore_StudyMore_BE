@@ -28,7 +28,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private static final String REDIRECT_URI = "https://smore-stydy-more-fe.vercel.app/redirection/%s/%s";
+    private static final String REDIRECT_URI = "https://smore-study-more.vercel.app/redirection/%s/%s";
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
