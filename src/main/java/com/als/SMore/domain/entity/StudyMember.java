@@ -33,7 +33,7 @@ public class StudyMember {
     private Long studyMemberPk;
 
     // 공부시간 Cascade 삭제조건 추가.
-    @OneToMany(mappedBy = "studyLearningTimePk", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "studyMember", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<StudyLearningTime> studyLearningTimes;
 
     @Column(name = "role", nullable = false)
