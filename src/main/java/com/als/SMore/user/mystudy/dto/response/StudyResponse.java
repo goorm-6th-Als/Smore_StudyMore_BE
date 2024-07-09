@@ -1,5 +1,7 @@
 package com.als.SMore.user.mystudy.dto.response;
 
+import com.als.SMore.domain.entity.Study;
+import com.als.SMore.domain.entity.StudyDetail;
 import com.als.SMore.global.json.LongToStringSerializer;
 import com.als.SMore.global.json.StringToLongDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -9,7 +11,6 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 
-@Builder
 @Getter
 public class StudyResponse {
     @JsonSerialize(using = LongToStringSerializer.class)
@@ -21,5 +22,19 @@ public class StudyResponse {
     private Long studyPersonNum;
     private LocalDate studyStartDate;
     private LocalDate studyEndDate;
+
+    public StudyResponse(Study study, StudyDetail studyDetail, Long studyPersonNum){
+        this.studyPk = study.getStudyPk();
+        this.studyName = study.getStudyName();
+        this.studyImg = studyDetail.getImageUri();
+        this.studyStartDate = studyDetail.getStartDate();
+        this.studyEndDate = studyDetail.getCloseDate();
+        this.maxPeople = studyDetail.getMaxPeople();
+        this.studyPersonNum = studyPersonNum;
+    }
+
+    public static StudyResponse from(Study study, StudyDetail studyDetail, Long studyPersonNum){
+        return new StudyResponse(study,studyDetail,studyPersonNum);
+    }
 
 }
