@@ -20,7 +20,6 @@ public class CustomAuthenticationEntryPointHandler implements AuthenticationEntr
         Integer exception = (Integer)request.getAttribute("exception");
 
         if(exception == null) {
-            log.info(authException.getMessage());
             setResponse(response, ErrorCode.UNKNOWN_ERROR,HttpServletResponse.SC_UNAUTHORIZED);
         }
         //잘못된 타입의 토큰인 경우
