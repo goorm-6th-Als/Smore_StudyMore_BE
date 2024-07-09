@@ -46,7 +46,8 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(request -> request
                         .requestMatchers(
-                                "/board/**"
+                                "/board/**",
+                                "/subscribe/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
