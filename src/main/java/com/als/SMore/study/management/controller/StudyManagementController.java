@@ -113,7 +113,7 @@ public class StudyManagementController {
     public ResponseEntity<String> expelStudyMember(
             @PathVariable Long studyPk,
             @RequestBody ExpelMemberDTO expelMemberDTO) {
-        String nickname = studyManagementService.expelStudyMember(studyPk, expelMemberDTO.getMemberPk());
-        return ResponseEntity.ok(nickname + " 님을 퇴출했습니다.");
+        studyManagementService.expelStudyMember(studyPk, expelMemberDTO.getMemberPk());
+        return ResponseEntity.noContent().build();
     }
 }
