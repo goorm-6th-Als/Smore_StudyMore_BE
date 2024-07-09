@@ -32,9 +32,9 @@ public class NotificationController {
      */
     @GetMapping(value = "/subscribe/notification", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(@RequestParam(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId,
-                                @RequestParam("Authorization") String AccessToken,
+                                @RequestParam("Bearer") String AccessToken,
                                 HttpServletResponse response) {
-        String userPk = tokenProvider.validate(AccessToken.substring(7));
+        String userPk = tokenProvider.validate(AccessToken);
         log.info("userPk = {}, Last-Event-ID = {}", userPk, lastEventId);
         return notificationService.subscribe(Long.valueOf(userPk), lastEventId, response);
     }
