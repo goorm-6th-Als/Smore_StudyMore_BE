@@ -50,7 +50,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.badRequest().body(MessageResponse.builder().message("메소드 함수가 잘못 설정되었습니다").build());
     }
 
-    // HTTP의 RequestBody가 누락된 경우
+    // HTTP의 PathVariable이 누락된 경우
     @ExceptionHandler(MissingServletRequestParameterException.class)
     protected ResponseEntity<MessageResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException e){
         log.error(e.getMessage());
@@ -64,7 +64,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.internalServerError().body(MessageResponse.builder().message("파라미터의 이름과 변수의 이름이 일치하지 않습니다").build());
     }
 
-    // 값이 들어오지 않았을 때 발생하는 오류
+    // RequestBody가 들어오지 않았을 때 발생하는 오류
     @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<MessageResponse> handleMissingPathVariableException(HttpMessageNotReadableException e){
         log.error(e.getMessage());
