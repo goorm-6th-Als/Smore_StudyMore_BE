@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    private static final Long DEFAULT_TIMEOUT = 3L * 1000 * 60; // 기본 타임아웃 설정
+    private static final Long DEFAULT_TIMEOUT = 5L * 1000 * 60; // 기본 타임아웃 설정 - 테스트로 5분.
     private final EmitterRepository emitterRepository;
 
 
