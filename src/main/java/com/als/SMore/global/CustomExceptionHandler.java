@@ -57,7 +57,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.badRequest().body(MessageResponse.builder().message("파라미터가 누락되었습니다").build());
     }
 
-    // 파라미터의 이름과 변수의 이름이 일치하지 않을 때 발생하는 오류
+    // PathVariable의 이름과 URI에서 받아오는 변수의 이름이 일치하지 않을 때 발생하는 오류
     @ExceptionHandler(MissingPathVariableException.class)
     protected ResponseEntity<MessageResponse> handleMissingPathVariableException(MissingPathVariableException e){
         log.error(e.getMessage());
