@@ -74,6 +74,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Collections.singletonList("*"));
         config.setMaxAge(3600L);
+        config.setAllowedHeaders(Arrays.asList("Authorization", "X-Refresh-Token"));
         config.setExposedHeaders(Arrays.asList("Authorization", "X-Refresh-Token"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
