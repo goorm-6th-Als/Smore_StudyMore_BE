@@ -41,9 +41,9 @@ public class Problem {
     private StudyProblemBank studyProblemBank;
 
     // Cascade 삭제조건 추가.
-    @OneToMany(mappedBy = "problemOptionsPk", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ProblemOptions> problemOptions;
-    @OneToMany(mappedBy = "problemTypePk", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "problem", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ProblemType> problemTypes;
 
     @Column(name = "problem_answer_pk")
