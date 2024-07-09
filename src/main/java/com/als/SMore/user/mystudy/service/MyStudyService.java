@@ -47,15 +47,7 @@ public class MyStudyService {
                     .orElseThrow(() -> new IllegalAccessError("존재하지 않는 스터디입니다."));
 
             studyList.add(
-                    StudyResponse.builder()
-                            .studyPk(study.getStudyPk())
-                            .studyName(study.getStudyName())
-                            .studyImg(studyDetail.getImageUri())
-                            .studyStartDate(studyDetail.getStartDate())
-                            .studyEndDate(studyDetail.getCloseDate())
-                            .studyPersonNum(studyMemberCount)
-                            .maxPeople(studyDetail.getMaxPeople())
-                            .build()
+                    StudyResponse.from(study,studyDetail,studyMemberCount)
             );
         }
 
@@ -78,14 +70,7 @@ public class MyStudyService {
             Long studyMemberCount = studyMemberRepository.countAllByStudy_StudyPk(studyMember.getStudy().getStudyPk());
             StudyDetail studyDetail = studyDetailRepository.findByStudy(studyMember.getStudy());
             Study study = studyRepository.findById(studyMember.getStudy().getStudyPk()).orElseThrow(IllegalAccessError::new);
-            StudyResponse studyResponse = StudyResponse.builder()
-                    .studyPk(study.getStudyPk())
-                    .studyName(study.getStudyName())
-                    .studyImg(studyDetail.getImageUri())
-                    .studyStartDate(studyDetail.getStartDate())
-                    .studyEndDate(studyDetail.getCloseDate())
-                    .maxPeople(studyDetail.getMaxPeople())
-                    .studyPersonNum(studyMemberCount).build();
+            StudyResponse studyResponse = StudyResponse.from(study,studyDetail,studyMemberCount);
             studyList.add(studyResponse);
         }
 
