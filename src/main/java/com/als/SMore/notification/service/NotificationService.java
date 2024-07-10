@@ -54,19 +54,19 @@ public class NotificationService {
         // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
         resendLostData(lastEventId, memberPk, emitter);
 
-        // Scheduler for sending heartbeat
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(() -> {
-            try {
-                emitter.send(SseEmitter.event().name("ping").data("pong?"));
-            } catch (IOException e) {
-                emitter.completeWithError(e);
-                scheduler.shutdown();
-            }
-        }, 0, 30, TimeUnit.SECONDS); // 30초마다 Ping 메시지 전송
-
-        emitter.onCompletion(scheduler::shutdown);
-        emitter.onTimeout(scheduler::shutdown);
+//         Scheduler for sending heartbeat
+//        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//        scheduler.scheduleAtFixedRate(() -> {
+//            try {
+//                emitter.send(SseEmitter.event().name("ping").data("pong?"));
+//            } catch (IOException e) {
+//                emitter.completeWithError(e);
+//                scheduler.shutdown();
+//            }
+//        }, 0, 30, TimeUnit.SECONDS); // 30초마다 Ping 메시지 전송
+//
+//        emitter.onCompletion(scheduler::shutdown);
+//        emitter.onTimeout(scheduler::shutdown);
 
         return emitter;
     }
@@ -107,7 +107,7 @@ public class NotificationService {
      */
     private void resendLostData(String lastEventId, Long memberPk, SseEmitter emitter) {
         // 놓친 이벤트가 있다면
-//        if (!lastEventId.isEmpty()) { // 일단 이벤트 그냥 다 재전송.
+        if (!lastEventId.isEmpty()) { // 일단 이벤트 그냥 다 재전송.
             System.out.println("NotificationService.resendLostData1");
             // 멈버 아이디를 기준으로 캐시된 모든 이벤트를 가져온다.
             Map<String, Object> cachedEvents = emitterRepository.findAllEventCacheStartWithByMemberPk(String.valueOf(memberPk));
@@ -123,7 +123,7 @@ public class NotificationService {
                     }
                 }
             }
-//        }
+        }
     }
 
     /**
