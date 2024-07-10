@@ -96,9 +96,7 @@ public class MyStudyService {
                     .content(studyEnterMember.getContent())
                     .build());
         }
-        //스터디 방장에게 "스터디 가입 신청 요청이 있습니다." 알림
         Member studyManager = studyRepository.findMemberByStudyPk(studyPk);
-        notify(studyManager.getMemberPk(), studyPk,"스터디 가입 신청 요청이 있습니다.");
         return EnterStudyResponse.builder().enterStudyList(enterStudies).build();
 
     }
