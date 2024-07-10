@@ -11,6 +11,8 @@ import com.als.SMore.domain.repository.StudyEnterMemberRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
 import com.als.SMore.global.CustomException;
+import com.als.SMore.notification.dto.NotificationRequestDto;
+import com.als.SMore.notification.service.NotificationService;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberWithMemberInfoDTO;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberWithStudyInfoDTO;
@@ -31,6 +33,8 @@ public class StudyEnterMemberService {
     private final StudyRepository studyRepository;
     private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
+    private final NotificationService notificationService;
+
 
     /**
      * 스터디 가입신청 생성
@@ -57,6 +61,8 @@ public class StudyEnterMemberService {
 
         StudyEnterMember studyEnterMember = StudyEnterMemberMapper.toEntity(studyEnterMemberDTO, study, member);
         studyEnterMember = studyEnterMemberRepository.save(studyEnterMember);
+        //스터디 방장에게 "스터디 가입 신청 요청이 있습니다." 알림
+        notify(study.getMember().getMemberPk(), studyPk,"스터디 가입 신청 요청이 있습니다.");
         return StudyEnterMemberMapper.toDTO(studyEnterMember);
     }
 
@@ -118,5 +124,14 @@ public class StudyEnterMemberService {
             throw new CustomException(NOT_AUTHORIZED_REQUEST_MEMBER);
         }
         studyEnterMemberRepository.deleteById(studyEnterMemberPk);
+    }
+
+    private void notify(Long receiverPk, Long studyPk, String content) {
+        NotificationRequestDto notificationRequest = NotificationRequestDto.builder()
+                .receiverPk(receiverPk)
+                .studyPk(studyPk)
+                .content(content)
+                .build();
+        notificationService.send(notificationRequest);
     }
 }
