@@ -2,6 +2,7 @@ package com.als.SMore.notification.controller;
 
 import com.als.SMore.notification.service.NotificationService;
 import com.als.SMore.user.login.util.MemberUtil;
+import com.als.SMore.user.login.util.TokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final TokenProvider tokenProvider;
 
     /**
      * 클라이언트의 실시간 알림 구독 요청을 처리하고 Server-Sent Events(SSE) 스트림 반환.
@@ -30,9 +32,10 @@ public class NotificationController {
      */
     @GetMapping(value = "/subscribe/notification", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(@RequestParam(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId,
+                                @RequestParam("Bearer") String AccessToken,
                                 HttpServletResponse response) {
-        Long userPk = MemberUtil.getUserPk();
+        String userPk = tokenProvider.validate(AccessToken);
         log.info("userPk = {}, Last-Event-ID = {}", userPk, lastEventId);
-        return notificationService.subscribe(userPk, lastEventId, response);
+        return notificationService.subscribe(Long.valueOf(userPk), lastEventId, response);
     }
 }
