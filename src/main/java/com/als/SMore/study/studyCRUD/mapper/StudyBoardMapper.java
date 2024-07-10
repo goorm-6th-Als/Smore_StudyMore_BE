@@ -19,7 +19,7 @@ public class StudyBoardMapper {
                 .studyName(study.getStudyName())
                 .adTitle(studyBoard.getAdTitle())
                 .adContent(studyBoard.getAdContent())
-                .imageUri(studyDetail.getImageUri())
+                .imageUri(studyBoard.getImageUri())
 
                 .curPeople(curPeople)
                 .maxPeople(studyDetail.getMaxPeople())
