@@ -2,8 +2,11 @@ package com.als.SMore.user.mystudy.service;
 
 import com.als.SMore.domain.entity.*;
 import com.als.SMore.domain.repository.*;
+import com.als.SMore.global.CustomErrorCode;
+import com.als.SMore.global.CustomException;
 import com.als.SMore.notification.dto.NotificationRequestDto;
 import com.als.SMore.notification.service.NotificationService;
+import com.als.SMore.study.studyCRUD.service.StudyService;
 import com.als.SMore.user.login.util.TokenProvider;
 import com.als.SMore.user.mystudy.dto.request.IsCheckedStatusRequest;
 import com.als.SMore.user.mystudy.dto.response.EnterStudy;
@@ -28,6 +31,7 @@ public class MyStudyService {
     private final MemberRepository memberRepository;
     private final StudyRepository studyRepository;
     private final NotificationService notificationService;
+    private final StudyService studyService;
 
     // 참석하는 스터디의 목록을 리턴하는 함수
     public StudyListResponse enterStudy(){
@@ -106,7 +110,8 @@ public class MyStudyService {
     @Transactional
     public boolean acceptMember(IsCheckedStatusRequest statusRequest){
 
-        StudyDetail studyDetail = studyDetailRepository.findByStudy_StudyPk(statusRequest.getStudyPk()).orElseThrow(IllegalAccessError::new);
+        StudyDetail studyDetail = studyDetailRepository.findByStudy_StudyPk(statusRequest.getStudyPk()).
+                orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_DETAIL));
 
         Long userCount = studyMemberRepository.countAllByStudy_StudyPk(statusRequest.getStudyPk());
 
@@ -116,7 +121,9 @@ public class MyStudyService {
 
         StudyEnterMember studyEnterMember = studyEnterMemberRepository.findStudyEnterMemberByMember_UserIdAndStudy_StudyPk(
                 statusRequest.getUserId(), statusRequest.getStudyPk()
-        ).orElseThrow(IllegalAccessError::new);
+        ).orElseThrow(()->new CustomException(CustomErrorCode.NOT_FOUND_USER));
+
+        studyService.validateMaxEnterStudy(studyEnterMember.getMember().getMemberPk());
 
         // 유저 이메일과 studyPk가 동일한 컬럼을 삭제하고 반환
         studyEnterMemberRepository
@@ -139,7 +146,7 @@ public class MyStudyService {
     @Transactional
     public void refuseMember(IsCheckedStatusRequest statusRequest){
         StudyEnterMember studyEnterMember = studyEnterMemberRepository.findStudyEnterMemberByMember_UserIdAndStudy_StudyPk(statusRequest.getUserId(), statusRequest.getStudyPk())
-                .orElseThrow(IllegalAccessError::new);
+                .orElseThrow(()->new CustomException(CustomErrorCode.NOT_FOUND_USER));
 
         studyEnterMemberRepository.delete(studyEnterMember);
         //스터디 신청이 거절된 유저에게 "스터디 가입 신청이 거절되었습니다." 알림.
