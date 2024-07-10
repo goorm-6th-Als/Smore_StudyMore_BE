@@ -12,6 +12,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -19,6 +22,7 @@ import java.util.Map;
 public class NotificationService {
     private static final Long DEFAULT_TIMEOUT = 5L * 1000 * 60; // 기본 타임아웃 설정 - 테스트로 5분.
     private final EmitterRepository emitterRepository;
+
 
 
     /**
@@ -49,6 +53,21 @@ public class NotificationService {
 
         // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
         resendLostData(lastEventId, memberPk, emitter);
+
+//         Scheduler for sending heartbeat
+//        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//        scheduler.scheduleAtFixedRate(() -> {
+//            try {
+//                emitter.send(SseEmitter.event().name("ping").data("pong?"));
+//            } catch (IOException e) {
+//                emitter.completeWithError(e);
+//                scheduler.shutdown();
+//            }
+//        }, 0, 30, TimeUnit.SECONDS); // 30초마다 Ping 메시지 전송
+//
+//        emitter.onCompletion(scheduler::shutdown);
+//        emitter.onTimeout(scheduler::shutdown);
+
         return emitter;
     }
 
@@ -88,7 +107,7 @@ public class NotificationService {
      */
     private void resendLostData(String lastEventId, Long memberPk, SseEmitter emitter) {
         // 놓친 이벤트가 있다면
-        if (!lastEventId.isEmpty()) {
+        if (!lastEventId.isEmpty()) { // 일단 이벤트 그냥 다 재전송.
             System.out.println("NotificationService.resendLostData1");
             // 멈버 아이디를 기준으로 캐시된 모든 이벤트를 가져온다.
             Map<String, Object> cachedEvents = emitterRepository.findAllEventCacheStartWithByMemberPk(String.valueOf(memberPk));
