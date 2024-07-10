@@ -50,9 +50,8 @@ public class StudyService {
         Long memberPk = MemberUtil.getUserPk();
         logger.info("현재 사용자 PK: {}", memberPk);
 
-        if (studyMemberRepository.countByMemberMemberPk(memberPk) >= MAX_STUDY_PARTICIPATION) {
-            throw new CustomException(CustomErrorCode.MAX_STUDY_PARTICIPATION_EXCEEDED);
-        }
+        validateMaxEnterStudy(memberPk);
+
         Member member = memberRepository.findById(memberPk)
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 memberPk: " + memberPk));
 
@@ -88,6 +87,16 @@ public class StudyService {
         Study study = studyRepository.findById(studyPk)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 study ID: " + studyPk));
         return StudyNameMapper.toDTO(study);
+    }
+
+    /**
+     * 스터디 이름 최대개수 검증
+     * @param memberPk 스터디 PK
+     */
+    public void validateMaxEnterStudy(Long memberPk) {
+        if (studyMemberRepository.countByMemberMemberPk(memberPk) >= MAX_STUDY_PARTICIPATION) {
+            throw new CustomException(CustomErrorCode.MAX_STUDY_PARTICIPATION_EXCEEDED);
+        }
     }
 
 }

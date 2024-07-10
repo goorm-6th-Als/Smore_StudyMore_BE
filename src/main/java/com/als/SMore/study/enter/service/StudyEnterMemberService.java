@@ -17,6 +17,7 @@ import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberWithMemberInfoDTO;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberWithStudyInfoDTO;
 import com.als.SMore.study.enter.mapper.StudyEnterMemberMapper;
+import com.als.SMore.study.studyCRUD.service.StudyService;
 import com.als.SMore.user.login.util.MemberUtil;
 import com.als.SMore.user.login.util.aop.annotation.NotAop;
 import java.util.List;
@@ -28,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class StudyEnterMemberService {
-
+    private final StudyService studyService;
     private final StudyEnterMemberRepository studyEnterMemberRepository;
     private final StudyRepository studyRepository;
     private final MemberRepository memberRepository;
@@ -58,6 +59,9 @@ public class StudyEnterMemberService {
         if (studyEnterMemberRepository.existsByStudyAndMember(study, member)) {
             throw new CustomException(CustomErrorCode.ALREADY_APPLIED);
         }
+
+        // 최대 스터디 참여 검증
+        studyService.validateMaxEnterStudy(memberPk);
 
         StudyEnterMember studyEnterMember = StudyEnterMemberMapper.toEntity(studyEnterMemberDTO, study, member);
         studyEnterMember = studyEnterMemberRepository.save(studyEnterMember);
