@@ -1,7 +1,7 @@
 package com.als.SMore.study.enter.service;
 
-import static com.als.SMore.global.CustomErrorCode.CustomErrorCode;
-import static com.als.SMore.global.CustomErrorCode.NOT_AUTHORIZED_REQUEST_MEMBER;
+import static com.als.SMore.global.exception.CustomErrorCode.CustomErrorCode;
+import static com.als.SMore.global.exception.CustomErrorCode.NOT_AUTHORIZED_REQUEST_MEMBER;
 
 import com.als.SMore.domain.entity.Member;
 import com.als.SMore.domain.entity.Study;
@@ -10,7 +10,7 @@ import com.als.SMore.domain.repository.MemberRepository;
 import com.als.SMore.domain.repository.StudyEnterMemberRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.notification.dto.NotificationRequestDto;
 import com.als.SMore.notification.service.NotificationService;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;

@@ -1,5 +1,6 @@
 package com.als.SMore.global;
 
+import com.als.SMore.global.exception.CustomErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

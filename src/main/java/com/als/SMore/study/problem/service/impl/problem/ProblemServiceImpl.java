@@ -6,8 +6,8 @@ import com.als.SMore.domain.entity.ProblemOptions;
 import com.als.SMore.domain.entity.StudyProblemBank;
 import com.als.SMore.domain.repository.ProblemOptionsRepository;
 import com.als.SMore.domain.repository.ProblemRepository;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.log.timeTrace.TimeTrace;
 import com.als.SMore.study.problem.DTO.request.problem.ProblemCreateRequestDTO;
 import com.als.SMore.study.problem.DTO.request.problem.ProblemGetAllRequestDTO;
@@ -78,8 +78,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 
     @Override
-    public void createProblem(Long memberPk, ProblemCreateRequestDTO problemCreateRequestDTO) {
-        Member member = problemValidator.getMember(memberPk);
+    public void createProblem(Member member, ProblemCreateRequestDTO problemCreateRequestDTO) {
         StudyProblemBank problemBank = problemValidator.getStudyProblemBank(problemCreateRequestDTO.getStudyProblemBankPk());
 
         Problem problem = problemRepository.save(Problem.of(member, problemBank, problemCreateRequestDTO));
@@ -94,10 +93,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProblemSummaryResponseDTO> getAllProblemSummary(Long problemBankPk) {
-
-        StudyProblemBank studyProblemBank = problemValidator.getStudyProblemBank(problemBankPk);
-
+    public List<ProblemSummaryResponseDTO> getAllProblemSummary(StudyProblemBank studyProblemBank) {
         return problemRepository.findAllProblemSummaryByStudyProblem(studyProblemBank);
     }
 
@@ -140,8 +136,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     @Transactional
-    public ProblemUpdateResponseDTO getProblem(Long problemPk) {
-        Problem problem = problemValidator.getProblem(problemPk);
+    public ProblemUpdateResponseDTO getProblem(Problem problem) {
         List<ProblemOptions> problemOptions = problemOptionsRepository.findAllByProblemOrderByOptionsNum(problem);
         List<ProblemOptionResponseDTO> problemOptionResponseDTOList = new ArrayList<>();
         for (ProblemOptions problemOption : problemOptions) {
@@ -151,11 +146,11 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public void updateProblem(ProblemUpdateRequestDTO problemUpdateRequestDTO, Long memberPk) {
+    public void updateProblem(ProblemUpdateRequestDTO problemUpdateRequestDTO, Member member) {
 
         Problem problem = problemValidator.getProblem(problemUpdateRequestDTO.getProblemPk());
 
-        if (!problemValidator.isManager(memberPk, problem.getStudyProblemBank()))
+        if (!problemValidator.isManager(member.getMemberPk(), problem.getStudyProblemBank()))
             throw new CustomException(CustomErrorCode.UNAUTHORIZED_ACCESS);
 
         problem.updateAll(problemUpdateRequestDTO);
@@ -173,11 +168,10 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public void deleteProblem(Long problemPk, Long memberPk) {
+    public void deleteProblem(Problem problem, Member member) {
 
-        Problem problem = problemValidator.getProblem(problemPk);
 
-        if (!problemValidator.isManager(memberPk, problem.getStudyProblemBank()))
+        if (!problemValidator.isManager(member.getMemberPk(), problem.getStudyProblemBank()))
             throw new CustomException(CustomErrorCode.UNAUTHORIZED_ACCESS);
         deleteProblemOptionList(problem);
         problemRepository.delete(problem);

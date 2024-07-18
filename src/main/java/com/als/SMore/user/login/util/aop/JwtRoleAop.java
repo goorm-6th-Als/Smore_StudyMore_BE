@@ -1,9 +1,8 @@
 package com.als.SMore.user.login.util.aop;
 
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.user.login.util.TokenProvider;
-import com.als.SMore.user.login.util.aop.annotation.JwtRole;
 import com.als.SMore.user.login.util.aop.dto.AopDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;

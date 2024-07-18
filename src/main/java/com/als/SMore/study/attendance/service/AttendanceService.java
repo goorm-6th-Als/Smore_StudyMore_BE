@@ -13,8 +13,8 @@ import java.util.List;
 
 public interface AttendanceService {
 
-    LocalDateTime attendanceStart(Long memberPk, Long StudyPk);
-    Long attendanceEnd(Long memberPk, Long StudyPk);
-    Long getLearningSeconds(Long memberPk, Long StudyPk);
-    LearningMonthListResponseDTO getLearningMonth(Long memberPk, Long studyPk, LearningMonthRequestDTO learningMonthRequestDTO);
+    LocalDateTime attendanceStart(Member member, Study study);
+    Long attendanceEnd(Member member, Study study);
+    Long getLearningSeconds(StudyMember studyMember);
+    LearningMonthListResponseDTO getLearningMonth(StudyMember studyMember, LearningMonthRequestDTO learningMonthRequestDTO);
 }
