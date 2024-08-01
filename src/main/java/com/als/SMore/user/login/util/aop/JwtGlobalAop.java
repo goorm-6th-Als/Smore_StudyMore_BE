@@ -9,6 +9,7 @@ import com.als.SMore.user.login.util.MemberUtil;
 import com.als.SMore.user.login.util.TokenProvider;
 import com.als.SMore.user.login.util.aop.dto.AopDto;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -19,6 +20,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Slf4j
@@ -39,22 +43,23 @@ public class JwtGlobalAop extends BasicJwtAop{
 
         Long memberPk = MemberUtil.getUserPk();
 
-        AopDto aopDto = super.getAopDto(request);
-        String studyPk = aopDto.getStudyPk();
-        String token = aopDto.getToken();
+        String studyPk = super.getStudyPk(request);
+
+        // 세션에 스터디에 관한 정보가 없는 경우, 검사
+        HttpSession session = request.getSession();
 
         // tokenProvider 에서 토큰에 studyPk에 관한 역할이 있는 지 판단함.
-        if(!tokenProvider.isCheckedRole(aopDto.getToken(), studyPk)){
-            // 인터셉터를 만들어서 연결을 끊어 버리자
+        if(session.getAttribute(String.valueOf(memberPk)) == null){
             //setResponse(response,"study에대한 접근 권한이 없습니다", 403);
-            StudyMember studyMember = studyMemberRepository.findByStudyStudyPkAndMemberMemberPk(
-                    Long.parseLong(studyPk), memberPk
-            ).orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_PK));
+            Map<String, String> roles = getRole(studyPk, memberPk);
+            session.setAttribute(String.valueOf(memberPk),roles);
+        }
 
-            // studypk와 role 을 가지고 와야 한다.
-            String role = studyMember.getRole();
-            String renewToken = tokenProvider.createRenewToken(token, Long.parseLong(studyPk), role);
-            throw new JwtAuthException(CustomErrorCode.JWT_AUTH_CODE,renewToken);
+        Map<String, String> roles = (Map<String, String>) session.getAttribute(String.valueOf(memberPk));
+
+        if(session.getAttribute(String.valueOf(memberPk)) != null && roles == null){
+            Map<String, String> roleList = getRole(studyPk, memberPk);
+            session.setAttribute(String.valueOf(memberPk),roleList);
         }
 
         //log.info("닉네임 정보 : {}",nickname);
@@ -64,4 +69,19 @@ public class JwtGlobalAop extends BasicJwtAop{
 
     @Pointcut("execution(* com.als.SMore.study.*.controller.*.*(..))")
     public void controllerPointcut(){}
+
+    protected Map<String, String> getRole(String studyPk,Long memberPk){
+        StudyMember studyMember = studyMemberRepository.findByStudyStudyPkAndMemberMemberPk(
+                Long.parseLong(studyPk), memberPk
+        ).orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_STUDY_PK));
+
+        // studypk와 role 을 가지고 와야 한다.
+        String role = studyMember.getRole();
+        Map<String, String> roles = new HashMap<>() {
+            {
+                put(studyPk,role);
+            }
+        };
+        return roles;
+    }
 }

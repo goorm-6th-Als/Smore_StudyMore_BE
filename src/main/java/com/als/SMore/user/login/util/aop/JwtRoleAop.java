@@ -1,7 +1,9 @@
 package com.als.SMore.user.login.util.aop;
 
+
 import com.als.SMore.global.exception.CustomErrorCode;
 import com.als.SMore.global.exception.CustomException;
+
 import com.als.SMore.user.login.util.TokenProvider;
 import com.als.SMore.user.login.util.aop.dto.AopDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +16,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.Map;
 
 @Order
 @Slf4j
@@ -29,16 +33,13 @@ public class JwtRoleAop extends BasicJwtAop{
         // request 랑 response 를 먼저 생성
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .currentRequestAttributes()).getRequest();
+        String userPk = String.valueOf(MemberUtil.getUserPk());
 
-        AopDto aopDto = super.getAopDto(request);
+        String studyPk = super.getStudyPk(request);
 
-        // 토큰을 받아오기
-        String token = aopDto.getToken();
+        Map<String, String> attribute = (Map<String, String>) request.getSession().getAttribute(userPk);
+        String role = attribute.get(studyPk);
 
-        // URI 에서 studyPk를 가져옴
-        String studyPk = aopDto.getStudyPk();
-
-        String role = tokenProvider.getRole(token, studyPk);
         if(!role.equals("admin")){
             throw new CustomException(CustomErrorCode.NOT_FOUND_ROLE);
         }
