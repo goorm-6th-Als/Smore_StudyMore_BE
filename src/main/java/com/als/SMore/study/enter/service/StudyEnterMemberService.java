@@ -22,8 +22,12 @@ import com.als.SMore.user.login.util.MemberUtil;
 import com.als.SMore.user.login.util.aop.annotation.NotAop;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import io.lettuce.core.dynamic.annotation.CommandNaming;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -129,8 +133,8 @@ public class StudyEnterMemberService {
         }
         studyEnterMemberRepository.deleteById(studyEnterMemberPk);
     }
-
-    private void notify(Long receiverPk, Long studyPk, String content) {
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void notify(Long receiverPk, Long studyPk, String content) {
         NotificationRequestDto notificationRequest = NotificationRequestDto.builder()
                 .receiverPk(receiverPk)
                 .studyPk(studyPk)
