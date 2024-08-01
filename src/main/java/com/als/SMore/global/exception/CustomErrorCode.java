@@ -1,4 +1,4 @@
-package com.als.SMore.global;
+package com.als.SMore.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

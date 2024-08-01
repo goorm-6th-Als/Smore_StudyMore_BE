@@ -2,12 +2,11 @@ package com.als.SMore.user.mystudy.service;
 
 import com.als.SMore.domain.entity.*;
 import com.als.SMore.domain.repository.*;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.notification.dto.NotificationRequestDto;
 import com.als.SMore.notification.service.NotificationService;
 import com.als.SMore.study.studyCRUD.service.StudyService;
-import com.als.SMore.user.login.util.TokenProvider;
 import com.als.SMore.user.mystudy.dto.request.IsCheckedStatusRequest;
 import com.als.SMore.user.mystudy.dto.response.EnterStudy;
 import com.als.SMore.user.mystudy.dto.response.EnterStudyResponse;

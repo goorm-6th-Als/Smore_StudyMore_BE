@@ -1,8 +1,13 @@
 package com.als.SMore.study.attendance.controller;
 
+import com.als.SMore.domain.entity.Member;
+import com.als.SMore.domain.entity.Study;
+import com.als.SMore.domain.entity.StudyMember;
+import com.als.SMore.global.validator.GlobalValidator;
 import com.als.SMore.study.attendance.DTO.request.LearningMonthRequestDTO;
 import com.als.SMore.study.attendance.DTO.response.LearningMonthListResponseDTO;
 import com.als.SMore.study.attendance.service.AttendanceService;
+import com.als.SMore.study.attendance.validator.AttendanceValidator;
 import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +19,9 @@ import java.time.LocalDateTime;
 @RequestMapping("/study/{studyPk}/attendance")
 @RequiredArgsConstructor
 public class AttendanceController {
-    final private AttendanceService attendanceService;
-
+    private final AttendanceService attendanceService;
+    private final GlobalValidator globalValidator;
+    private final AttendanceValidator attendanceValidator;
 
     /**
      * SecurityContext에 저장된 유저의 pk를 조회
@@ -32,7 +38,9 @@ public class AttendanceController {
      */
     @PostMapping("/start")
     public LocalDateTime start(@PathVariable Long studyPk){
-        return attendanceService.attendanceStart(getMember(), studyPk);
+        Member member = globalValidator.getMember(getMember());
+        Study study = globalValidator.getStudy(studyPk);
+        return attendanceService.attendanceStart(member, study);
     }
 
     /**
@@ -43,18 +51,25 @@ public class AttendanceController {
 
     @PostMapping("/stop")
     public Long end(@PathVariable Long studyPk){
-       return attendanceService.attendanceEnd(getMember(), studyPk);
+        Member member = globalValidator.getMember(getMember());
+        Study study = globalValidator.getStudy(studyPk);
+        return attendanceService.attendanceEnd(member, study);
     }
 
     @GetMapping("/my-study-time")
     public Long getTime(@PathVariable Long studyPk){
-        return attendanceService.getLearningSeconds(getMember(), studyPk);
+        Member member = globalValidator.getMember(getMember());
+        Study study = globalValidator.getStudy(studyPk);
+        StudyMember studyMember = attendanceValidator.getStudyMember(member,study);
+        return attendanceService.getLearningSeconds(studyMember);
     }
 
     @GetMapping("/my-study-month")
     public LearningMonthListResponseDTO getMonth(@PathVariable Long studyPk, @RequestBody LearningMonthRequestDTO learningMonthRequestDTO){
-        System.out.println(learningMonthRequestDTO.getMonth());
-        return attendanceService.getLearningMonth(getMember(), studyPk, learningMonthRequestDTO);
+        Member member = globalValidator.getMember(getMember());
+        Study study = globalValidator.getStudy(studyPk);
+        StudyMember studyMember = attendanceValidator.getStudyMember(member,study);
+        return attendanceService.getLearningMonth(studyMember, learningMonthRequestDTO);
 
     }
 

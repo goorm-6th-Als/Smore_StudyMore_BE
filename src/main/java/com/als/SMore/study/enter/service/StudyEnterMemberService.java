@@ -1,7 +1,7 @@
 package com.als.SMore.study.enter.service;
 
-import static com.als.SMore.global.CustomErrorCode.CustomErrorCode;
-import static com.als.SMore.global.CustomErrorCode.NOT_AUTHORIZED_REQUEST_MEMBER;
+import static com.als.SMore.global.exception.CustomErrorCode.CustomErrorCode;
+import static com.als.SMore.global.exception.CustomErrorCode.NOT_AUTHORIZED_REQUEST_MEMBER;
 
 import com.als.SMore.domain.entity.Member;
 import com.als.SMore.domain.entity.Study;
@@ -10,7 +10,7 @@ import com.als.SMore.domain.repository.MemberRepository;
 import com.als.SMore.domain.repository.StudyEnterMemberRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.notification.dto.NotificationRequestDto;
 import com.als.SMore.notification.service.NotificationService;
 import com.als.SMore.study.enter.DTO.StudyEnterMemberDTO;
@@ -22,8 +22,12 @@ import com.als.SMore.user.login.util.MemberUtil;
 import com.als.SMore.user.login.util.aop.annotation.NotAop;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import io.lettuce.core.dynamic.annotation.CommandNaming;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -129,8 +133,8 @@ public class StudyEnterMemberService {
         }
         studyEnterMemberRepository.deleteById(studyEnterMemberPk);
     }
-
-    private void notify(Long receiverPk, Long studyPk, String content) {
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void notify(Long receiverPk, Long studyPk, String content) {
         NotificationRequestDto notificationRequest = NotificationRequestDto.builder()
                 .receiverPk(receiverPk)
                 .studyPk(studyPk)
