@@ -5,8 +5,8 @@ import com.als.SMore.domain.repository.MemberRepository;
 import com.als.SMore.domain.repository.StudyLearningTimeRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.study.attendance.DTO.request.LearningMonthRequestDTO;
 import com.als.SMore.study.attendance.DTO.response.LearningMonthListResponseDTO;
 import com.als.SMore.study.attendance.DTO.response.LearningMonthResponseDTO;
@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -25,22 +24,8 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AttendanceValidator {
-    private final MemberRepository memberRepository;
-    private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
     private final StudyLearningTimeRepository studyLearningTimeRepository;
-    public Member getMember(Long pk) {
-        // 멤버 PK를 받아서 검증
-        Optional<Member> member = memberRepository.findById(pk);
-        return member.orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
-    }
-
-    public Study getStudy(Long pk) {
-        // Study PK를 받아서 검증
-        Optional<Study> study = studyRepository.findById(pk);
-        return study.orElseThrow(()-> new CustomException(CustomErrorCode.NOT_FOUND_STUDY));
-
-    }
 
     public StudyMember getStudyMember(Member member, Study study){
         Optional<StudyMember> optionalStudyMember = studyMemberRepository.findByMemberAndStudy(member, study);
@@ -48,21 +33,7 @@ public class AttendanceValidator {
 
     }
 
-    public Long studyTimeCalculator(AttendanceCheck attendanceCheck){
-        // AttendanceCheck를 받아 출석시작과 끝을 비교해 초 단위로 return
-        int startTime = (attendanceCheck.getAttendanceDate().getHour() * 60 * 60)//시
-                + (attendanceCheck.getAttendanceDate().getMinute() * 60)//분
-                + (attendanceCheck.getAttendanceDate().getSecond());//초
-        int endTime = (attendanceCheck.getAttendanceDateEnd().getHour() * 60 * 60)//시
-                + (attendanceCheck.getAttendanceDateEnd().getMinute() * 60)//분
-                + (attendanceCheck.getAttendanceDateEnd().getSecond());//초
-        Long result = (long)(endTime - startTime);
-        if(result < 0) {
-            log.debug("공부 시간이 0초보다 작습니다");
-            throw new CustomException(CustomErrorCode.INVALID_VALUE);
-        }
-        return result;
-    }
+
 
     public LearningMonthListResponseDTO getLearningMonth(StudyMember studyMember, LearningMonthRequestDTO learningMonthRequestDTO) {
         int year = learningMonthRequestDTO.getYear();

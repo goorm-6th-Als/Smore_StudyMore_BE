@@ -6,8 +6,8 @@ import com.als.SMore.domain.entity.NoticeBoard;
 import com.als.SMore.domain.entity.Study;
 import com.als.SMore.domain.repository.NoticeBoardRepository;
 import com.als.SMore.domain.repository.StudyRepository;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
