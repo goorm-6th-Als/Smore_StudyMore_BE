@@ -8,8 +8,8 @@ import com.als.SMore.domain.repository.MemberRepository;
 import com.als.SMore.domain.repository.ProblemRepository;
 import com.als.SMore.domain.repository.StudyProblemBankRepository;
 import com.als.SMore.domain.repository.StudyRepository;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,24 +21,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class ProblemValidator {
-
-    private final MemberRepository memberRepository;
-    private final StudyRepository studyRepository;
     private final ProblemRepository problemRepository;
     private final StudyProblemBankRepository studyProblemBankRepository;
 
-    public Member getMember(Long pk) {
-        // 멤버 PK를 받아서 검증
-        Optional<Member> member = memberRepository.findById(pk);
-        return member.orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
-    }
-
-    public Study getStudy(Long pk) {
-        // Study PK를 받아서 검증
-        Optional<Study> study = studyRepository.findById(pk);
-        return study.orElseThrow(()-> new CustomException(CustomErrorCode.NOT_FOUND_STUDY));
-
-    }
 
     public StudyProblemBank getStudyProblemBank(Long studyProblemBankPk) {
         // studyProblemBank Pk를 받아서 검증

@@ -1,12 +1,13 @@
-package com.als.SMore.global;
+package com.als.SMore.global.exception;
 
+import com.als.SMore.global.ErrorResponse;
+import com.als.SMore.global.JwtAuthException;
 import com.als.SMore.user.mypage.dto.response.MessageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

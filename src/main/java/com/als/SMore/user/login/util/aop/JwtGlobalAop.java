@@ -1,15 +1,12 @@
 package com.als.SMore.user.login.util.aop;
 
-import com.als.SMore.domain.entity.MemberToken;
 import com.als.SMore.domain.entity.StudyMember;
-import com.als.SMore.domain.repository.MemberTokenRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.global.JwtAuthException;
 import com.als.SMore.user.login.util.MemberUtil;
 import com.als.SMore.user.login.util.TokenProvider;
-import com.als.SMore.user.login.util.aop.annotation.JwtRole;
 import com.als.SMore.user.login.util.aop.dto.AopDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,7 +16,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;

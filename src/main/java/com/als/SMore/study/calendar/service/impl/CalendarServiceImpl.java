@@ -6,8 +6,8 @@ import com.als.SMore.domain.entity.Member;
 import com.als.SMore.domain.entity.Study;
 import com.als.SMore.domain.repository.CalendarRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.log.timeTrace.TimeTrace;
 import com.als.SMore.study.calendar.dto.request.CreateCalendarRequestDTO;
 import com.als.SMore.study.calendar.dto.request.UpdateCalendarRequestDTO;
@@ -30,55 +30,31 @@ public class CalendarServiceImpl implements CalendarService {
     //Repository
     final private CalendarRepository calendarRepository;
 
-    //validator
-    final private CalendarValidator calendarValidator;
-    private final StudyMemberRepository studyMemberRepository;
-
-    private boolean isAdmin(Long studyPk, Long memberPk) {
-        return studyMemberRepository.existsByStudyStudyPkAndMemberMemberPkAndRole(studyPk, memberPk, "admin");
-    }
-
-    private void adminValidator(Long studyPk, Long memberPk){
-        if(!isAdmin(studyPk, memberPk)){
-            throw new CustomException(CustomErrorCode.NOT_AUTHORIZED_REQUEST_MEMBER);
-        }
-    }
-
     @Override
-    public void createCalendar(Long memberPk, Long studyPk, CreateCalendarRequestDTO createCalendarRequestDTO) {
-        //검증
-        adminValidator(studyPk, memberPk);
-
-        Member member = calendarValidator.getMember(memberPk);
-        Study study = calendarValidator.getStudy(studyPk);
+    public void createCalendar(Member member, Study study, CreateCalendarRequestDTO createCalendarRequestDTO) {
         calendarRepository.save(Calendar.of(member, study, createCalendarRequestDTO));
     }
 
     @Override
-    public void updateCalendar(Long memberPk, Long studyPk, UpdateCalendarRequestDTO updateCalendarRequestDTO) {
-        adminValidator(studyPk, memberPk);
-        Calendar calendar = calendarValidator.getCalendar(updateCalendarRequestDTO.getCalendarPk());
+    public void updateCalendar(Member member, Study study, Calendar calendar, UpdateCalendarRequestDTO updateCalendarRequestDTO) {
         calendar.updateContentAndDate(updateCalendarRequestDTO);
 
     }
 
     @Override
-    public void deleteCalendar(Long memberPk, Long studyPk, Long calendarPk) {
-        adminValidator(studyPk, memberPk);
-
-        calendarRepository.delete(calendarValidator.getCalendar(calendarPk));
+    public void deleteCalendar(Member member, Study study, Calendar calendar) {
+        calendarRepository.delete(calendar);
     }
 
     @Override
-    public FindCalendarResponseDTO findCalendar(Long calendarPk) {
-        Calendar calendar = calendarValidator.getCalendar(calendarPk);
+    public FindCalendarResponseDTO findCalendar(Calendar calendar) {
         return FindCalendarResponseDTO.of(calendar);
 
     }
 
     @Override
-    public List<FindCalendarResponseDTO> findAllCalendar(Long studyPk) {
-        List<Calendar> calendarList = calendarRepository.findByStudy(calendarValidator.getStudy(studyPk));
+    public List<FindCalendarResponseDTO> findAllCalendar(Study study) {
+        List<Calendar> calendarList = calendarRepository.findByStudy(study);
         List<FindCalendarResponseDTO> findCalendarResponseDTOList = new ArrayList<>();
         for (Calendar calendar : calendarList) {
             findCalendarResponseDTOList.add(FindCalendarResponseDTO.of(calendar));

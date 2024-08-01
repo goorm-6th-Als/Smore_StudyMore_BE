@@ -6,8 +6,8 @@ import com.als.SMore.domain.entity.StudyProblemBank;
 import com.als.SMore.domain.repository.MemberRepository;
 import com.als.SMore.domain.repository.StudyProblemBankRepository;
 import com.als.SMore.domain.repository.StudyRepository;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,20 +21,6 @@ import java.util.Optional;
 public class ProblemBankValidator {
 
     private final StudyProblemBankRepository studyProblemBankRepository;
-    private final MemberRepository memberRepository;
-    private final StudyRepository studyRepository;
-    public Member getMember(Long pk) {
-        // 멤버 PK를 받아서 검증
-        Optional<Member> member = memberRepository.findById(pk);
-        return member.orElseThrow(() -> new CustomException(CustomErrorCode.NOT_FOUND_USER));
-    }
-
-    public Study getStudy(Long pk) {
-        // Study PK를 받아서 검증
-        Optional<Study> study = studyRepository.findById(pk);
-        return study.orElseThrow(()-> new CustomException(CustomErrorCode.NOT_FOUND_STUDY));
-
-    }
 
     // 문제은행 제목 글자 수 1 - 30 제한
     public void bankNameLength(String bankName) {
