@@ -1,10 +1,16 @@
 package com.als.SMore.study.problem.controller;
 
+import com.als.SMore.domain.entity.Member;
+import com.als.SMore.domain.entity.Study;
+import com.als.SMore.domain.entity.StudyProblemBank;
+import com.als.SMore.global.validator.GlobalValidator;
 import com.als.SMore.study.problem.DTO.request.problemBank.ProblemBankUpdateRequestDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.PersonalProblemBankResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankResponseDTO;
 import com.als.SMore.study.problem.DTO.response.problemBank.ProblemBankSummaryResponseDTO;
 import com.als.SMore.study.problem.service.ProblemBankService;
+import com.als.SMore.study.problem.validator.ProblemBankValidator;
+import com.als.SMore.study.problem.validator.ProblemValidator;
 import com.als.SMore.user.login.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +27,8 @@ import java.util.Map;
 @Slf4j
 public class ProblemBankController {
     private final ProblemBankService problemBankService;
+    private final GlobalValidator globalValidator;
+    private final ProblemBankValidator problemBankValidator;
 
     /**
      * 현재 로그인된 사용자의 Pk를 가져오는 메서드
@@ -37,7 +45,8 @@ public class ProblemBankController {
      */
     @GetMapping("/bank")
     public List<ProblemBankSummaryResponseDTO> getAllStudyProblemBank(@PathVariable Long studyPk) {
-        return problemBankService.getAllProblemBankSummary(studyPk);
+        Study study = globalValidator.getStudy(studyPk);
+        return problemBankService.getAllProblemBankSummary(study);
     }
 
     /**
@@ -48,7 +57,10 @@ public class ProblemBankController {
 
     @GetMapping("/bank/personal")
     public List<PersonalProblemBankResponseDTO> getAllPersonalStudyProblemBank(@PathVariable Long studyPk) {
-        return problemBankService.getPersonalProblemBank(getMemberPk(), studyPk);
+        Member member = globalValidator.getMember(getMemberPk());
+        Study study = globalValidator.getStudy(studyPk);
+
+        return problemBankService.getPersonalProblemBank(member, study);
     }
 
 
@@ -60,7 +72,9 @@ public class ProblemBankController {
      */
     @GetMapping("/bank/{problemBankPk}")
     public ProblemBankResponseDTO getStudyProblemBank(@PathVariable Long studyPk, @PathVariable Long problemBankPk) {
-        return problemBankService.getProblemBank(problemBankPk, getMemberPk());
+        Member member = globalValidator.getMember(getMemberPk());
+        StudyProblemBank problemBank = problemBankValidator.getProblemBank(problemBankPk);
+        return problemBankService.getProblemBank(problemBank, member);
     }
 
     /**
@@ -71,7 +85,11 @@ public class ProblemBankController {
     @PostMapping("/bank")
     public Map<String, String> createProblemBank(@PathVariable Long studyPk, @RequestBody Map<String, String> problemBankMap) {
         Map<String, String> resultMap = new HashMap<String, String>();
-        resultMap.put("problemBankPk", problemBankService.createProblemBank(getMemberPk(), studyPk, problemBankMap.get("problemName")).toString());
+        Member member = globalValidator.getMember(getMemberPk());
+        Study study = globalValidator.getStudy(studyPk);
+        problemBankValidator.bankNameLength(problemBankMap.get("problemBankName"));
+        problemBankValidator.studyProblemBankSize(study);
+        resultMap.put("problemBankPk", problemBankService.createProblemBank(member, study, problemBankMap.get("problemName")).toString());
         return resultMap;
     }
 
@@ -82,7 +100,9 @@ public class ProblemBankController {
      */
     @DeleteMapping("/bank/{problemBankPk}")
     public void deleteProblemBank(@PathVariable Long studyPk, @PathVariable Long problemBankPk) {
-        problemBankService.deleteProblemBank(getMemberPk(), problemBankPk);
+        Member member = globalValidator.getMember(getMemberPk());
+        StudyProblemBank problemBank = problemBankValidator.getProblemBank(problemBankPk);
+        problemBankService.deleteProblemBank(member, problemBank);
     }
 
     /**
@@ -93,6 +113,7 @@ public class ProblemBankController {
      */
     @PutMapping("/bank")
     public ProblemBankResponseDTO updateProblemBank(@PathVariable Long studyPk, @RequestBody ProblemBankUpdateRequestDTO problemBankUpdateRequestDTO) {
-        return problemBankService.updateProblemBank(getMemberPk(), problemBankUpdateRequestDTO);
+        Member member = globalValidator.getMember(getMemberPk());
+        return problemBankService.updateProblemBank(member, problemBankUpdateRequestDTO);
     }
 }

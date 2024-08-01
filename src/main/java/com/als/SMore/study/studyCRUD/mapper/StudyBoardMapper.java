@@ -6,8 +6,8 @@ import com.als.SMore.domain.entity.StudyDetail;
 import com.als.SMore.domain.repository.StudyDetailRepository;
 import com.als.SMore.domain.repository.StudyMemberRepository;
 import com.als.SMore.domain.repository.StudyRepository;
-import com.als.SMore.global.CustomErrorCode;
-import com.als.SMore.global.CustomException;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.study.studyCRUD.DTO.StudyBoardDTO;
 
 public class StudyBoardMapper {
@@ -19,7 +19,7 @@ public class StudyBoardMapper {
                 .studyName(study.getStudyName())
                 .adTitle(studyBoard.getAdTitle())
                 .adContent(studyBoard.getAdContent())
-                .imageUri(studyDetail.getImageUri())
+                .imageUri(studyBoard.getImageUri())
 
                 .curPeople(curPeople)
                 .maxPeople(studyDetail.getMaxPeople())

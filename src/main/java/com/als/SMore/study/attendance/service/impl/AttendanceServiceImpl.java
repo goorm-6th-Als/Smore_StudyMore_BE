@@ -2,6 +2,8 @@ package com.als.SMore.study.attendance.service.impl;
 
 import com.als.SMore.domain.entity.*;
 import com.als.SMore.domain.repository.*;
+import com.als.SMore.global.exception.CustomErrorCode;
+import com.als.SMore.global.exception.CustomException;
 import com.als.SMore.study.attendance.DTO.request.LearningMonthRequestDTO;
 import com.als.SMore.study.attendance.DTO.response.LearningMonthListResponseDTO;
 import com.als.SMore.study.attendance.service.AttendanceService;
@@ -32,7 +34,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      * @param study
      * @return 출석 시작 메서드
      */
-    private AttendanceCheck attendanceStart(Member member, Study study) {
+    private AttendanceCheck getAttendance(Member member, Study study) {
         log.info("[attendanceStart] Start");
         // member와 study를 통해 attendanceCheck를 조회
         Optional<AttendanceCheck> attendance = attendanceCheckRepository
@@ -122,6 +124,22 @@ public class AttendanceServiceImpl implements AttendanceService {
         return studyLearningTimeRepository.save(StudyLearningTime.of(studyMember));
     }
 
+    private Long studyTimeCalculator(AttendanceCheck attendanceCheck){
+        // AttendanceCheck를 받아 출석시작과 끝을 비교해 초 단위로 return
+        int startTime = (attendanceCheck.getAttendanceDate().getHour() * 60 * 60)//시
+                + (attendanceCheck.getAttendanceDate().getMinute() * 60)//분
+                + (attendanceCheck.getAttendanceDate().getSecond());//초
+        int endTime = (attendanceCheck.getAttendanceDateEnd().getHour() * 60 * 60)//시
+                + (attendanceCheck.getAttendanceDateEnd().getMinute() * 60)//분
+                + (attendanceCheck.getAttendanceDateEnd().getSecond());//초
+        Long result = (long)(endTime - startTime);
+        if(result < 0) {
+            log.debug("공부 시간이 0초보다 작습니다");
+            throw new CustomException(CustomErrorCode.INVALID_VALUE);
+        }
+        return result;
+    }
+
     /**
      * 학습 시간을 설정하는 메서드
      * @param member
@@ -131,7 +149,7 @@ public class AttendanceServiceImpl implements AttendanceService {
      */
     private Long setLearningTime(Member member, Study study, AttendanceCheck attendanceCheck) {
         StudyMember studyMember = attendanceValidator.getStudyMember(member, study);
-        Long learningTime = attendanceValidator.studyTimeCalculator(attendanceCheck);
+        Long learningTime = studyTimeCalculator(attendanceCheck);
 
         StudyLearningTime studyLearningTime = getLearningTime(studyMember);
         studyLearningTime.updateLearningTime(learningTime);
@@ -150,35 +168,26 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Transactional
     @Override
-    public LocalDateTime attendanceStart(Long memberPk, Long StudyPk) {
+    public LocalDateTime attendanceStart(Member member, Study study) {
         log.info("[attendanceStart] Start");
-        Member member = attendanceValidator.getMember(memberPk);
-        Study study = attendanceValidator.getStudy(StudyPk);
-        return attendanceStart(member, study).getAttendanceDate();
+        return getAttendance(member, study).getAttendanceDate();
     }
 
     @Transactional
     @Override
-    public Long attendanceEnd(Long memberPk, Long StudyPk) {
+    public Long attendanceEnd(Member member, Study study) {
         log.info("[attendanceEnd] Start");
-        Member member = attendanceValidator.getMember(memberPk);
-        Study study = attendanceValidator.getStudy(StudyPk);
         return attendanceCheckEnd(member, study);
     }
 
     @Override
     @Transactional
-    public Long getLearningSeconds(Long memberPk, Long StudyPk) {
-        Member member = attendanceValidator.getMember(memberPk);
-        Study study = attendanceValidator.getStudy(StudyPk);
-        return getLearningTime(attendanceValidator.getStudyMember(member, study)).getLearningTime();
+    public Long getLearningSeconds(StudyMember studyMember) {
+        return getLearningTime(studyMember).getLearningTime();
     }
 
     @Override
-    public LearningMonthListResponseDTO getLearningMonth(Long memberPk, Long studyPk, LearningMonthRequestDTO learningMonthRequestDTO) {
-        Member member = attendanceValidator.getMember(memberPk);
-        Study study = attendanceValidator.getStudy(studyPk);
-        StudyMember studyMember = attendanceValidator.getStudyMember(member, study);
+    public LearningMonthListResponseDTO getLearningMonth(StudyMember studyMember, LearningMonthRequestDTO learningMonthRequestDTO) {
         return attendanceValidator.getLearningMonth(studyMember, learningMonthRequestDTO);
     }
 }

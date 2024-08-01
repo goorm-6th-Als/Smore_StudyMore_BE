@@ -2,6 +2,9 @@ package com.als.SMore.study.calendar.service;
 
 
 
+import com.als.SMore.domain.entity.Calendar;
+import com.als.SMore.domain.entity.Member;
+import com.als.SMore.domain.entity.Study;
 import com.als.SMore.study.calendar.dto.request.CreateCalendarRequestDTO;
 import com.als.SMore.study.calendar.dto.request.UpdateCalendarRequestDTO;
 import com.als.SMore.study.calendar.dto.response.FindCalendarResponseDTO;
@@ -12,13 +15,13 @@ public interface CalendarService {
 
 
 
-    void createCalendar(Long memberPk, Long studyPk, CreateCalendarRequestDTO createCalendarRequestDTO);
+    void createCalendar(Member member, Study study, CreateCalendarRequestDTO createCalendarRequestDTO);
 
-    void updateCalendar(Long memberPk, Long studyPk, UpdateCalendarRequestDTO updateCalendarRequestDTO);
+    void updateCalendar(Member member, Study study,Calendar calendar, UpdateCalendarRequestDTO updateCalendarRequestDTO);
 
-    void deleteCalendar(Long memberPk, Long studyPk, Long calendarPk);
+    void deleteCalendar(Member member, Study study, Calendar calendar);
 
-    FindCalendarResponseDTO findCalendar(Long calendarPk);
+    FindCalendarResponseDTO findCalendar(Calendar calendar);
 
-    List<FindCalendarResponseDTO> findAllCalendar(Long studyPk);
+    List<FindCalendarResponseDTO> findAllCalendar(Study study);
 }
