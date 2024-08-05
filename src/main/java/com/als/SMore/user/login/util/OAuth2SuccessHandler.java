@@ -28,7 +28,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private static final String REDIRECT_URI = "http://ec2-3-39-229-204.ap-northeast-2.compute.amazonaws.com:3000/redirection/%s/%s";
+    private static final String REDIRECT_URI = "http://ec2-54-180-247-168.ap-northeast-2.compute.amazonaws.com:3000/redirection/%s/%s";
     private final TokenProvider tokenProvider;
     private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
