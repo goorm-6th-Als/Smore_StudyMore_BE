@@ -4,7 +4,6 @@ package com.als.SMore.user.login.util.aop;
 import com.als.SMore.global.exception.CustomErrorCode;
 import com.als.SMore.global.exception.CustomException;
 
-import com.als.SMore.user.login.util.MemberUtil;
 import com.als.SMore.user.login.util.TokenProvider;
 import com.als.SMore.user.login.util.aop.dto.AopDto;
 import jakarta.servlet.http.HttpServletRequest;

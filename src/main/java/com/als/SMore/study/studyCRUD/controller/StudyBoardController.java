@@ -29,7 +29,6 @@ public class StudyBoardController {
     @NotAop
     @GetMapping
     public ResponseEntity<List<StudyBoardDTO>> getAllStudyBoards() {
-        System.out.println("StudyBoardController.getAllStudyBoards");
         return ResponseEntity.ok(studyBoardService.getAllStudyBoards());
     }
 
