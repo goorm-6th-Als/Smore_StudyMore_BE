@@ -4,10 +4,13 @@ Kakao x goorm 기업 연계 프로젝트 1조 알쓰조
 
 
 # 📕 스터디 모집 및 관리 WEB 서비스 SMore (study more)
+![smore-logo-ver1](https://github.com/user-attachments/assets/3459742c-f72e-421f-8dde-a97619d25102)
 
-![readme_mockup2](이미지 자리)
 
-- 배포 URL : http://smore.today/
+
+- 배포 URL
+-      https://smore.today/
+-      https://smore-stydy-more-fe.vercel.app/ 
 - Test ID : None
 - Test PW : None
 
@@ -41,7 +44,18 @@ Kakao x goorm 기업 연계 프로젝트 1조 알쓰조
 
 ## <img src="https://github.com/Kangjunesu/Web_IDE_Project_BE/assets/108870712/c475921f-b294-426d-bbb6-0e43a37486a2" width="30" heght="30"/> 기술 스택
 ### BackEnd
-<img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=java&logoColor=white"/> <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/> <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/> <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=flat-square&logo=springsecurity&logoColor=white"/> <img src="https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=Postman&logoColor=white"/> <img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=flat-square&logo=apachetomcat&logoColor=black"/> <img src="https://img.shields.io/badge/amazon ec2-FF9900?style=flat-square&logo=amazonec2&logoColor=black"/> <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=Docker&logoColor=white"/> <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/> <img src="https://img.shields.io/badge/Jira-0052CC?style=flat-square&logo=jira&logoColor=white"/> <img src="https://img.shields.io/badge/IntelliJIDEA-000000?style=flat-square&logo=intellij-idea&logoColor=white"/> <img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=Gradle&logoColor=white"/> <img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=springboot&logoColor=white"/> <img src="https://img.shields.io/badge/STOMP-6DB33F?style=flat-square&logo=stomp&logoColor=white"/> <img src="https://img.shields.io/badge/WebSocket-000000?style=flat-square&logo=websocket&logoColor=white"/>
+|   **구분**   | **요소** |
+| :----: | :----: |
+| Language & Library|<img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=openjdk&logoColor=white"/> <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=flat-square&logo=springsecurity&logoColor=white"/> <img src="https://img.shields.io/badge/STOMP-6DB33F?style=flat-square&logo=stomp&logoColor=white"/> <img src="https://img.shields.io/badge/WebSocket-000000?style=flat-square&logo=websocket&logoColor=white"/> <img src="https://img.shields.io/badge/jwt-007396?style=flat-square&logo=jwt&logoColor=white"/> <img src="https://img.shields.io/badge/jpa-007396?style=flat-square&logo=jwt&logoColor=white"/>|
+| build | <img src="https://img.shields.io/badge/Gradle-02303A?style=flat-square&logo=Gradle&logoColor=white"/>|
+| DATABASE | <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/> <img width="58" src="https://img.shields.io/badge/rails-%23CC0000.svg?style=for-the-badge&logo=ruby-on-rails&logoColor=white"/> |
+| Framework |  <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/> <img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=springboot&logoColor=white"/>|
+| AWS |  <img src="https://img.shields.io/badge/ec2-FF9900?style=flat-square&logo=amazonec2&logoColor=black"/> <img src="https://img.shields.io/badge/S3-FF9900?style=flat-square&logo=Amazon S3&logoColor=black"/> <img src="https://img.shields.io/badge/ROUTE 53-FF9900?style=flat-square&logo=amazonroute53&logoColor=black"/>|
+| Http | <img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=flat-square&logo=apachetomcat&logoColor=black"/> |
+| TEST | <img src="https://img.shields.io/badge/Postman-FF6C37?style=flat-square&logo=Postman&logoColor=white"/> |
+| etc | <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/> <img src="https://img.shields.io/badge/Jira-0052CC?style=flat-square&logo=jira&logoColor=white"/> <img src="https://img.shields.io/badge/IntelliJIDEA-000000?style=flat-square&logo=intellij-idea&logoColor=white"/> <img src="https://img.shields.io/badge/Notion-000000?style=flat-square&logo=notion&logoColor=white"/> <img src="https://img.shields.io/badge/Discord-000000?style=flat-square&logo=discord&logoColor=#5865F2"/> <img src="https://img.shields.io/badge/Figma-000000?style=flat-square&logo=figma&logoColor=#F24E1E"/>|
+
+    
 
 ### FrontEnd
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/> <img src="https://img.shields.io/badge/react-20232a?style=flat-square&logo=react&logoColor=61DAFB"/> <img src="https://img.shields.io/badge/axios-5A29E4?style=flat-square&logo=axios&logoColor=white"/> <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white"/> <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white"/> <img src="https://img.shields.io/badge/Bootstrapap-7952B3?style=flat-square&logo=bootstrap&logoColor=white"/> <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/> 
@@ -54,14 +68,132 @@ Kakao x goorm 기업 연계 프로젝트 1조 알쓰조
 
 ### 브랜치 전략
 
+### 컨밴션
+![스크린샷 2024-07-18 123530](https://github.com/user-attachments/assets/c74ac7a3-4672-4f19-8e84-839f7668d9c9)
+
+
 -
 
 
 ## 3. 프로젝트 구조
 
-```
 
-```
+<details>
+
+ ```
+├─build
+│  ├─classes
+│  │  └─java
+│  │      └─main
+│  │          └─com
+│  │              └─als
+│  │                  └─SMore
+│  │                      ├─domain
+│  │                      │  ├─entity
+│  │                      │  └─repository
+│  │                      ├─global
+│  │                      │  └─json
+│  │                      ├─log
+│  │                      │  └─timeTrace
+│  │                      ├─notification
+│  │                      │  ├─controller
+│  │                      │  ├─dto
+│  │                      │  ├─repository
+│  │                      │  └─service
+│  │                      ├─study
+│  │                      │  ├─attendance
+│  │                      │  │  ├─controller
+│  │                      │  │  ├─DTO
+│  │                      │  │  │  ├─request
+│  │                      │  │  │  └─response
+│  │                      │  │  ├─service
+│  │                      │  │  │  └─impl
+│  │                      │  │  └─validator
+│  │                      │  ├─calendar
+│  │                      │  │  ├─controller
+│  │                      │  │  ├─dto
+│  │                      │  │  │  ├─request
+│  │                      │  │  │  └─response
+│  │                      │  │  ├─service
+│  │                      │  │  │  └─impl
+│  │                      │  │  └─validator
+│  │                      │  ├─chatting
+│  │                      │  │  ├─config
+│  │                      │  │  ├─controller
+│  │                      │  │  ├─DTO
+│  │                      │  │  └─service
+│  │                      │  ├─dashboard
+│  │                      │  │  ├─controller
+│  │                      │  │  ├─DTO
+│  │                      │  │  ├─mapper
+│  │                      │  │  └─service
+│  │                      │  ├─enter
+│  │                      │  │  ├─controller
+│  │                      │  │  ├─DTO
+│  │                      │  │  ├─mapper
+│  │                      │  │  └─service
+│  │                      │  ├─management
+│  │                      │  │  ├─controller
+│  │                      │  │  ├─DTO
+│  │                      │  │  ├─mapper
+│  │                      │  │  └─service
+│  │                      │  ├─notice
+│  │                      │  │  ├─controller
+│  │                      │  │  ├─DTO
+│  │                      │  │  ├─service
+│  │                      │  │  └─validator
+│  │                      │  ├─problem
+│  │                      │  │  ├─controller
+│  │                      │  │  ├─DTO
+│  │                      │  │  │  ├─request
+│  │                      │  │  │  │  ├─problem
+│  │                      │  │  │  │  └─problemBank
+│  │                      │  │  │  └─response
+│  │                      │  │  │      ├─problem
+│  │                      │  │  │      └─problemBank
+│  │                      │  │  ├─service
+│  │                      │  │  │  └─impl
+│  │                      │  │  │      ├─problem
+│  │                      │  │  │      └─problemBank
+│  │                      │  │  └─validator
+│  │                      │  ├─studyCRUD
+│  │                      │  │  ├─controller
+│  │                      │  │  ├─DTO
+│  │                      │  │  ├─mapper
+│  │                      │  │  ├─service
+│  │                      │  │  └─utils
+│  │                      │  └─todo
+│  │                      │      ├─controller
+│  │                      │      ├─DTO
+│  │                      │      ├─mapper
+│  │                      │      └─service
+│  │                      └─user
+│  │                          ├─login
+│  │                          │  ├─config
+│  │                          │  ├─controller
+│  │                          │  ├─dto
+│  │                          │  │  └─response
+│  │                          │  ├─service
+│  │                          │  └─util
+│  │                          │      └─aop
+│  │                          │          ├─annotation
+│  │                          │          └─dto
+│  │                          ├─mypage
+│  │                          │  ├─config
+│  │                          │  ├─controller
+│  │                          │  ├─dto
+│  │                          │  │  ├─request
+│  │                          │  │  └─response
+│  │                          │  └─service
+│  │                          └─mystudy
+│  │                              ├─controller
+│  │                              ├─dto
+│  │                              │  ├─request
+│  │                              │  └─response
+│  │                              └─service
+
+ ```
+</details>
 
 <br>
 
