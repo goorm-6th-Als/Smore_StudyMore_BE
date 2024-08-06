@@ -107,7 +107,7 @@ public class NotificationService {
      */
     private void resendLostData(String lastEventId, Long memberPk, SseEmitter emitter) {
         // 놓친 이벤트가 있다면
-        if (!lastEventId.isEmpty()) { // 일단 이벤트 그냥 다 재전송.
+//        if (!lastEventId.isEmpty()) { // 일단 이벤트 그냥 다 재전송.
             System.out.println("NotificationService.resendLostData1");
             // 멈버 아이디를 기준으로 캐시된 모든 이벤트를 가져온다.
             Map<String, Object> cachedEvents = emitterRepository.findAllEventCacheStartWithByMemberPk(String.valueOf(memberPk));
@@ -123,7 +123,7 @@ public class NotificationService {
                     }
                 }
             }
-        }
+//        }
     }
 
     /**

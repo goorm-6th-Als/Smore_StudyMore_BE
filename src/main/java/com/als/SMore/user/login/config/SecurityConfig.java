@@ -69,7 +69,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfiguration() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Collections.singletonList("http://ec2-54-180-247-168.ap-northeast-2.compute.amazonaws.com:3000"));
+        config.setAllowedOrigins(Collections.singletonList("http://ec2-43-202-238-3.ap-northeast-2.compute.amazonaws.com:3000"));
         config.setAllowedMethods(Collections.singletonList("*"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Collections.singletonList("*"));
