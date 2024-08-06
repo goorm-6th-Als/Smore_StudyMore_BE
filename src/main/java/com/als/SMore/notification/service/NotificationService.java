@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    private static final Long DEFAULT_TIMEOUT = 5L * 1000 * 60; // 기본 타임아웃 설정 - 테스트로 5분.
+    private static final Long DEFAULT_TIMEOUT = 30L * 1000 * 60;  // 기본 타임아웃 설정 - 테스트로 30분.
     private final EmitterRepository emitterRepository;
 
 
@@ -163,8 +163,8 @@ public class NotificationService {
         if (emitter != null) {
             try {
                 log.info(" 알림 내용 전송 전 =  {}", responseDto.getContent());
-//                emitter.send(SseEmitter.event().id(emitterId).name("sse").data(responseDto));
-                emitter.send(SseEmitter.event().id(emitterId).name("sse").data(new ObjectMapper().writeValueAsString(responseDto)));
+                emitter.send(SseEmitter.event().id(emitterId).name("sse").data(responseDto));
+//                emitter.send(SseEmitter.event().id(emitterId).name("sse").data(new ObjectMapper().writeValueAsString(responseDto)));
                 log.info(" 알림 내용 전송 완료 =  {}", responseDto.getNotificationPk());
 
             } catch (IOException e) {
