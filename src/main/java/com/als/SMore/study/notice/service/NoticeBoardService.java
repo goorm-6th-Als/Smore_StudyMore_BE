@@ -11,6 +11,7 @@ import com.als.SMore.study.notice.DTO.NoticeResponseDTO;
 import com.als.SMore.study.notice.validator.NoticeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -70,7 +71,8 @@ public class NoticeBoardService {
         return new MessageResponseDTO("삭제 완료");
     }
 
-    private void notify(Long receiverPk, Long studyPk, String content) {
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void notify(Long receiverPk, Long studyPk, String content) {
         NotificationRequestDto notificationRequest = NotificationRequestDto.builder()
                 .receiverPk(receiverPk)
                 .studyPk(studyPk)
