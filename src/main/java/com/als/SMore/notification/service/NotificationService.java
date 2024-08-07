@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    private static final Long DEFAULT_TIMEOUT = 5L * 1000 * 60;  // 기본 타임아웃 설정 - 테스트로 5분.
+    private static final Long DEFAULT_TIMEOUT = 30L * 1000 * 60;  // 기본 타임아웃 설정
     private final EmitterRepository emitterRepository;
 
 
@@ -119,7 +119,7 @@ public class NotificationService {
                 if (lastEventId.compareTo(entry.getKey()) < 0) {
                     try {
                         System.out.println("NotificationService.resendLostData2 " + entry.getValue());
-                        emitter.send(SseEmitter.event().id(entry.getKey()).data(new ObjectMapper().writeValueAsString(entry.getValue())));
+                        emitter.send(SseEmitter.event().id(entry.getKey()).data(entry.getValue()));
                     } catch (IOException e) {
                         log.error("Resending lost data failed for memberPk : {}", memberPk, e);
                     }
@@ -169,7 +169,7 @@ public class NotificationService {
 //                emitter.send(SseEmitter.event().id(emitterId).name("sse").data(new ObjectMapper().writeValueAsString(responseDto)));
                 log.info(" 알림 내용 전송 완료 =  {}", responseDto.getNotificationPk());
 
-            } catch (IOException e) {
+            } catch (Exception e) {
 //                emitterRepository.deleteById(emitterId);
 //                log.error("Failed to send notification", e);
 //                throw new RuntimeException("Connection error!");
@@ -178,8 +178,8 @@ public class NotificationService {
                     log.warn("SSE 연결이 끊어짐. 무시됨.", e); // 경고 메시지로 로그를 기록
                 } else {
                     log.info("SSE 연결 오류 발생", e);
-                    emitterRepository.deleteById(emitterId);
-                    log.warn("삭제 emitter : {}", emitterId);
+//                    emitterRepository.deleteById(emitterId);
+//                    log.warn("삭제 emitter : {}", emitterId);
                 }
             }
         } else {
