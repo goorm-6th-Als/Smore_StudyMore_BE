@@ -170,9 +170,17 @@ public class NotificationService {
                 log.info(" 알림 내용 전송 완료 =  {}", responseDto.getNotificationPk());
 
             } catch (IOException e) {
-                emitterRepository.deleteById(emitterId);
-                log.error("Failed to send notification", e);
-                throw new RuntimeException("Connection error!");
+//                emitterRepository.deleteById(emitterId);
+//                log.error("Failed to send notification", e);
+//                throw new RuntimeException("Connection error!");
+
+                if (e.getMessage().contains("Broken pipe")) {
+                    log.warn("SSE 연결이 끊어짐. 무시됨.", e); // 경고 메시지로 로그를 기록
+                } else {
+                    log.info("SSE 연결 오류 발생", e);
+                    emitterRepository.deleteById(emitterId);
+                    log.warn("삭제 emitter : {}", emitterId);
+                }
             }
         } else {
             log.warn("No emitter found for ID: {}", emitterId);
