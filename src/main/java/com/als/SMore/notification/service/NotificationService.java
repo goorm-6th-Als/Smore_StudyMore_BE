@@ -119,7 +119,8 @@ public class NotificationService {
                 if (lastEventId.compareTo(entry.getKey()) < 0) {
                     try {
                         System.out.println("NotificationService.resendLostData2 " + entry.getValue());
-                        emitter.send(SseEmitter.event().id(entry.getKey()).data(entry.getValue()));
+                        emitter.send(SseEmitter.event().id(entry.getKey()).name("sse").data(entry.getValue()));
+
                     } catch (IOException e) {
                         log.error("Resending lost data failed for memberPk : {}", memberPk, e);
                     }
