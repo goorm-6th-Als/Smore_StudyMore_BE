@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    private static final Long DEFAULT_TIMEOUT = 30L * 1000 * 60;  // 기본 타임아웃 설정 - 테스트로 30분.
+    private static final Long DEFAULT_TIMEOUT = 5L * 1000 * 60;  // 기본 타임아웃 설정 - 테스트로 5분.
     private final EmitterRepository emitterRepository;
 
 
@@ -41,6 +41,8 @@ public class NotificationService {
 
         // NGINX PROXY 에서의 필요설정 불필요한 버퍼링방지
         response.setHeader("X-Accel-Buffering", "no");
+        response.setHeader("Connection", "keep-alive");
+        response.setHeader("Cache-Control", "no-cache");
 
         //컴플리트, 타임아웃시에는 emitter를 삭제
         emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
