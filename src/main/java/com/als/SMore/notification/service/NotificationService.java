@@ -84,8 +84,9 @@ public class NotificationService {
 
     private void resendLostData(String lastEventId, Long memberPk, SseEmitter emitter) {
         // 놓친 이벤트가 있다면
-        if (!lastEventId.isEmpty()) { // 일단 이벤트 그냥 다 재전송.
+//        if (!lastEventId.isEmpty()) { // 일단 이벤트 그냥 다 재전송.
             System.out.println("NotificationService.resendLostData1");
+        System.out.println();
             // 멈버 아이디를 기준으로 캐시된 모든 이벤트를 가져온다.
             Map<String, Object> cachedEvents = emitterRepository.findAllEventCacheStartWithByMemberPk(String.valueOf(memberPk));
             // 모든 이벤트를 순회하며
@@ -93,14 +94,15 @@ public class NotificationService {
                 // lastEventId보다 큰 ID(뒷 시간에 일어난 이벤트) 필터링하여 재전송
                 if (lastEventId.compareTo(entry.getKey()) < 0) {
                     try {
-                        System.out.println("NotificationService.resendLostData2 " + entry.getValue());
+                        System.out.println("NotificationService.resendLostData2 " + entry.getValue().toString());
+                        System.out.println("NotificationService.resendLostData2-1 " + entry.getKey().toString());
                         emitter.send(SseEmitter.event().id(entry.getKey()).name("sse").data(entry.getValue()));
                     } catch (IOException e) {
                         log.error("Resending lost data failed for memberPk : {}", memberPk, e);
                     }
                 }
             }
-        }
+//        }
     }
 
 
