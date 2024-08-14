@@ -30,6 +30,7 @@ public class EmitterRepository {
     }
 
     public void saveEventCache(String eventCacheId, Object event) {
+        log.info("saveEventCache eventCacheId : " + eventCacheId);
         log.info("saveEventCache event : " + event.toString());
         eventCache.put(eventCacheId, event);
     }
