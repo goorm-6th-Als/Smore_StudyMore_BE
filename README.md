@@ -2,17 +2,13 @@
 Kakao x goorm 기업 연계 프로젝트 1조 알쓰조 
 
 
-
-# 📕 스터디 모집 및 관리 WEB 서비스 SMore (study more)
+## 📕 스터디 모집 및 관리 WEB 서비스 SMore (study more)
 ![smore-logo-ver1](https://github.com/user-attachments/assets/3459742c-f72e-421f-8dde-a97619d25102)
 
 
 
-- 배포 URL
--      https://smore.today/
--      https://smore-stydy-more-fe.vercel.app/ 
-- Test ID : None
-- Test PW : None
+- [배포 URL](http://ec2-43-202-238-3.ap-northeast-2.compute.amazonaws.com:3000)
+- 카카오톡으로 로그인 가능합니다.
 
 <br>
 
@@ -20,18 +16,18 @@ Kakao x goorm 기업 연계 프로젝트 1조 알쓰조
 
 - SMore는 스터디를 위한 플랫폼입니다.
 - 스터디 모집 및 스터디 가입이 한 플랫폼에서 가능하며
-- 스터디 내부 일정과 Todo 칸반리스트 문제 출제 등의 기능을 포함하고 있습니다.
+- 스터디 운영에 필요한 기능들이 포함되어 있습니다.
+
+- ### 주요 기능
+  - 1. 스터디 생성
+  - 2. 스터디 가입 신청
+  - 3. 출석 체크 및 공부시간 랭킹
+  - 4. 스터디 일정
+  - 5. 문제 풀이
+  - 6. 개인 목표
+  - 7. 스터디원 관리
 
 <br>
-
-## 팀원 구성
-
-<div align="center">
-
-|   **이름**   | **포지션** | **구분** | **Github** |   **이름**   | **포지션** | **구분** | **Github** |   **이름**   | **포지션** | **구분** |       **Github** |
-| ---- | ---- | ---- | ------ | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ------ |
-| <div align="center"><img src="https://avatars.githubusercontent.com/u/96505736?v=4" width="50" height="50"/><br><b>김현빈</b></div> | <div align="center"><b>BE</b></div> | <div align="center"><b>팀장</b></div> | <div align="center"><b>[Github](https://github.com/khv9786)</b></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/108870712?v=4" width="50" height="50"/><br><b>강준수</b></div> | <div align="center"><b>BE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/Kangjunesu)</b></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/104208670?v=4" width="50" height="50"/><br><b>이수지</b></div> | <div align="center"><b>FE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/ssssuji)</b></div> |
-| <div align="center"><img src="https://avatars.githubusercontent.com/u/75283640?v=4" width="50" height="50"/><br><b>박진수</b></div> | <div align="center"><b>BE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/qkrwlstn1)</b></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/53739820?v=4" width="50" height="50"/><br><b>남수연</b></div> | <div align="center"><b>BE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/namtndus)</b></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/109202222?v=4" width="50" height="50"/><br><b>서다영</b></div> | <div align="center"><b>FE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/savedinstancestate)</b></div> |
 
 </div>
 
@@ -42,7 +38,11 @@ Kakao x goorm 기업 연계 프로젝트 1조 알쓰조
 
 <br>
 
-## <img src="https://github.com/Kangjunesu/Web_IDE_Project_BE/assets/108870712/c475921f-b294-426d-bbb6-0e43a37486a2" width="30" heght="30"/> 기술 스택
+##  🛠 아키텍처
+![image](https://github.com/user-attachments/assets/f911955e-4735-441f-a52a-7327e648c85a)
+
+
+## 📚 기술 스택
 ### BackEnd
 |   **구분**   | **요소** |
 | :----: | :----: |
@@ -60,27 +60,17 @@ Kakao x goorm 기업 연계 프로젝트 1조 알쓰조
 ### FrontEnd
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/> <img src="https://img.shields.io/badge/react-20232a?style=flat-square&logo=react&logoColor=61DAFB"/> <img src="https://img.shields.io/badge/axios-5A29E4?style=flat-square&logo=axios&logoColor=white"/> <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white"/> <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white"/> <img src="https://img.shields.io/badge/Bootstrapap-7952B3?style=flat-square&logo=bootstrap&logoColor=white"/> <img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white"/> 
 
-### Collaboration Tool
-
-<img src="https://img.shields.io/badge/Jira-0052CC?style=flat-square&logo=jira&logoColor=white"/>  <img src="https://img.shields.io/badge/figma-F24E1E?style=flat-square&logo=figma&logoColor=white"/> 
-
-## 2. 채택한 개발 기술과 브랜치 전략
-
-### 브랜치 전략
-
-### 컨밴션
-![스크린샷 2024-07-18 123530](https://github.com/user-attachments/assets/c74ac7a3-4672-4f19-8e84-839f7668d9c9)
-
-
--
-
-
 ## 3. 프로젝트 구조
 
+<details> <summary> ⛏ ERD </summary>
 
-<details>
+    ![image](https://github.com/user-attachments/assets/624f2789-866c-4dc7-b970-162488845c97)
+</details>
 
- ```
+<details><summary>📂 파일 구조</summary>
+    
+```
+
 ├─build
 │  ├─classes
 │  │  └─java
@@ -193,36 +183,25 @@ Kakao x goorm 기업 연계 프로젝트 1조 알쓰조
 │  │                              └─service
 
  ```
+
 </details>
 
 <br>
 
+## 팀원 구성
+
+<div align="center">
+
+|   **이름**   | **포지션** | **구분** | **Github** |   **이름**   | **포지션** | **구분** | **Github** |   **이름**   | **포지션** | **구분** |       **Github** |
+| ---- | ---- | ---- | ------ | ---- | ---- | ---- | ------ | ---- | ---- | ---- | ------ |
+| <div align="center"><img src="https://avatars.githubusercontent.com/u/96505736?v=4" width="50" height="50"/><br><b>김현빈</b></div> | <div align="center"><b>BE</b></div> | <div align="center"><b>팀장</b></div> | <div align="center"><b>[Github](https://github.com/khv9786)</b></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/108870712?v=4" width="50" height="50"/><br><b>강준수</b></div> | <div align="center"><b>BE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/Kangjunesu)</b></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/104208670?v=4" width="50" height="50"/><br><b>이수지</b></div> | <div align="center"><b>FE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/ssssuji)</b></div> |
+| <div align="center"><img src="https://avatars.githubusercontent.com/u/75283640?v=4" width="50" height="50"/><br><b>박진수</b></div> | <div align="center"><b>BE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/qkrwlstn1)</b></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/53739820?v=4" width="50" height="50"/><br><b>남수연</b></div> | <div align="center"><b>BE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/namtndus)</b></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/109202222?v=4" width="50" height="50"/><br><b>서다영</b></div> | <div align="center"><b>FE</b></div> | <div align="center"><b>팀원</b></div> | <div align="center"><b>[Github](https://github.com/savedinstancestate)</b></div> |
+</div>
+
+
 ## 4. 역할 분담
-
-    
-<br>
-
-## 5. 개발 기간 및 작업 관리
-
-### 개발 기간
-
-- 전체 개발 기간 : 
-- UI 구현 : 
-- 기능 구현 : 
-
-<br>
-
-### 작업 관리
-
-<br>
-
-## 6. 신경 쓴 부분
-
-## 7. 기능 API
-
-## 8. 트러블 슈팅
-
-## 9. 개선 목표
-
-## 10. 프로젝트 후기
+### BackEnd
+![image](https://github.com/user-attachments/assets/7804068f-b445-493f-91e7-2cb7abe87ed9)
+### FrontEnd
+![image](https://github.com/user-attachments/assets/da995bc7-b7c3-40fb-bd58-2934769162fe)
 
