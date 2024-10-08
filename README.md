@@ -29,6 +29,10 @@ Kakao x goorm 기업 연계 프로젝트 1조 알쓰조
 
 <br>
 
+## 프로젝트 영상
+
+
+
 </div>
 
 ##  <img src="https://github.com/Kangjunesu/Web_IDE_Project_BE/assets/108870712/6b3433e1-b807-438b-a50a-a3cf065fa1a1" width="30" heght="30"/> FrontEnd 레포지토리
@@ -64,10 +68,16 @@ Kakao x goorm 기업 연계 프로젝트 1조 알쓰조
 
 <details> <summary> ⛏ ERD </summary>
 
-    ![image](https://github.com/user-attachments/assets/624f2789-866c-4dc7-b970-162488845c97)
+  ![정리 (6)](https://github.com/user-attachments/assets/68cf6146-5995-4ef4-b156-1ba717e45a78)
+
+
 </details>
 
 <details><summary>📂 파일 구조</summary>
+
+
+
+
     
 ```
 
